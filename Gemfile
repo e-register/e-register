@@ -1,9 +1,8 @@
 source 'https://rubygems.org'
 
+ENV['DB'] ||= 'sqlite'
 
 gem 'rails', '4.2.1'
-
-ENV['DB'] ||= 'sqlite'
 
 # Install the proper gem according to the used database
 if ENV['DB'] == 'sqlite'
@@ -29,13 +28,15 @@ gem 'jbuilder', '~> 2.0'
 # Use Unicorn as the app server
 # gem 'unicorn'
 
-group :development, :test do
+group :development do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug'
 
   # Access an IRB console on exception pages or by using <%= console %> in views
   gem 'web-console', '~> 2.0'
+end
 
+group :test do
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring'
   gem 'spring-commands-rspec'
