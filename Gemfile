@@ -18,7 +18,6 @@ gem 'coffee-rails', '~> 4.1.0'
 
 gem 'jquery-rails'
 gem 'turbolinks'
-# Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'jbuilder', '~> 2.0'
 gem 'therubyracer'
 
@@ -31,14 +30,15 @@ gem 'therubyracer'
 
 
 group :development do
-  # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   # Only in the development environment because the Travis build with ruby < 2 fail with this
   gem 'byebug'
-
-  # Access an IRB console on exception pages or by using <%= console %> in views
   gem 'web-console', '~> 2.0'
-end
 
+  gem 'pry-rails'
+  gem 'better_errors'
+  gem 'binding_of_caller'
+  gem 'rack-mini-profiler'
+end
 
 group :development, :test do
   # Spring speeds up development by keeping your application running in the background.

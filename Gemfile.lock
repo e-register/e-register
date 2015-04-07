@@ -37,6 +37,10 @@ GEM
       thread_safe (~> 0.3, >= 0.3.4)
       tzinfo (~> 1.1)
     arel (6.0.0)
+    better_errors (2.1.1)
+      coderay (>= 1.0.0)
+      erubis (>= 2.6.6)
+      rack (>= 0.9.0)
     binding_of_caller (0.7.2)
       debug_inspector (>= 0.0.1)
     builder (3.2.2)
@@ -128,7 +132,11 @@ GEM
       coderay (~> 1.1.0)
       method_source (~> 0.8.1)
       slop (~> 3.4)
+    pry-rails (0.3.4)
+      pry (>= 0.9.10)
     rack (1.6.0)
+    rack-mini-profiler (0.9.3)
+      rack (>= 1.1.3)
     rack-test (0.6.3)
       rack (>= 1.0)
     rails (4.2.1)
@@ -233,6 +241,8 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  better_errors
+  binding_of_caller
   byebug
   capybara
   coffee-rails (~> 4.1.0)
@@ -241,6 +251,8 @@ DEPENDENCIES
   jbuilder (~> 2.0)
   jquery-rails
   poltergeist
+  pry-rails
+  rack-mini-profiler
   rails (= 4.2.1)
   rspec-rails
   sass-rails (~> 5.0)
