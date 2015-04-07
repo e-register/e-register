@@ -1,0 +1,16 @@
+sqlite: &sqlite
+  adapter: sqlite3
+  database: db/e-register.sqlite3
+
+postgresql: &postgresql
+  adapter: postgresql
+  username: postgres
+  password:
+  database: e-register
+  min_messages: ERROR
+
+test:
+  pool: 5
+  timeout: 5000
+  host: localhost
+  <<: *<%= ENV['DB'] %>
