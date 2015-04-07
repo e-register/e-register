@@ -6,7 +6,7 @@ postgresql: &postgresql
   adapter: postgresql
   username: postgres
   password:
-  database: e-register
+  database: e_register
   min_messages: ERROR
 
 test:
