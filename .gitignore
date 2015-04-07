@@ -19,4 +19,8 @@
 # Ignore RubyMine metadata files
 .idea/
 
+# The real database configuration is hidden
 config/database.yml
+
+# Exclude the coveralls results
+coverage/
