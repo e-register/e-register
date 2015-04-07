@@ -20,6 +20,7 @@ gem 'jquery-rails'
 gem 'turbolinks'
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'jbuilder', '~> 2.0'
+gem 'therubyracer'
 
 
 # Use ActiveModel has_secure_password
