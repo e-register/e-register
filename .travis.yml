@@ -1,0 +1,11 @@
+language: ruby
+rvm:
+  - 2.2.0
+  - 1.9.3
+env:
+  - DB=sqlite
+  - DB=postgresql
+before_script:
+  - psql -c 'create database e_register' -U postgres
+script:
+  - bundle exec rspec spec
