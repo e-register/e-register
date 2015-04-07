@@ -1,4 +1,4 @@
-# Prepare the Coveralls Evnvironment
+# Prepare the Coveralls Environment
 require 'coveralls'
 Coveralls.wear!('rails')
 
@@ -53,4 +53,7 @@ RSpec.configure do |config|
 
   # Add the support for Capybara
   config.include Capybara::DSL
+
+  # Add the support for FactoryGirl
+  config.include FactoryGirl::Syntax::Methods
 end
