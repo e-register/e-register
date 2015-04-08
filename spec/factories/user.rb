@@ -14,13 +14,13 @@ FactoryGirl.define do
 
     factory :user_student do
       transient do
-        num_students 2
+        num_klass 2
       end
 
       association :user_group, factory: :user_group_student
 
       after(:create) do |user, evaluator|
-        klasses = create_list(:klass, evaluator.num_students)
+        klasses = create_list(:klass, evaluator.num_klass)
         klasses.each do |klass|
           create(:student, user: user, klass: klass)
         end
