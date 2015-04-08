@@ -38,4 +38,12 @@ describe User, type: :model do
 
     expect(student.user_group).to eq(group)
   end
+
+  it 'has students' do
+    user = create(:user_student)
+
+    students = Student.where(user: user)
+
+    expect(user.students).to match_array(students)
+  end
 end
