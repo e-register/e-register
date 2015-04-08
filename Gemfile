@@ -5,11 +5,8 @@ ENV['DB'] ||= 'sqlite'
 gem 'rails', '4.2.1'
 
 # Install the proper gem according to the used database
-if ENV['DB'] == 'sqlite'
-  gem 'sqlite3'
-else
-  gem 'pg'
-end
+gem 'sqlite3'
+gem 'pg'
 
 gem 'sass-rails', '~> 5.0'
 gem 'uglifier', '>= 1.3.0'
@@ -38,14 +35,14 @@ group :development do
   gem 'better_errors'
   gem 'binding_of_caller'
   gem 'rack-mini-profiler'
-end
 
-group :development, :test do
   # Spring speeds up development by keeping your application running in the background.
   # Read more: https://github.com/rails/spring
   gem 'spring'
   gem 'spring-commands-rspec'
+end
 
+group :development, :test do
   gem 'coveralls', require: false
 end
 
