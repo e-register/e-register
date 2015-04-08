@@ -1,9 +1,9 @@
 require 'rails_helper'
 
 describe Subject do
-  subject { build(:subject) }
+  subject { create(:subject) }
 
-  it { respond_to(:name) }
+  it { is_expected.to respond_to(:name) }
 
   it { is_expected.to be_valid }
 
@@ -19,7 +19,7 @@ describe Subject do
   end
 
   it 'is not valid without a name' do
-    other = build(:subject, name: nil)
-    expect(other).not_to be_valid
+    klass = build(:subject, name: nil)
+    expect(klass).not_to be_valid
   end
 end
