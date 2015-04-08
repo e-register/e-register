@@ -4,4 +4,9 @@ class Teacher < ActiveRecord::Base
   belongs_to :user
   belongs_to :klass
   belongs_to :subject
+
+  # Search all the students that are in the same class of this teacher
+  def students
+    Student.where(klass: klass).includes(:user)
+  end
 end

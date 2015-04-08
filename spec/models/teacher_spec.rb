@@ -6,6 +6,7 @@ describe Teacher, type: :model do
   it { is_expected.to respond_to(:user) }
   it { is_expected.to respond_to(:klass) }
   it { is_expected.to respond_to(:subject) }
+  it { is_expected.to respond_to(:students) }
 
   it 'checks the uniqueness of the tuple' do
     user = create(:user)
@@ -16,5 +17,20 @@ describe Teacher, type: :model do
     other = build(:teacher, user: user, klass: klass, subject: subject)
 
     expect(other).not_to be_valid
+  end
+
+  it 'retrieves the students of the teacher' do
+    user1 = create(:user_teacher, num_klass: 0)
+    user2 = create(:user_student, num_klass: 0)
+    user3 = create(:user_student, num_klass: 0)
+
+    klass1 = create(:klass)
+    klass2 = create(:klass)
+
+    teach = create(:teacher, user: user1, klass: klass1)
+    stud1 = create(:student, user: user2, klass: klass1)
+    stud2 = create(:student, user: user3, klass: klass2)
+
+    expect(teach.students).to match_array([stud1])
   end
 end
