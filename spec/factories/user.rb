@@ -9,7 +9,20 @@ FactoryGirl.define do
     end
 
     factory :user_teacher do
+      transient do
+        num_klass 2
+      end
+
       association :user_group, factory: :user_group_teacher
+
+      after(:create) do |user, evaluator|
+        klasses = create_list(:klass, evaluator.num_klass)
+        subjects = create_list(:subject, evaluator.num_klass)
+
+        klasses.zip(subjects).each do |klass, subject|
+          create(:teacher, user: user, klass: klass, subject: subject)
+        end
+      end
     end
 
     factory :user_student do

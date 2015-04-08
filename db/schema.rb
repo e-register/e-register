@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150408162703) do
+ActiveRecord::Schema.define(version: 20150408171937) do
 
   create_table "klasses", force: :cascade do |t|
     t.string   "name"
@@ -36,6 +36,19 @@ ActiveRecord::Schema.define(version: 20150408162703) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
+
+  create_table "teachers", force: :cascade do |t|
+    t.integer  "user_id"
+    t.integer  "klass_id"
+    t.integer  "subject_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "teachers", ["klass_id"], name: "index_teachers_on_klass_id"
+  add_index "teachers", ["subject_id"], name: "index_teachers_on_subject_id"
+  add_index "teachers", ["user_id", "klass_id", "subject_id"], name: "index_teachers_on_user_id_and_klass_id_and_subject_id", unique: true
+  add_index "teachers", ["user_id"], name: "index_teachers_on_user_id"
 
   create_table "user_groups", force: :cascade do |t|
     t.string   "name"

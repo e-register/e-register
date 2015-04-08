@@ -6,4 +6,8 @@ class Klass < ActiveRecord::Base
   def students
     Student.where(klass: self).includes(:user)
   end
+
+  def teachers
+    Teacher.where(klass: self).includes(:user)
+  end
 end
