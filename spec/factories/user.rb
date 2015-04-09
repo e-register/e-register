@@ -1,8 +1,20 @@
 FactoryGirl.define do
   factory :user do
+    transient do
+      num_credential 0
+    end
+
     name 'Edoardo'
     surname 'Morassutto'
     user_group
+
+    after(:create) do |user, evaluator|
+      evaluator.num_credential.times do
+        create(:credential, user: user)
+      end
+    end
+
+
 
     factory :user_admin do
       association :user_group, factory: :user_group_admin

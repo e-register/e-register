@@ -5,4 +5,5 @@ class User < ActiveRecord::Base
 
   has_many :students
   has_many :teachers
+  has_many :credentials
 end

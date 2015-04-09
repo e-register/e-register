@@ -46,4 +46,9 @@ describe User, type: :model do
 
     expect(user.students).to match_array(students)
   end
+
+  it 'has credentials' do
+    user = create(:user, num_credential: 2)
+    expect(user.credentials.count).to eq(2)
+  end
 end
