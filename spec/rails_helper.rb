@@ -14,6 +14,9 @@ require 'capybara/rspec'
 require 'capybara/poltergeist'
 Capybara.javascript_driver = :poltergeist
 
+# Load support files
+Dir[Rails.root.join("spec/support/**/*.rb")].each {|f| require f}
+
 # Requires supporting ruby files with custom matchers and macros, etc, in
 # spec/support/ and its subdirectories. Files matching `spec/**/*_spec.rb` are
 # run as spec files by default. This means that files in spec/support that end
@@ -59,14 +62,32 @@ RSpec.configure do |config|
   # Add the support for FactoryGirl
   config.include FactoryGirl::Syntax::Methods
 
+  # Prepare the database_cleaner gem
   config.before(:suite) do
     DatabaseCleaner.strategy = :transaction
     DatabaseCleaner.clean_with(:truncation)
   end
 
+  # Clean the database after each test
   config.around(:each) do |example|
     DatabaseCleaner.cleaning do
       example.run
     end
   end
+
+  # Add the support for stubbing the login
+  config.include Devise::TestHelpers, type: :controller
+  config.include DeviseControllerMacros, type: :controller
+  config.include Warden::Test::Helpers, type: :request
+  config.include DeviseRequestMacros, type: :request
+
+  # Enable the Warden Debug Mode to allow the current_user stubbing
+  config.around(:each) do |example|
+    Warden.test_mode!
+    example.run
+    Warden.test_reset!
+  end
+
+  # Speedup the tests reducing the security of the hash algorithm
+  BCrypt::Engine.cost = 1
 end
