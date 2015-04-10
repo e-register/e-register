@@ -19,4 +19,26 @@ describe Score, type: :model do
     score.reload
     expect(score.as_string).to match(/½/)
   end
+
+  it 'finds the correct score' do
+    scores = {}
+    [ 1.0, 3.0, 5.0, 7.0, 7.5 ].each do |value|
+      scores[value] = create(:score, value: value)
+    end
+
+    expect(Score.from_value(1.0)).to eq(scores[1.0])
+
+    expect(Score.from_value(1.5)).to eq(scores[1.0])
+    expect(Score.from_value(2.0)).to eq(scores[1.0])
+
+    expect(Score.from_value(5.0)).to eq(scores[5.0])
+
+    expect(Score.from_value(4.999999)).to eq(scores[5.0])
+    expect(Score.from_value(5.000001)).to eq(scores[5.0])
+
+    expect(Score.from_value(7.45)).to eq(scores[7.5])
+
+    expect(Score.from_value(0.0)).to eq(scores[1.0])
+    expect(Score.from_value(10.0)).to eq(scores[7.5])
+  end
 end
