@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150409161244) do
+ActiveRecord::Schema.define(version: 20150410131436) do
 
   create_table "credentials", force: :cascade do |t|
     t.integer  "user_id"
@@ -23,6 +23,10 @@ ActiveRecord::Schema.define(version: 20150409161244) do
 
   add_index "credentials", ["user_id"], name: "index_credentials_on_user_id"
   add_index "credentials", ["username"], name: "index_credentials_on_username", unique: true
+
+  create_table "evaluation_types", force: :cascade do |t|
+    t.string "name"
+  end
 
   create_table "klasses", force: :cascade do |t|
     t.string   "name"
