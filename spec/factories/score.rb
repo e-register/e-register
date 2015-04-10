@@ -1,3 +1,5 @@
+#encoding: utf-8
+
 FactoryGirl.define do
   factory :score do
     value 8.0

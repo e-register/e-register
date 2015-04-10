@@ -1,3 +1,5 @@
+#encoding: utf-8
+
 require 'rails_helper'
 
 describe Score, type: :model do
