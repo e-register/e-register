@@ -1,7 +1,5 @@
 source 'https://rubygems.org'
 
-ENV['DB'] ||= 'sqlite'
-
 gem 'rails', '4.2.1'
 
 # Install the proper gem according to the used database
