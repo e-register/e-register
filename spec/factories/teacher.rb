@@ -2,6 +2,6 @@ FactoryGirl.define do
   factory :teacher do
     user
     klass
-    subject
+    association :subject, factory: :subject
   end
 end

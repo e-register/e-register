@@ -19,6 +19,19 @@ class User < ActiveRecord::Base
   has_many :teachers
   has_many :credentials
 
+  # Fetch all the evaluations of the user
+  def evaluations
+    evals = []
+    students.each { |stud| evals.concat(stud.evaluations) }
+    teachers.each { |teach| evals.concat(teach.evaluations) }
+    evals
+  end
+
+
+  ########################
+  # AUTHENTICATION STUFF #
+  ########################
+
   # Checks if the password provided is correct for the current user. This uses
   # the :username virtual attribute to find the correct credential
   def valid_password?(password)

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150409161244) do
+ActiveRecord::Schema.define(version: 20150412101340) do
 
   create_table "credentials", force: :cascade do |t|
     t.integer  "user_id"
@@ -24,11 +24,59 @@ ActiveRecord::Schema.define(version: 20150409161244) do
   add_index "credentials", ["user_id"], name: "index_credentials_on_user_id"
   add_index "credentials", ["username"], name: "index_credentials_on_username", unique: true
 
+  create_table "evaluation_scales", force: :cascade do |t|
+    t.text     "checkpoints"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
+
+  create_table "evaluation_types", force: :cascade do |t|
+    t.string "name"
+  end
+
+  create_table "evaluations", force: :cascade do |t|
+    t.integer  "teacher_id"
+    t.integer  "student_id"
+    t.date     "date"
+    t.integer  "klass_test_id"
+    t.integer  "score_id"
+    t.float    "score_points"
+    t.float    "total_score"
+    t.integer  "evaluation_scale_id"
+    t.integer  "evaluation_type_id"
+    t.string   "description"
+    t.boolean  "visible"
+    t.datetime "created_at",          null: false
+    t.datetime "updated_at",          null: false
+  end
+
+  add_index "evaluations", ["klass_test_id"], name: "index_evaluations_on_klass_test_id"
+  add_index "evaluations", ["student_id"], name: "index_evaluations_on_student_id"
+  add_index "evaluations", ["teacher_id"], name: "index_evaluations_on_teacher_id"
+
+  create_table "klass_tests", force: :cascade do |t|
+    t.integer  "teacher_id"
+    t.date     "date"
+    t.float    "total_score"
+    t.integer  "evaluation_scale_id"
+    t.string   "description"
+    t.datetime "created_at",          null: false
+    t.datetime "updated_at",          null: false
+  end
+
+  add_index "klass_tests", ["teacher_id"], name: "index_klass_tests_on_teacher_id"
+
   create_table "klasses", force: :cascade do |t|
     t.string   "name"
     t.string   "detail"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "scores", force: :cascade do |t|
+    t.float   "value"
+    t.string  "as_string",  null: false
+    t.boolean "is_counted", null: false
   end
 
   create_table "students", force: :cascade do |t|

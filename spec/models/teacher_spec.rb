@@ -7,6 +7,8 @@ describe Teacher, type: :model do
   it { is_expected.to respond_to(:klass) }
   it { is_expected.to respond_to(:subject) }
   it { is_expected.to respond_to(:students) }
+  it { is_expected.to respond_to(:klass_tests) }
+  it { is_expected.to respond_to(:evaluations) }
 
   it 'checks the uniqueness of the tuple' do
     user = create(:user)

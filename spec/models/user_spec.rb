@@ -51,4 +51,40 @@ describe User, type: :model do
     user = create(:user, num_credential: 2)
     expect(user.credentials.count).to eq(2)
   end
+
+  it 'fetches the evaluations if the user is a student' do
+    user = create(:user_student)
+
+    evaluations = []
+    user.students.each do |stud|
+      evaluations << create(:evaluation, student: stud)
+    end
+
+    # a fake eval is other class
+    create(:evaluation)
+    # a fake eval in the same class
+    create(:evaluation, teacher: create(:teacher, klass: user.students.first.klass))
+    # a hidden eval
+    create(:evaluation, student: user.students.first, visible: false)
+
+    expect(user.evaluations).to match_array(evaluations)
+  end
+
+  it 'fetches the evaluations if the user is a teacher' do
+    user = create(:user_teacher)
+
+    evaluations = []
+    user.teachers.each do |teach|
+      evaluations << create(:evaluation, teacher: teach)
+    end
+
+    # a fake eval
+    create(:evaluation)
+    # an eval of someone
+    create(:evaluation, teacher: create(:teacher))
+    # an eval of his student but of someone
+    create(:evaluation, teacher: create(:teacher), student: user.teachers.first.students.first)
+
+    expect(user.evaluations).to match_array(evaluations)
+  end
 end
