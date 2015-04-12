@@ -5,4 +5,5 @@ describe KlassTest, type: :model do
 
   it { is_expected.to respond_to(:teacher) }
   it { is_expected.to respond_to(:evaluation_scale) }
+  it { is_expected.to respond_to(:evaluations) }
 end

@@ -5,6 +5,7 @@ class Teacher < ActiveRecord::Base
   belongs_to :klass
   belongs_to :subject
   has_many :klass_tests
+  has_many :evaluations
 
   # Search all the students that are in the same class of this teacher
   def students

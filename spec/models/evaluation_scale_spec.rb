@@ -5,14 +5,14 @@ describe EvaluationScale, type: :model do
 
   it { is_expected.to respond_to(:checkpoints) }
   it { is_expected.to respond_to(:compute_score) }
+  it { is_expected.to respond_to(:evaluations) }
 
   it 'has attribute checkpoints of kind of Hash' do
     expect(subject.checkpoints).to be_a(Hash)
   end
 
   it 'computes the correct score' do
-    # create 19 score: 1, 1.5, 2, 2.5, ... 9, 9.5, 10
-    19.times { |n| create(:score, value: (n/2.0)+1, as_string: (n/2.0)+1) }
+    generate_scores
 
     scale = {
         checkpoints: [
@@ -48,5 +48,15 @@ describe EvaluationScale, type: :model do
   it 'does not compute the score if the items are invalid' do
     expect(subject.compute_score(-0.1)).to be_nil
     expect(subject.compute_score(1.1)).to be_nil
+  end
+
+  it 'prepare the checkpoints correctly' do
+    points = [
+        { 'percentage' => 0.0, 'value' => 1.0 },
+        { 'percentage' => 1.0, 'value' => 10.0 },
+    ]
+    scale = create(:evaluation_scale, checkpoints: { 'checkpoints' => points })
+
+    expect(scale.send(:prepare_points)).to eq(points)
   end
 end
