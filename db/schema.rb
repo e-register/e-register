@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150410135623) do
+ActiveRecord::Schema.define(version: 20150412100526) do
 
   create_table "credentials", force: :cascade do |t|
     t.integer  "user_id"
@@ -33,6 +33,18 @@ ActiveRecord::Schema.define(version: 20150410135623) do
   create_table "evaluation_types", force: :cascade do |t|
     t.string "name"
   end
+
+  create_table "klass_tests", force: :cascade do |t|
+    t.integer  "teacher_id"
+    t.date     "date"
+    t.float    "total_score"
+    t.integer  "evaluation_scale_id"
+    t.string   "description"
+    t.datetime "created_at",          null: false
+    t.datetime "updated_at",          null: false
+  end
+
+  add_index "klass_tests", ["teacher_id"], name: "index_klass_tests_on_teacher_id"
 
   create_table "klasses", force: :cascade do |t|
     t.string   "name"
