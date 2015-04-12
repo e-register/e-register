@@ -1,12 +1,15 @@
 language: ruby
 cache: bundler
+install: bundle install --jobs=3 --retry=3 --without production development --path vendor/bundle
+cache:
+  directories:
+  - vendor/bundle
 rvm:
   - 2.2.0
   - 1.9.3
 env:
   - DB=sqlite
   - DB=postgresql
-install: bundle install --jobs=3 --retry=3 --without production development --path vendor/bundle
 before_script:
   - psql -c 'create database e_register' -U postgres
   - cp config/travis_database.yml config/database.yml
