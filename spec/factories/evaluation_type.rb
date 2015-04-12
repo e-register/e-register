@@ -2,6 +2,9 @@ FactoryGirl.define do
   factory :evaluation_type do
     name 'Written'
 
+    # Prevent duplicates within the specs
+    initialize_with { EvaluationType.find_or_create_by(name: name) }
+
     factory :evaluation_type_written do
       name 'Written'
     end

@@ -32,4 +32,12 @@ describe Student, type: :model do
 
     expect(stud.teachers).to match_array([teach1])
   end
+
+  it 'filter the hidden evaluations' do
+    user = create(:user_student)
+    eval = create(:evaluation, student: user.students.first)
+    create(:evaluation, student: user.students.first, visible: false)
+
+    expect(user.students.first.evaluations).to match_array([eval])
+  end
 end

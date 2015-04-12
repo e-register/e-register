@@ -2,7 +2,7 @@ FactoryGirl.define do
   factory :evaluation do
     teacher
     student
-    date Date.new
+    date Date.today
     klass_test
     association :score, value: 8, as_string: '8'
     score_points 8.0

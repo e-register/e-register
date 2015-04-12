@@ -7,8 +7,8 @@ describe EvaluationType, type: :model do
   it { is_expected.to be_valid }
 
   it 'has unique name' do
-    create(:evaluation_type_written)
-    type = build(:evaluation_type_written)
+    create(:evaluation_type, name: 'Written')
+    type = EvaluationType.new(name: 'Written')
     expect(type).not_to be_valid
   end
 
