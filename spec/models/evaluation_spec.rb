@@ -10,55 +10,24 @@ describe Evaluation, type: :model do
   it { is_expected.to respond_to(:evaluation_scale) }
   it { is_expected.to respond_to(:evaluation_type) }
 
-  it 'returns the total score from klass_test if missing' do
-    klass_test = create(:klass_test)
-
-    subject.klass_test = klass_test
-    subject.total_score = nil
-
-    expect(subject.total_score).to eq(klass_test.total_score)
-  end
-
-  it 'returns the total score from evaluation even with klass_test' do
-    klass_test = create(:klass_test)
-    subject.klass_test = klass_test
-    subject.total_score = 123
-
-    expect(subject.total_score).to eq(123)
-  end
-
-  it 'returns nil if the total score is missing' do
-    subject.total_score = nil
-    subject.klass_test = nil
-
-    expect(subject.total_score).to be_nil
-  end
-
-
-  it 'returns the klass_test description if missing' do
-    klass_test = create(:klass_test)
-
-    subject.klass_test = klass_test
-    subject.description = nil
-
-    expect(subject.description).to eq(klass_test.description)
-  end
-
-  it 'returns the description from evaluation even with klass_test' do
-    klass_test = create(:klass_test)
-    subject.klass_test = klass_test
-    subject.description = 'BlaBlaBla'
-
-    expect(subject.description).to eq('BlaBlaBla')
-  end
-
-  it 'returns an empty string if the description is missing' do
-    klass_test = create(:klass_test)
-    subject.klass_test = nil
-    subject.description = nil
-
-    expect(subject.description).to eq('')
-  end
+  attributes_override_check(base_class: 'evaluation',
+                            base_attribute: 'total_score',
+                            super_attribute: 'klass_test',
+                            base_value: 123)
+  attributes_override_check(base_class: 'evaluation',
+                            base_attribute: 'description',
+                            super_attribute: 'klass_test',
+                            base_value: 'BlaBlaBla',
+                            default_value: '')
+  attributes_override_check(base_class: 'evaluation',
+                            base_attribute: 'date',
+                            super_attribute: 'klass_test',
+                            base_value: Date.yesterday)
+  attributes_override_check(base_class: 'evaluation',
+                            base_attribute: 'evaluation_scale',
+                            super_attribute: 'klass_test',
+                            base_value: FactoryGirl.build(:evaluation_scale),
+                            save_base_value: true)
 
   it 'computes the correct score' do
     generate_scores
@@ -77,6 +46,7 @@ describe Evaluation, type: :model do
     evaluation = create(:evaluation, score_points: 8.0, total_score: 10.0)
     evaluation.score = nil
     evaluation.evaluation_scale = nil
+    evaluation.klass_test = nil
 
     expect { evaluation.compute_score }.to raise_exception
   end

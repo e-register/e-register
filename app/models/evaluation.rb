@@ -7,18 +7,26 @@ class Evaluation < ActiveRecord::Base
   belongs_to :evaluation_type
 
   def total_score
-    attribute(:total_score) || (klass_test && klass_test.total_score)
+    super || (klass_test && klass_test.total_score)
   end
 
   def description
-    return attribute(:description) unless attribute(:description).blank?
+    return super unless super.blank?
     klass_test.try(:description).try(:to_s) || ""
+  end
+
+  def date
+    super || (klass_test && klass_test.date)
+  end
+
+  def evaluation_scale
+    return super if attribute(:evaluation_scale_id)
+    klass_test && klass_test.evaluation_scale
   end
 
   def compute_score
     if evaluation_scale
-      self.score = evaluation_scale.compute_score(score_points / total_score)
-      self.save!
+      update!(score: evaluation_scale.compute_score(score_points / total_score))
     else
       raise Exception, "The Evaluation Scale cannot be nil"
     end
