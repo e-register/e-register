@@ -89,7 +89,6 @@ ActiveRecord::Schema.define(version: 20150413151418) do
 
   create_table "presences", force: :cascade do |t|
     t.integer  "teacher_id"
-    t.integer  "klass_id"
     t.integer  "student_id"
     t.date     "date"
     t.integer  "hour"
@@ -101,7 +100,6 @@ ActiveRecord::Schema.define(version: 20150413151418) do
   end
 
   add_index "presences", ["date"], name: "index_presences_on_date"
-  add_index "presences", ["klass_id"], name: "index_presences_on_klass_id"
   add_index "presences", ["student_id"], name: "index_presences_on_student_id"
   add_index "presences", ["teacher_id"], name: "index_presences_on_teacher_id"
 

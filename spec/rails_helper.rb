@@ -90,4 +90,7 @@ RSpec.configure do |config|
 
   # Speedup the tests reducing the security of the hash algorithm
   BCrypt::Engine.cost = 1
+
+  # Enable SQL Logging
+  # ActiveRecord::Base.logger = Logger.new(STDOUT)
 end

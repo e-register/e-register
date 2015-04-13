@@ -12,4 +12,9 @@ class Teacher < ActiveRecord::Base
   def students
     Student.where(klass: klass).includes(:user)
   end
+
+  # Search the presences created by the user
+  def presences
+    Presence.where(teacher: user)
+  end
 end
