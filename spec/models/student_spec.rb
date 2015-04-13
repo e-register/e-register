@@ -54,4 +54,31 @@ describe Student, type: :model do
 
     expect(stud1.presences).to match_array([pres])
   end
+
+  it 'fetch correctly the last presence' do
+    stud = create(:student)
+
+    absent = create(:presence_type_absent)
+    present = create(:presence_type_present)
+
+    create(:presence, student: stud, date: Date.yesterday, hour: 1, presence_type: absent)
+    create(:presence, student: stud, date: Date.yesterday, hour: 5, presence_type: present)
+
+    create(:presence, student: stud, date: Date.today, hour: 1, presence_type: present)
+    pres = create(:presence, student: stud, date: Date.today, hour: 3, presence_type: absent)
+
+    expect(stud.last_today_presence).to eq(pres)
+  end
+
+  it 'returns nil if the user presence is not available' do
+    stud = create(:student)
+
+    absent = create(:presence_type_absent)
+    present = create(:presence_type_present)
+
+    create(:presence, student: stud, date: Date.yesterday, hour: 1, presence_type: absent)
+    create(:presence, student: stud, date: Date.yesterday, hour: 5, presence_type: present)
+
+    expect(stud.last_today_presence).to be_nil
+  end
 end
