@@ -7,10 +7,8 @@ describe Credential, type: :model do
   it { is_expected.to respond_to(:username) }
   it { is_expected.to respond_to(:password_hash) }
 
-  it 'has a unique username' do
-    other = build(:credential, username: subject.username)
-    expect(other).not_to be_valid
-  end
+  check_unique_field(:credential, :username, 'pippo')
+  check_required_field(:credential, [:user, :username, :password_hash])
 
   it 'stores password in a hashed way' do
     cred = create(:credential, password: 'secret')

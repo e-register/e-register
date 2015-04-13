@@ -40,4 +40,18 @@ describe Student, type: :model do
 
     expect(user.students.first.evaluations).to match_array([eval])
   end
+
+  it 'fetches the presences' do
+    stud1 = create(:student)
+    stud2 = create(:student)
+    stud3 = create(:student, klass: stud1.klass)
+
+    pres = create(:presence, student: stud1)
+    create(:presence, student: stud3)
+
+    # a fake presence
+    create(:presence, student: stud2)
+
+    expect(stud1.presences).to match_array([pres])
+  end
 end

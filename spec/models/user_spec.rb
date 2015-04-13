@@ -7,30 +7,7 @@ describe User, type: :model do
   it { is_expected.to respond_to(:surname) }
   it { is_expected.to respond_to(:user_group) }
 
-  it 'is invalid if the name is missing' do
-    user = build(:user, name: nil)
-    expect(user).to_not be_valid
-  end
-
-  it 'is invalid if the surname is missing' do
-    user = build(:user, surname: nil)
-    expect(user).to_not be_valid
-  end
-
-  it 'is invalid if the user group is missing' do
-    user = build(:user, user_group: nil)
-    expect(user).to_not be_valid
-  end
-
-  it 'is invalid if the name is empty' do
-    user = build(:user, name: '')
-    expect(user).to_not be_valid
-  end
-
-  it 'is invalid if the surname is empty' do
-    user = build(:user, surname: '')
-    expect(user).to_not be_valid
-  end
+  check_required_field(:user, [ :name, :surname, :user_group ])
 
   it 'is student if the group is student' do
     student = build(:user_student)
@@ -86,5 +63,38 @@ describe User, type: :model do
     create(:evaluation, teacher: create(:teacher), student: user.teachers.first.students.first)
 
     expect(user.evaluations).to match_array(evaluations)
+  end
+
+  it 'fetches the presences of the user as student' do
+    user = create(:user_student)
+    student = user.students.first
+
+    create(:teacher, klass: student.klass)
+
+    pres = create(:presence, student: student)
+    # a fake presence
+    create(:presence)
+    # a presence of a user's teacher
+    create(:presence, teacher: student.teachers.first.user)
+
+    expect(user.presences).to match_array([pres])
+  end
+
+  it 'fetches the presences of the user as teacher' do
+    user = create(:user_teacher)
+    teacher = user.teachers.first
+
+    stud1 = create(:student, klass: teacher.klass)
+    stud2 = create(:student)
+
+    pres = []
+    pres << create(:presence, teacher: user)
+    pres << create(:presence, student: stud1)
+
+    # fake presences
+    create(:presence)
+    create(:presence, student: stud2)
+
+    expect(user.presences).to match_array(pres)
   end
 end

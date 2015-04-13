@@ -53,8 +53,8 @@ RSpec.configure do |config|
   # https://relishapp.com/rspec/rspec-rails/docs
   config.infer_spec_type_from_file_location!
 
-  # Force to use transactional fixtures
-  config.use_transactional_fixtures = true
+  # Skip because of database_cleaner
+  config.use_transactional_fixtures = false
 
   # Add the support for Capybara
   config.include Capybara::DSL
@@ -90,4 +90,7 @@ RSpec.configure do |config|
 
   # Speedup the tests reducing the security of the hash algorithm
   BCrypt::Engine.cost = 1
+
+  # Enable SQL Logging
+  # ActiveRecord::Base.logger = Logger.new(STDOUT)
 end

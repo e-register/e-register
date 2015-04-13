@@ -11,10 +11,7 @@ describe Score, type: :model do
 
   it { is_expected.to be_valid }
 
-  it 'is invalid without a string value' do
-    score = build(:score, as_string: '')
-    expect(score).not_to be_valid
-  end
+  check_required_field(:score, :as_string)
 
   it 'has the support for the ½ char' do
     score = create(:score_half)

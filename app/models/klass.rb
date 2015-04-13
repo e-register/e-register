@@ -11,4 +11,14 @@ class Klass < ActiveRecord::Base
   def teachers
     Teacher.where(klass: self).includes(:user)
   end
+
+  # Search the presences of the students in this class
+  def presences
+    Presence.where(student: students)
+  end
+
+  # Search the today's presence of the class
+  def today_presences
+    Presence.today_presences(students)
+  end
 end

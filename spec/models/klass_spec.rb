@@ -6,22 +6,8 @@ describe Klass do
   it { is_expected.to respond_to(:name) }
   it { is_expected.to respond_to(:detail) }
 
-  it 'has the correct name' do
-    klass = create(:klass, name: 'IVCis')
-    expect(klass.name).to eq('IVCis')
-  end
-
-  it 'has an unique name' do
-    klass = build(:klass, name: subject.name)
-    expect(klass).not_to be_valid
-  end
-
-  it 'is not valid without a name' do
-    klass = build(:klass, name: nil)
-    expect(klass).not_to be_valid
-  end
-
-  # it 'has a coordinator'
+  check_unique_field(:klass, :name, 'Class name')
+  check_required_field(:klass, :name)
 
   it 'has the students' do
     user1 = create(:user_student, num_klass: 0)
@@ -59,5 +45,39 @@ describe Klass do
 
     expect(klass1.teachers.map { |s| s.user }).to match_array([user1])
     expect(klass2.teachers.map { |s| s.user }).to match_array([user1, user2])
+  end
+
+  it 'fetch the presences' do
+    stud1 = create(:student)
+    stud2 = create(:student)
+    stud3 = create(:student, klass: stud1.klass)
+
+    pres1 = create(:presence, student: stud1)
+    pres2 = create(:presence, student: stud3)
+
+    # a fake presence
+    create(:presence, student: stud2)
+
+    expect(stud1.klass.presences).to match_array([pres1, pres2])
+  end
+
+  it 'fetch the today\'s presences' do
+    stud1 = create(:student)
+    stud2 = create(:student, klass: stud1.klass)
+
+    absent = create(:presence_type_absent)
+    present = create(:presence_type_present)
+
+    create(:presence, student: stud1, date: Date.yesterday, hour: 1, presence_type: absent)
+    create(:presence, student: stud2, date: Date.yesterday, hour: 5, presence_type: present)
+
+    pres1 = create(:presence, student: stud1, date: Date.today, hour: 1, presence_type: present)
+    pres2 = create(:presence, student: stud1, date: Date.today, hour: 4, presence_type: absent)
+    pres3 = create(:presence, student: stud2, date: Date.today, hour: 3, presence_type: present)
+
+    # a fake presence
+    create(:presence)
+
+    expect(stud1.klass.today_presences).to eq([pres1, pres3, pres2])
   end
 end
