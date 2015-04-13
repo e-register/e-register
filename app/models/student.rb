@@ -11,8 +11,4 @@ class Student < ActiveRecord::Base
   def teachers
     Teacher.where(klass: klass).includes(:user)
   end
-
-  def last_today_presence
-    Presence.where(student: self, date: Date.today).order(:hour).last
-  end
 end
