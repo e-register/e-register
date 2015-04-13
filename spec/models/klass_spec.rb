@@ -60,4 +60,24 @@ describe Klass do
 
     expect(stud1.klass.presences).to match_array([pres1, pres2])
   end
+
+  it 'fetch the today\'s presences' do
+    stud1 = create(:student)
+    stud2 = create(:student, klass: stud1.klass)
+
+    absent = create(:presence_type_absent)
+    present = create(:presence_type_present)
+
+    create(:presence, student: stud1, date: Date.yesterday, hour: 1, presence_type: absent)
+    create(:presence, student: stud2, date: Date.yesterday, hour: 5, presence_type: present)
+
+    pres1 = create(:presence, student: stud1, date: Date.today, hour: 1, presence_type: present)
+    pres2 = create(:presence, student: stud1, date: Date.today, hour: 4, presence_type: absent)
+    pres3 = create(:presence, student: stud2, date: Date.today, hour: 3, presence_type: present)
+
+    # a fake presence
+    create(:presence)
+
+    expect(stud1.klass.today_presences).to eq([pres1, pres3, pres2])
+  end
 end

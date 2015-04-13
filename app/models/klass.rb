@@ -16,4 +16,9 @@ class Klass < ActiveRecord::Base
   def presences
     Presence.where(student: students)
   end
+
+  # Search the today's presence of the class
+  def today_presences
+    Presence.today_presences(students)
+  end
 end
