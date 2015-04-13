@@ -53,8 +53,8 @@ RSpec.configure do |config|
   # https://relishapp.com/rspec/rspec-rails/docs
   config.infer_spec_type_from_file_location!
 
-  # Force to use transactional fixtures
-  config.use_transactional_fixtures = true
+  # Skip because of database_cleaner
+  config.use_transactional_fixtures = false
 
   # Add the support for Capybara
   config.include Capybara::DSL

@@ -31,7 +31,7 @@ describe Teacher, type: :model do
 
     teach = create(:teacher, user: user1, klass: klass1)
     stud1 = create(:student, user: user2, klass: klass1)
-    stud2 = create(:student, user: user3, klass: klass2)
+    create(:student, user: user3, klass: klass2)
 
     expect(teach.students).to match_array([stud1])
   end

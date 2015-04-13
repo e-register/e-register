@@ -7,15 +7,6 @@ describe PresenceType, type: :model do
   it { is_expected.to respond_to(:description) }
   it { is_expected.to respond_to(:present) }
 
-  it 'has unique name' do
-    valid = create(:presence_type_present)
-    invalid = PresenceType.new(name: valid.name)
-
-    expect(invalid).not_to be_valid
-  end
-
-  it 'is invalid without a name' do
-    invalid = build(:presence_type, name: '')
-    expect(invalid).not_to be_valid
-  end
+  check_unique_field(:presence_type, :name, 'Present', create_method: :new)
+  check_required_field(:presence_type, :name)
 end

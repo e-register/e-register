@@ -6,22 +6,8 @@ describe Klass do
   it { is_expected.to respond_to(:name) }
   it { is_expected.to respond_to(:detail) }
 
-  it 'has the correct name' do
-    klass = create(:klass, name: 'IVCis')
-    expect(klass.name).to eq('IVCis')
-  end
-
-  it 'has an unique name' do
-    klass = build(:klass, name: subject.name)
-    expect(klass).not_to be_valid
-  end
-
-  it 'is not valid without a name' do
-    klass = build(:klass, name: nil)
-    expect(klass).not_to be_valid
-  end
-
-  # it 'has a coordinator'
+  check_unique_field(:klass, :name, 'Class name')
+  check_required_field(:klass, :name)
 
   it 'has the students' do
     user1 = create(:user_student, num_klass: 0)

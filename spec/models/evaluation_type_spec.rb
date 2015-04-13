@@ -6,14 +6,6 @@ describe EvaluationType, type: :model do
   it { is_expected.to respond_to(:name) }
   it { is_expected.to be_valid }
 
-  it 'has unique name' do
-    create(:evaluation_type, name: 'Written')
-    type = EvaluationType.new(name: 'Written')
-    expect(type).not_to be_valid
-  end
-
-  it 'is invalid without a name' do
-    type = build(:evaluation_type, name: '')
-    expect(type).not_to be_valid
-  end
+  check_unique_field(:evaluation_type, :name, 'Written', create_method: :new)
+  check_required_field(:evaluation_type, :name)
 end
