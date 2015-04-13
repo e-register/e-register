@@ -27,6 +27,16 @@ class User < ActiveRecord::Base
     evals
   end
 
+  # Fetch the presence of the User: the student's one and the teachers one
+  def presences
+    # the presences of the teacher
+    pres = Presence.where(teacher: self)
+    # the presences of the student
+    students.each { |stud| pres.concat(stud.presences) }
+    # the presences of all the students in the classes where the teacher teaches
+    teachers.each { |teach| pres.concat(teach.klass.presences) }
+    pres.to_a.uniq
+  end
 
   ########################
   # AUTHENTICATION STUFF #

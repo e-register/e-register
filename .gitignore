@@ -24,6 +24,3 @@ config/database.yml
 
 # Exclude the coveralls results
 coverage/
-
-# Exclude binstubs
-bin/

@@ -35,4 +35,18 @@ describe Teacher, type: :model do
 
     expect(teach.students).to match_array([stud1])
   end
+
+  it 'fetches the correct presences' do
+    teach = create(:teacher)
+    student = create(:student, klass: teach.klass)
+
+    pres = create(:presence, teacher: teach.user)
+
+    # a fake presence
+    create(:presence)
+    # a presence of a student in the same class of the teacher
+    create(:presence, student: student)
+
+    expect(teach.presences).to match_array([pres])
+  end
 end

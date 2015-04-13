@@ -46,4 +46,18 @@ describe Klass do
     expect(klass1.teachers.map { |s| s.user }).to match_array([user1])
     expect(klass2.teachers.map { |s| s.user }).to match_array([user1, user2])
   end
+
+  it 'fetch the presences' do
+    stud1 = create(:student)
+    stud2 = create(:student)
+    stud3 = create(:student, klass: stud1.klass)
+
+    pres1 = create(:presence, student: stud1)
+    pres2 = create(:presence, student: stud3)
+
+    # a fake presence
+    create(:presence, student: stud2)
+
+    expect(stud1.klass.presences).to match_array([pres1, pres2])
+  end
 end

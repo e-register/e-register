@@ -5,6 +5,7 @@ class Student < ActiveRecord::Base
   belongs_to :user
   belongs_to :klass
   has_many :evaluations, -> { where(visible: true) }
+  has_many :presences
 
   # Search all the teachers that taught in the same class of this student
   def teachers

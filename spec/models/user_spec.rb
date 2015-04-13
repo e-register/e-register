@@ -64,4 +64,37 @@ describe User, type: :model do
 
     expect(user.evaluations).to match_array(evaluations)
   end
+
+  it 'fetches the presences of the user as student' do
+    user = create(:user_student)
+    student = user.students.first
+
+    create(:teacher, klass: student.klass)
+
+    pres = create(:presence, student: student)
+    # a fake presence
+    create(:presence)
+    # a presence of a user's teacher
+    create(:presence, teacher: student.teachers.first.user)
+
+    expect(user.presences).to match_array([pres])
+  end
+
+  it 'fetches the presences of the user as teacher' do
+    user = create(:user_teacher)
+    teacher = user.teachers.first
+
+    stud1 = create(:student, klass: teacher.klass)
+    stud2 = create(:student)
+
+    pres = []
+    pres << create(:presence, teacher: user)
+    pres << create(:presence, student: stud1)
+
+    # fake presences
+    create(:presence)
+    create(:presence, student: stud2)
+
+    expect(user.presences).to match_array(pres)
+  end
 end
