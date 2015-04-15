@@ -97,4 +97,34 @@ describe User, type: :model do
 
     expect(user.presences).to match_array(pres)
   end
+
+  it 'has the events' do
+    teacher = create(:user_teacher)
+    student = create(:user_student)
+
+    klass = create(:klass)
+
+    # join the classes of the 2 users
+    student.students.first.update(klass: klass)
+    teacher.teachers.first.update(klass: klass)
+
+    # only teacher
+    event1 = create(:event, teacher: teacher, text: 'event1')
+    # teacher and student
+    event2 = create(:event, klass: klass, text: 'event2')
+    # only student
+    event3 = create(:event, klass: student.students.second.klass, text: 'event3')
+    # only teacher
+    event4 = create(:event, klass: teacher.teachers.second.klass, text: 'event4')
+    # only teacher as owner, not the student (hidden)
+    event5 = create(:event, teacher: teacher, visible: false, klass: klass, text: 'event5')
+
+    # a fake event
+    create(:event)
+
+    # the events as a teacher
+    expect(teacher.events).to match_array([event1, event2, event4, event5])
+    # the events as a student
+    expect(student.events).to match_array([event2, event3])
+  end
 end

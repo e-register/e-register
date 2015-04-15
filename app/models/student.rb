@@ -7,6 +7,8 @@ class Student < ActiveRecord::Base
   has_many :evaluations, -> { where(visible: true) }
   has_many :presences
 
+  delegate :events, to: :klass
+
   # Search all the teachers that taught in the same class of this student
   def teachers
     Teacher.where(klass: klass).includes(:user)

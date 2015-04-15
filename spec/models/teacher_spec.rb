@@ -49,4 +49,17 @@ describe Teacher, type: :model do
 
     expect(teach.presences).to match_array([pres])
   end
+
+  it 'fetches the correct events' do
+    teach = create(:teacher)
+
+    event = create(:event, teacher: teach.user)
+
+    # an event in the class of the teacher but not owned by him
+    create(:event, klass: teach.klass)
+    # a fake event
+    create(:event)
+
+    expect(teach.events).to match_array([event])
+  end
 end
