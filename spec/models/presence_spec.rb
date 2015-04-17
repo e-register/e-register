@@ -11,6 +11,8 @@ describe Presence, type: :model do
   it { is_expected.to respond_to(:justification) }
   it { is_expected.to respond_to(:note) }
 
+  check_required_field :presence, [ :teacher, :student, :date, :hour, :presence_type ]
+
   it 'fetch correctly the presences' do
     stud = create(:student)
 

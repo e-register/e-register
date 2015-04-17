@@ -8,4 +8,6 @@ describe Event, type: :model do
   it { is_expected.to respond_to(:date) }
   it { is_expected.to respond_to(:text) }
   it { is_expected.to respond_to(:visible) }
+
+  check_required_field :event, [ :teacher, :klass, :date, :text ]
 end
