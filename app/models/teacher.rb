@@ -17,4 +17,9 @@ class Teacher < ActiveRecord::Base
   def presences
     Presence.where(teacher: user)
   end
+
+  # Search the events created by the teacher
+  def events
+    Event.where(teacher: user)
+  end
 end

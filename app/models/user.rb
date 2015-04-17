@@ -38,6 +38,18 @@ class User < ActiveRecord::Base
     pres.to_a.uniq
   end
 
+  # Fetch the events of the User
+  def events
+    # the events created by the teacher
+    events = Event.where(teacher: self)
+    # the events of all the my classes (if I'm a student)
+    students.each { |stud| events.concat(stud.klass.events) }
+    # the events of all the my classes (if I'm a teacher)
+    teachers.each { |teach| events.concat(teach.klass.events) }
+    # remove the duplicates
+    events.to_a.uniq
+  end
+
   ########################
   # AUTHENTICATION STUFF #
   ########################

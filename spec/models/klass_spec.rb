@@ -80,4 +80,17 @@ describe Klass do
 
     expect(stud1.klass.today_presences).to eq([pres1, pres3, pres2])
   end
+
+  it 'has the events' do
+    klass = create(:klass)
+
+    event = create(:event, klass: klass)
+
+    # a fake event
+    create(:event)
+    # a hidden event
+    create(:event, klass: klass, visible: false)
+
+    expect(klass.events).to match_array([event])
+  end
 end
