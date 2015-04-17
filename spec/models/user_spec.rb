@@ -97,4 +97,31 @@ describe User, type: :model do
 
     expect(user.presences).to match_array(pres)
   end
+
+  it 'fetches the signs as a student' do
+    user = create(:user_student)
+    student = user.students.first
+
+    sign = create(:sign, klass: student.klass)
+
+    # a fake sign
+    create(:sign)
+
+    expect(user.signs).to match_array([sign])
+  end
+
+  it 'fetches the signs as a teacher' do
+    user = create(:user_teacher)
+    teacher = user.teachers.first
+
+    sign1 = create(:sign, teacher: user)
+    sign2 = create(:sign, klass: teacher.klass, subject: teacher.subject)
+
+    # some fake signs
+    create(:sign)
+    create(:sign, klass: teacher.klass)
+    create(:sign, subject: teacher.subject)
+
+    expect(user.signs).to match_array([sign1, sign2])
+  end
 end

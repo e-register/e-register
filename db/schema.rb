@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150413151418) do
+ActiveRecord::Schema.define(version: 20150417140743) do
 
   create_table "credentials", force: :cascade do |t|
     t.integer  "user_id"
@@ -108,6 +108,22 @@ ActiveRecord::Schema.define(version: 20150413151418) do
     t.string  "as_string",  null: false
     t.boolean "is_counted", null: false
   end
+
+  create_table "signs", force: :cascade do |t|
+    t.integer  "teacher_id"
+    t.integer  "subject_id"
+    t.integer  "klass_id"
+    t.date     "date"
+    t.integer  "hour"
+    t.string   "lesson"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "signs", ["date"], name: "index_signs_on_date"
+  add_index "signs", ["klass_id"], name: "index_signs_on_klass_id"
+  add_index "signs", ["subject_id"], name: "index_signs_on_subject_id"
+  add_index "signs", ["teacher_id"], name: "index_signs_on_teacher_id"
 
   create_table "students", force: :cascade do |t|
     t.integer  "user_id"

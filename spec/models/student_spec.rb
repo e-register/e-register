@@ -28,14 +28,17 @@ describe Student, type: :model do
 
     stud = create(:student, user: user1, klass: klass1)
     teach1 = create(:teacher, user: user2, klass: klass1)
-    teach2 = create(:teacher, user: user3, klass: klass2)
+
+    create(:teacher, user: user3, klass: klass2)
 
     expect(stud.teachers).to match_array([teach1])
   end
 
   it 'filter the hidden evaluations' do
     user = create(:user_student)
+
     eval = create(:evaluation, student: user.students.first)
+
     create(:evaluation, student: user.students.first, visible: false)
 
     expect(user.students.first.evaluations).to match_array([eval])
@@ -53,5 +56,16 @@ describe Student, type: :model do
     create(:presence, student: stud2)
 
     expect(stud1.presences).to match_array([pres])
+  end
+
+  it 'fetches the signs' do
+    stud = create(:student)
+
+    sign = create(:sign, klass: stud.klass)
+
+    # a fake sign
+    create(:sign)
+
+    expect(stud.signs).to match_array([sign])
   end
 end
