@@ -22,4 +22,9 @@ class Teacher < ActiveRecord::Base
   def events
     Event.where(teacher: user)
   end
+
+  # Search the signs of the pair klass-subject
+  def signs
+    Sign.where(subject: subject, klass: klass)
+  end
 end

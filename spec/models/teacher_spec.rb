@@ -62,4 +62,18 @@ describe Teacher, type: :model do
 
     expect(teach.events).to match_array([event])
   end
+
+  it 'fetches the correct signs' do
+    teach = create(:teacher)
+
+    sign1 = create(:sign, teacher: teach.user, klass: teach.klass, subject: teach.subject)
+    sign2 = create(:sign, klass: teach.klass, subject: teach.subject)
+
+    # a fake sign
+    create(:sign)
+    # a fake sign of the same user
+    create(:sign, teacher: teach.user)
+
+    expect(teach.signs).to match_array([sign1, sign2])
+  end
 end

@@ -13,4 +13,9 @@ class Student < ActiveRecord::Base
   def teachers
     Teacher.where(klass: klass).includes(:user)
   end
+
+  # Search all the signs in the class of the student
+  def signs
+    Sign.where(klass: klass)
+  end
 end

@@ -50,6 +50,14 @@ class User < ActiveRecord::Base
     events.to_a.uniq
   end
 
+  # Fetch the signs of the user
+  def signs
+    signs = Sign.where(teacher: self)
+    students.each { |stud| signs.concat(stud.signs) }
+    teachers.each { |teach| signs.concat(teach.signs) }
+    signs.to_a.uniq
+  end
+
   ########################
   # AUTHENTICATION STUFF #
   ########################
