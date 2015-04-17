@@ -29,6 +29,8 @@ describe Evaluation, type: :model do
                             base_value: FactoryGirl.build(:evaluation_scale),
                             save_base_value: true)
 
+  check_required_field :evaluation, [ :teacher, :student, :evaluation_type ]
+
   it 'computes the correct score' do
     generate_scores
 

@@ -57,10 +57,6 @@ describe User, type: :model do
 
     # a fake eval
     create(:evaluation)
-    # an eval of someone
-    create(:evaluation, teacher: create(:teacher))
-    # an eval of his student but of someone
-    create(:evaluation, teacher: create(:teacher), student: user.teachers.first.students.first)
 
     expect(user.evaluations).to match_array(evaluations)
   end

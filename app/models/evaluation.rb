@@ -6,6 +6,8 @@ class Evaluation < ActiveRecord::Base
   belongs_to :evaluation_scale
   belongs_to :evaluation_type
 
+  validates_presence_of :teacher, :student, :evaluation_type
+
   def total_score
     super || (klass_test && klass_test.total_score)
   end
