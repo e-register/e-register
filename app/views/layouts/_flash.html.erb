@@ -1,10 +1,8 @@
-<div class="row">
+<div class="flashes row col-lg-4 pull-right">
   <% flash.each do |name, msg| %>
-    <div class="col-md-6">
-      <div class="flash alert alert-<%= name == 'alert' ? 'danger' : 'success' %>">
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <%= msg %> (<%= name %>)
-      </div>
+    <div class="flash alert alert-<%= name == 'alert' ? 'danger' : 'success' %>">
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      <%= msg %>
     </div>
   <% end %>
 </div>

@@ -1,5 +1,5 @@
 $ ->
   callback = ->
-    $('.flash').hide('blind')
+    $('.flash').fadeOut()
 
   setTimeout callback, 5000
