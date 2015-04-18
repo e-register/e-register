@@ -2,4 +2,4 @@ $ ->
   callback = ->
     $('.flash').hide('blind')
 
-  setTimeout callback, 1000
+  setTimeout callback, 5000
