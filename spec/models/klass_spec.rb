@@ -93,4 +93,17 @@ describe Klass do
 
     expect(klass.events).to match_array([event])
   end
+
+  it 'fetches the notes' do
+    klass = create(:klass)
+
+    note = create(:note, notable: klass)
+
+    # a fake note
+    create(:note)
+    # an hidden note
+    create(:note, notable: klass, visible: false)
+
+    expect(klass.notes).to match_array([note])
+  end
 end

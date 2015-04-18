@@ -11,7 +11,8 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150417140743) do
+ActiveRecord::Schema.define(version: 20150418094330) do
+
   create_table "credentials", force: :cascade do |t|
     t.integer  "user_id"
     t.string   "username"
@@ -91,6 +92,21 @@ ActiveRecord::Schema.define(version: 20150417140743) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
+
+  create_table "notes", force: :cascade do |t|
+    t.integer  "teacher_id"
+    t.integer  "notable_id"
+    t.string   "notable_type"
+    t.date     "date"
+    t.boolean  "visible"
+    t.string   "text"
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
+  end
+
+  add_index "notes", ["date"], name: "index_notes_on_date"
+  add_index "notes", ["notable_type", "notable_id"], name: "index_notes_on_notable_type_and_notable_id"
+  add_index "notes", ["teacher_id"], name: "index_notes_on_teacher_id"
 
   create_table "presence_types", force: :cascade do |t|
     t.string   "name"

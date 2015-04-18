@@ -18,4 +18,9 @@ class Student < ActiveRecord::Base
   def signs
     Sign.where(klass: klass)
   end
+
+  # Search all the notes of the student
+  def notes
+    Note.where(notable: self)
+  end
 end

@@ -68,4 +68,17 @@ describe Student, type: :model do
 
     expect(stud.signs).to match_array([sign])
   end
+
+  it 'fetches the notes' do
+    stud = create(:student)
+
+    note = create(:note, notable: stud)
+
+    # a fake note
+    create(:note)
+    # an hidden note
+    create(:note, notable: stud, visible: false)
+
+    expect(stud.notes).to match_array([note])
+  end
 end
