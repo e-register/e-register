@@ -23,4 +23,9 @@ class Klass < ActiveRecord::Base
   def today_presences
     Presence.today_presences(students)
   end
+
+  # Search the notes of the klass
+  def notes
+    Note.where(notable: self)
+  end
 end

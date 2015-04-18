@@ -150,4 +150,19 @@ describe User, type: :model do
 
     expect(user.signs).to match_array([sign1, sign2])
   end
+
+  it 'fetches the notes' do
+    user = create(:user)
+
+    note1 = create(:note, teacher: user)
+    note2 = create(:note, teacher: user, visible: false)
+    note3 = create(:note, notable: user)
+
+    # a fake note
+    create(:note)
+    # an hidden note
+    create(:note, notable: user, visible: false)
+
+    expect(user.notes).to match_array([note1, note2, note3])
+  end
 end

@@ -58,6 +58,11 @@ class User < ActiveRecord::Base
     signs.to_a.uniq
   end
 
+  # Search the notes of the user
+  def notes
+    Note.unscoped.where.any_of({teacher: self}, {notable: self, visible: true})
+  end
+
   ########################
   # AUTHENTICATION STUFF #
   ########################
