@@ -1,5 +1,9 @@
-<h1>Hello World</h1>
-<p>
-  This controller is here because the Devise gem requires a root route.
-  When the controllers will be created this file will blow up!
-</p>
+<% if current_user %>
+    <div class="row">
+        <% APP_CONFIG['homepage'][current_user.user_group.name.downcase].each do |name, conf| %>
+            <%= home_block(name, conf) %>
+        <% end %>
+    </div>
+<% else %>
+    <%= render 'unlogged' %>
+<% end %>

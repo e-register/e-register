@@ -1,0 +1,22 @@
+// the height of the footer bar
+@footerHeight: 60px;
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+// reserve the space for the footer
+body { margin-bottom: @footerHeight; }
+
+footer {
+  position: absolute;
+  bottom: 0;
+  // center the footer
+  margin-left: auto;
+  margin-right: auto;
+  left: 0;
+  right: 0;
+  height: @footerHeight;
+  // remove the margin from the navigation bar
+  .navbar { margin-bottom: 0; }
+}
