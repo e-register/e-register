@@ -1,13 +1,5 @@
-<h1>Hello World</h1>
-<p>
-  This controller is here because the Devise gem requires a root route.
-  When the controllers will be created this file will blow up!
-</p>
-<div class="col-md-6">
-  <h1>Hello World</h1>
-  <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer sit amet sagittis diam. Nam sit amet lectus finibus, vestibulum arcu at, imperdiet augue. Mauris at leo ut nibh rutrum consequat at nec purus. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Donec a justo molestie, laoreet risus in, venenatis nisi. Cras lacinia porttitor porta. Nunc molestie tempus magna vel tempor. Sed volutpat id velit nec iaculis. Sed ligula massa, efficitur et nisi in, posuere ullamcorper tortor. Ut eget arcu luctus, pharetra mauris ut, vestibulum augue. Aliquam vel est pharetra, laoreet orci ut, posuere enim.
-</div>
-<div class="col-md-6">
-  <h1>Hello World</h1>
-  <p>Vestibulum ac iaculis lacus. Duis blandit nulla ante, vel posuere ex maximus quis. Nunc ullamcorper diam et velit cursus faucibus. Suspendisse sed metus erat. Donec at aliquet lorem. Donec non auctor quam. Fusce aliquet mauris ac sem mollis, sed gravida augue facilisis.
-</div>
+<% if current_user %>
+
+<% else %>
+    <%= render 'unlogged' %>
+<% end %>
