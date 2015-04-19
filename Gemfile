@@ -3,7 +3,7 @@ source 'https://rubygems.org'
 gem 'rails', '4.2.1'
 
 # Install the proper gem according to the used database
-gem 'sqlite3'
+# gem 'sqlite3'
 gem 'pg'
 
 gem 'activerecord_any_of'
@@ -65,3 +65,6 @@ group :test do
   gem 'poltergeist'
   gem 'database_cleaner'
 end
+
+
+gem 'rails_12factor', group: :production
