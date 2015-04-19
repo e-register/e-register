@@ -7,6 +7,8 @@ class ApplicationController < ActionController::Base
 
   rescue_from ActiveRecord::RecordNotFound, with: :user_not_authorized
 
+  before_filter :enable_profiler
+
   def home
     @home_blocks = APP_CONFIG['homepage'][current_user.user_group.name.downcase] if current_user
   end
@@ -68,6 +70,14 @@ class ApplicationController < ActionController::Base
       redirect_to root_path, notice: "#{model_name} deleted successfully"
     else
       redirect_to instance, alert: "Error deleting the #{model_name.downcase}"
+    end
+  end
+
+  private
+
+  def enable_profiler
+    if current_user.try(:user_group).try(:name) == 'Admin'
+      Rack::MiniProfiler.authorize_request
     end
   end
 end

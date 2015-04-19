@@ -33,6 +33,8 @@ gem 'bcrypt', '~> 3.1.7'
 # gem 'unicorn'
 
 
+gem 'rack-mini-profiler'
+
 group :development do
   # Only in the development environment because the Travis build with ruby < 2 fail with this
   gem 'byebug'
@@ -41,7 +43,6 @@ group :development do
   gem 'pry-rails'
   gem 'better_errors'
   gem 'binding_of_caller'
-  gem 'rack-mini-profiler'
 
   # Spring speeds up development by keeping your application running in the background.
   # Read more: https://github.com/rails/spring
