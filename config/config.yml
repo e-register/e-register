@@ -1,4 +1,45 @@
+# This is the main configuration file of the applications, any value in here will
+# be stored in APP_CONFIG global constant
+#
+# If you change this file make sure you restart the server!
+
+# The base school informations
 school:
+  # The full name of the school, will be placed in the top page header
   full_name: ITST J.F. Kennedy
+  # A subtitle for the header
   sub_name: Pordenone
+  # This is a shortcut in the navigation bar
   short_name: J.F. Kennedy
+
+# The homepage is dynamically generated from this field
+homepage:
+  # The buttons of any logged in user
+  anyone: &anyone
+    Classes:
+      description: Manage here your classes
+      buttons:
+        My Classes:
+          to: /
+
+  teacher_or_admin: &teacher_or_admin
+    Quick Menu:
+      description: Some quick action you can do here
+      buttons:
+        Add an Evaluation:
+          to: /
+        Add a Note:
+          to: /
+          type: warning
+
+  # the buttons of a teacher
+  teacher:
+    <<: *anyone
+    <<: *teacher_or_admin
+  # the buttons of a student
+  student:
+    <<: *anyone
+  # the buttons of an admin
+  admin:
+    <<: *anyone
+    <<: *teacher_or_admin

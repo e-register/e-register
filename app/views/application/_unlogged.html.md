@@ -16,12 +16,13 @@ You can write this page in 2 ways:
 In both formats the ERB support is present, so you can write `<%% ruby code... %>`.
 With this feature you can access to this variables:
 
-<% APP_CONFIG.each do |key, value| %>
-    <%= key %>:
-        <% value.each do |k, v| %>
-            <%= k %>: <%= v %>
-        <% end %>
-<% end %>
+```
+<%= APP_CONFIG.to_yaml.html_safe %>
+```
+
+```
+<%= APP_CONFIG.inspect.html_safe %>
+```
 
 For example, the text `<%%= APP_CONFIG['school']['full_name'] %>` will be replaced with
 `<%= APP_CONFIG['school']['full_name'] %>`
