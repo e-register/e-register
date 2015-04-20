@@ -34,6 +34,21 @@ describe User, type: :model do
     expect(user.students).to match_array(students)
   end
 
+  it 'fetches the klasses' do
+    user = create(:user_teacher, num_klass: 0)
+
+    klass1 = create(:klass)
+    klass2 = create(:klass)
+    klass3 = create(:klass)
+
+    create(:student, klass: klass1, user: user)
+    create(:teacher, klass: klass1, user: user)
+    create(:teacher, klass: klass2, user: user)
+    create(:teacher, klass: klass3, user: user)
+
+    expect(user.klasses).to match_array([klass1, klass2, klass3])
+  end
+
   it 'has credentials' do
     user = create(:user, num_credential: 2)
     expect(user.credentials.count).to eq(2)

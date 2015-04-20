@@ -27,6 +27,13 @@ class User < ActiveRecord::Base
     "#{name} #{surname}".strip
   end
 
+  def klasses
+    klasses = []
+    students.includes(:klass).each { |stud| klasses.push(stud.klass) }
+    teachers.includes(:klass).each { |teach| klasses.push(teach.klass) }
+    klasses.to_a.uniq
+  end
+
   # Fetch all the evaluations of the user
   def evaluations
     evals = []
@@ -73,10 +80,14 @@ class User < ActiveRecord::Base
 
   # User group check
   def method_missing(m, *args, &block)
+    return super unless m.to_s.end_with?('?')
+
     return true if user_group.name.downcase + '?' == m.to_s
     return false if UserGroup.find_by(name: m.to_s[0..-2].capitalize)
+
     super
   end
+
   # User group check
   def respond_to?(m)
     return true if UserGroup.find_by(name: m.to_s[0..-2].capitalize)

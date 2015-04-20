@@ -1,0 +1,17 @@
+<div class="page-header">
+  <h1>
+    <%= @user.full_name %>
+    <span class="label label-default"><%= @user.user_group.name %></span>
+  </h1>
+</div>
+
+<h2>Classes</h2>
+<% if @klasses.any? %>
+  <ul>
+  <% @klasses.each do |klass| %>
+    <li><%= klass.name %></li>
+  <% end %>
+  </ul>
+<% else %>
+  <em>This user has no class</em>
+<% end %>
