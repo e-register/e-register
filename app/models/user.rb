@@ -78,20 +78,11 @@ class User < ActiveRecord::Base
     Note.unscoped.where.any_of({teacher: self}, {notable: self, visible: true})
   end
 
-  # User group check
-  def method_missing(m, *args, &block)
-    return super unless m.to_s.end_with?('?')
-
-    return true if user_group.name.downcase + '?' == m.to_s
-    return false if UserGroup.find_by(name: m.to_s[0..-2].capitalize)
-
-    super
-  end
-
-  # User group check
-  def respond_to?(m)
-    return true if UserGroup.find_by(name: m.to_s[0..-2].capitalize)
-    super
+  # define helper methods for groups
+  [ :admin?, :teacher?, :student? ].each do |group|
+    define_method group do
+      return user_group.name.downcase + '?' == group.to_s
+    end
   end
 
   # Check if a user is in a user_group:
