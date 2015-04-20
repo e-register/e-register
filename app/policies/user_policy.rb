@@ -1,5 +1,5 @@
 class UserPolicy < ApplicationPolicy
   def show?
-    user.admin? || record == user
+    user && user.admin? || record == user
   end
 end
