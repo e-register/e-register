@@ -192,6 +192,7 @@ describe User, type: :model do
       expect(@u3).to respond_to(:teacher?)
 
       expect(@u1).not_to respond_to(:foobar?)
+      expect { @u1.foobar? }.to raise_exception
     end
 
     it 'to student?' do
