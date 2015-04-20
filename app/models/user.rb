@@ -24,7 +24,7 @@ class User < ActiveRecord::Base
   # surname: "Morassutto"
   # full_name: "Edoardo Morassutto"
   def full_name
-    "#{name} #{surname}"
+    "#{name} #{surname}".strip
   end
 
   # Fetch all the evaluations of the user
