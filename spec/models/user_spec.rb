@@ -165,4 +165,58 @@ describe User, type: :model do
 
     expect(user.notes).to match_array([note1, note2, note3])
   end
+
+  describe 'has dynamic user_group methods' do
+    before do
+      @u1 = create(:user_student)
+      @u2 = create(:user_teacher)
+      @u3 = create(:user_admin)
+    end
+
+    it 'responds to methods' do
+      expect(@u1).to respond_to(:admin?)
+      expect(@u2).to respond_to(:admin?)
+      expect(@u3).to respond_to(:admin?)
+
+      expect(@u1).to respond_to(:student?)
+      expect(@u2).to respond_to(:student?)
+      expect(@u3).to respond_to(:student?)
+
+      expect(@u1).to respond_to(:teacher?)
+      expect(@u2).to respond_to(:teacher?)
+      expect(@u3).to respond_to(:teacher?)
+
+      expect(@u1).not_to respond_to(:foobar?)
+    end
+
+    it 'to student?' do
+      expect(@u1).to be_student
+      expect(@u2).not_to be_student
+      expect(@u3).not_to be_student
+    end
+    it 'to teacher?' do
+      expect(@u1).not_to be_teacher
+      expect(@u2).to be_teacher
+      expect(@u3).not_to be_teacher
+    end
+    it 'to admin?' do
+      expect(@u1).not_to be_admin
+      expect(@u2).not_to be_admin
+      expect(@u3).to be_admin
+    end
+
+    it 'checks the user_groups correctly' do
+      expect(@u1.user_group? :student).to be_truthy
+      expect(@u2.user_group? :student).to be_falsey
+      expect(@u3.user_group? :student).to be_falsey
+
+      expect(@u1.user_group? 'teacher').to be_falsey
+      expect(@u2.user_group? 'teacher').to be_truthy
+      expect(@u3.user_group? 'teacher').to be_falsey
+
+      expect(@u1.user_group? 'Admin').to be_falsey
+      expect(@u2.user_group? 'Admin').to be_falsey
+      expect(@u3.user_group? 'Admin').to be_truthy
+    end
+  end
 end

@@ -63,6 +63,27 @@ class User < ActiveRecord::Base
     Note.unscoped.where.any_of({teacher: self}, {notable: self, visible: true})
   end
 
+  # User group check
+  def method_missing(m, *args, &block)
+    return true if user_group.name.downcase + '?' == m.to_s
+    return false if UserGroup.find_by(name: m.to_s[0..-2].capitalize)
+    super
+  end
+  # User group check
+  def respond_to?(m)
+    return true if UserGroup.find_by(name: m.to_s[0..-2].capitalize)
+    super
+  end
+
+  # Check if a user is in a user_group:
+  # Params:
+  #    group: can be a string or a symbol, the name of the group
+  # Example:
+  #   u.user_group? :admin
+  def user_group?(group)
+    user_group.name == group.to_s.capitalize
+  end
+
   ########################
   # AUTHENTICATION STUFF #
   ########################
