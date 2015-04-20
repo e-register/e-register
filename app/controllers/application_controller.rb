@@ -4,6 +4,7 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
 
   rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
+  before_filter :enable_profiler
 
   rescue_from ActiveRecord::RecordNotFound, with: :user_not_authorized
 
