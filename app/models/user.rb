@@ -19,6 +19,14 @@ class User < ActiveRecord::Base
   has_many :teachers
   has_many :credentials
 
+  # The user full name:
+  # name: "Edoardo"
+  # surname: "Morassutto"
+  # full_name: "Edoardo Morassutto"
+  def full_name
+    "#{name} #{surname}"
+  end
+
   # Fetch all the evaluations of the user
   def evaluations
     evals = []

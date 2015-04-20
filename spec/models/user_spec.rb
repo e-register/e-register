@@ -9,6 +9,11 @@ describe User, type: :model do
 
   check_required_field(:user, [ :name, :surname, :user_group ])
 
+  it 'has a full_name' do
+    user = create(:user, name: 'Edoardo', surname: 'Morassutto')
+    expect(user.full_name).to eq('Edoardo Morassutto')
+  end
+
   it 'is student if the group is student' do
     student = build(:user_student)
     group = build(:user_group_student)
