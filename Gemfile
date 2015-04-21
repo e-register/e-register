@@ -46,6 +46,9 @@ group :development do
   # Read more: https://github.com/rails/spring
   gem 'spring'
   gem 'spring-commands-rspec'
+
+  gem 'faker'
+  gem 'ffaker'
 end
 
 group :development, :test do
