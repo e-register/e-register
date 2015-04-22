@@ -27,6 +27,7 @@ class User < ActiveRecord::Base
     "#{name} #{surname}".strip
   end
 
+  # Fetch the classes of the user
   def klasses
     klasses = []
     students.includes(:klass).each { |stud| klasses.push(stud.klass) }
@@ -92,28 +93,5 @@ class User < ActiveRecord::Base
   #   u.user_group? :admin
   def user_group?(group)
     user_group.name == group.to_s.capitalize
-  end
-
-  ########################
-  # AUTHENTICATION STUFF #
-  ########################
-
-  # Checks if the password provided is correct for the current user. This uses
-  # the :username virtual attribute to find the correct credential
-  def valid_password?(password)
-    credential = Credential.find_by(username: username)
-    credential.valid_password?(password) if credential
-  end
-
-  # Prepare the user according to the username requested:
-  #  - Find the credential with the specified username
-  #  - Fetch the user of that credential
-  #  - Inject in that user the provided username (as virtual attribute for
-  #    `valid_password?`)
-  def self.find_for_database_authentication(conditions)
-    credential = Credential.find_by(conditions)
-    user = credential.try(:user)
-    user.username = conditions[:username] if user
-    user
   end
 end

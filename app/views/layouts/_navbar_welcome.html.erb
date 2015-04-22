@@ -1,2 +1,4 @@
 <%= button_to "Logout", destroy_user_session_path, method: :delete, class: ['btn', 'btn-warning', 'navbar-btn', 'pull-right'] %>
-<p class="navbar-text pull-right">Welcome, <%= link_to current_user.full_name, current_user_path %></p>
+<p class="navbar-text pull-right">
+  Welcome, <%= link_to current_user.full_name, current_user_path %> (<%= current_user_username %>)
+</p>

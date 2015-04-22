@@ -10,8 +10,9 @@ class ApplicationController < ActionController::Base
   def home
   end
 
-  def current_user
-    super
+  helper_method :current_user_username
+  def current_user_username
+    session[:username]
   end
 
   private
