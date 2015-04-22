@@ -2,6 +2,9 @@
   <h1>
     <%= @user.full_name %>
     <span class="label label-default"><%= @user.user_group.name %></span>
+    <% if @user == current_user %>
+        <span class="label label-success">You</span>
+    <% end %>
   </h1>
 </div>
 
@@ -9,7 +12,7 @@
 <% if @klasses.any? %>
   <ul>
   <% @klasses.each do |klass| %>
-    <li><%= klass.name %></li>
+    <li><%= render 'partials/klass_li', klass: klass %></li>
   <% end %>
   </ul>
 <% else %>

@@ -1,0 +1,4 @@
+<%= link_to klass.name, '#', class: ['btn', 'btn-default'] %>
+<% unless klass.detail.blank? %>
+    <small><%= klass.detail %></small>
+<% end %>
