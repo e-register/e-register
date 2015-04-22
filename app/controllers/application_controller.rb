@@ -8,6 +8,7 @@ class ApplicationController < ActionController::Base
   rescue_from ActiveRecord::RecordNotFound, with: :user_not_authorized
 
   def home
+    @home_blocks = APP_CONFIG['homepage'][current_user.user_group.name.downcase] if current_user
   end
 
   helper_method :current_user_username

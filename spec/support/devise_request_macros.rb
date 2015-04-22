@@ -1,6 +1,7 @@
 module DeviseRequestMacros
   def sign_in(user = nil)
-    login_as(user, scope: :user)
+    cred = create(:credential, user: user, password: 'secret')
+    page.driver.post user_session_path, user: { username: cred.username, password: 'secret' }
   end
 end
 
