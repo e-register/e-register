@@ -1,0 +1,20 @@
+<% user_groups = UserGroup.all.map { |group| [ group.name, group.id ] } %>
+
+<h1>Edit <%= @user.full_name %></h1>
+<div class="col-md-6">
+  <%= form_for @user do |f| %>
+    <div class="form-group">
+      <%= f.label :name %>
+      <%= f.text_field :name, class: 'form-control' %>
+    </div>
+     <div class="form-group">
+      <%= f.label :surname %>
+      <%= f.text_field :surname, class: 'form-control' %>
+    </div>
+     <div class="form-group">
+      <%= f.label :user_group_id %>
+      <%= f.select :user_group_id, user_groups, {}, class: 'form-control' %>
+    </div>
+     <%= f.submit 'Update', class: ['btn', 'btn-success'] %>
+  <% end %>
+</div>

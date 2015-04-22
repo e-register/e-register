@@ -33,4 +33,8 @@ class ApplicationPolicy
   def destroy?
     false
   end
+
+  def manage?
+    new? || edit? || destroy?
+  end
 end
