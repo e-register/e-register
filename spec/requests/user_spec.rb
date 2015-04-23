@@ -83,6 +83,44 @@ describe 'User', type: :request do
     end
   end
 
+  describe 'UsersController#new' do
+    it 'creates a new user with all informations correct' do
+      sign_in create(:user_admin)
+
+      visit new_user_path
+
+      fill_in 'Name', with: 'Foo'
+      fill_in 'Surname', with: 'Bar'
+      select 'Admin', from: 'User group'
+
+      click_on 'Create'
+
+      user = User.find_by(name: 'Foo', surname: 'Bar')
+      expect(user).not_to be_nil
+    end
+
+    it 'doesn\'t create the user if non-admin' do
+      sign_in create(:user_student)
+
+      visit new_user_path
+
+      expect(current_path).to eq(root_path)
+      expect(page).to have_content('You are not authorized to perform this action.')
+    end
+
+    it 'manage if an error' do
+      sign_in create(:user_admin)
+
+      visit new_user_path
+
+      allow_any_instance_of(User).to receive(:save).and_return(false)
+
+      click_on 'Create'
+
+      expect(current_path).to eq(new_user_path)
+    end
+  end
+
   describe 'UsersController#destroy' do
     it 'deletes the user if admin' do
       user = create(:user_student)
