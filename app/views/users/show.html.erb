@@ -9,15 +9,7 @@
 </div>
 
 <h2>Classes</h2>
-<% if @klasses.any? %>
-  <ul>
-  <% @klasses.each do |klass| %>
-    <li><%= render 'partials/klass_li', klass: klass %></li>
-  <% end %>
-  </ul>
-<% else %>
-  <em>This user has no class</em>
-<% end %>
+<%= render 'partials/klass_list', klasses: @klasses %>
 
 <% if policy(:user).manage? %>
   <hr/>
