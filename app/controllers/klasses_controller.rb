@@ -10,6 +10,8 @@ class KlassesController < ApplicationController
     authorize @klass
     @today_presences = @klass.today_presences
     @today_signs = @klass.today_signs
+    @today_events = @klass.today_events
+
     @students = @klass.students.to_a.uniq { |x|x.user }.
         sort_by{ |x| [x.user.surname, x.user.name] }
     @teachers = @klass.teachers.to_a.uniq{ |x| x.user }.

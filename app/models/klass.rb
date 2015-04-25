@@ -25,12 +25,19 @@ class Klass < ActiveRecord::Base
     Presence.today_presences(students)
   end
 
+  # Search the today's signs
+  def today_signs
+    signs.where(date: Date.today)
+  end
+
+  # Search the today's events
+  def today_events
+    events.where(date: Date.today)
+  end
+
   # Search the notes of the klass
   def notes
     Note.where(notable: self)
   end
 
-  def today_signs
-    signs.where(date: Date.today)
-  end
 end

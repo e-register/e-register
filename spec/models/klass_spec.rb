@@ -94,6 +94,18 @@ describe Klass do
     expect(klass.events).to match_array([event])
   end
 
+  it 'fetches the today\'s events' do
+    klass = create(:klass)
+
+    event = create(:event, klass: klass, date: Date.today)
+
+    # some fake events
+    create(:event)
+    create(:event, klass: klass, date: Date.yesterday)
+
+    expect(klass.today_events).to match_array([event])
+  end
+
   it 'fetches the notes' do
     klass = create(:klass)
 
@@ -123,6 +135,7 @@ describe Klass do
 
     sign = create(:sign, klass: klass, date: Date.today)
 
+    # a fake sign
     create(:sign)
     create(:sign, klass: klass, date: Date.yesterday)
 

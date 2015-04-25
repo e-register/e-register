@@ -13,7 +13,7 @@ describe 'Klass', type: :request do
       end
     end
 
-    it 'doesn\' show the classes page for guest' do
+    it 'doesn\'t show the classes page for guest' do
       visit klasses_path
 
       expect(current_path).to eq(root_path)
@@ -29,7 +29,8 @@ describe 'Klass', type: :request do
       sign_in user
 
       create(:teacher, klass: klass)
-      create(:sign, klass: klass)
+      create(:sign, klass: klass, date: Date.today)
+      create(:event, klass: klass, date: Date.today)
 
       visit klass_path(klass)
 
@@ -46,6 +47,20 @@ describe 'Klass', type: :request do
         expect(page).to have_content(sign.subject.name)
         expect(page).to have_content(sign.lesson)
       end
+
+      klass.today_events.each do |event|
+        expect(page).to have_content(event.teacher.full_name)
+        expect(page).to have_content(event.text)
+      end
+    end
+
+    it 'doesn\'t show the class informations for guest' do
+      klass = create(:klass)
+
+      visit klass_path(klass)
+
+      expect(current_path).to eq(root_path)
+      expect(page).to have_content('You are not authorized to perform this action.')
     end
   end
 end

@@ -35,3 +35,12 @@
       <% end %>
     </ul>
 <% end %>
+
+<%= bootstrap_panel("Today's events") do %>
+    <ul>
+      <% @today_events.each do |event| %>
+          <li><%= event.teacher.full_name %> - <%= event.text %></li>
+      <% end %>
+    </ul>
+<% end %>
+
