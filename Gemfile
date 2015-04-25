@@ -21,6 +21,7 @@ gem 'less-rails'
 gem 'twitter-bootstrap-rails'
 
 gem 'devise'
+gem 'pundit'
 
 gem 'rdiscount'
 
@@ -49,6 +50,8 @@ end
 
 group :development, :test do
   gem 'coveralls', require: false
+  gem 'faker'
+  gem 'ffaker'
 end
 
 gem 'rspec-rails', group: [ :development, :test ]

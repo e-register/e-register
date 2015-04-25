@@ -1,0 +1,7 @@
+<h1>Create a user</h1>
+<div class="col-md-6">
+  <%= form_for @user do |f| %>
+    <%= render 'form', f: f %>
+    <%= f.submit 'Create', class: ['btn', 'btn-success'] %>
+  <% end %>
+</div>

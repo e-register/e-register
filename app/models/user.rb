@@ -15,9 +15,29 @@ class User < ActiveRecord::Base
   # and used in valid_password?
   attr_accessor :username
 
-  has_many :students
-  has_many :teachers
-  has_many :credentials
+  has_many :students, dependent: :destroy
+  has_many :teachers, dependent: :destroy
+  has_many :credentials, dependent: :destroy
+  has_many :presences, foreign_key: :teacher_id, dependent: :destroy
+  has_many :events, foreign_key: :teacher_id, dependent: :destroy
+  has_many :signs, foreign_key: :teacher_id, dependent: :destroy
+  has_many :notes, foreign_key: :teacher_id, dependent: :destroy
+
+  # The user full name:
+  # name: "Edoardo"
+  # surname: "Morassutto"
+  # full_name: "Edoardo Morassutto"
+  def full_name
+    "#{name} #{surname}".strip
+  end
+
+  # Fetch the classes of the user
+  def klasses
+    klasses = []
+    students.includes(:klass).each { |stud| klasses.push(stud.klass) }
+    teachers.includes(:klass).each { |teach| klasses.push(teach.klass) }
+    klasses.to_a.uniq
+  end
 
   # Fetch all the evaluations of the user
   def evaluations
@@ -63,26 +83,19 @@ class User < ActiveRecord::Base
     Note.unscoped.where.any_of({teacher: self}, {notable: self, visible: true})
   end
 
-  ########################
-  # AUTHENTICATION STUFF #
-  ########################
-
-  # Checks if the password provided is correct for the current user. This uses
-  # the :username virtual attribute to find the correct credential
-  def valid_password?(password)
-    credential = Credential.find_by(username: username)
-    credential.valid_password?(password) if credential
+  # define helper methods for groups
+  [ :admin?, :teacher?, :student? ].each do |group|
+    define_method group do
+      return user_group.name.downcase + '?' == group.to_s
+    end
   end
 
-  # Prepare the user according to the username requested:
-  #  - Find the credential with the specified username
-  #  - Fetch the user of that credential
-  #  - Inject in that user the provided username (as virtual attribute for
-  #    `valid_password?`)
-  def self.find_for_database_authentication(conditions)
-    credential = Credential.find_by(conditions)
-    user = credential.try(:user)
-    user.username = conditions[:username] if user
-    user
+  # Check if a user is in a user_group:
+  # Params:
+  #    group: can be a string or a symbol, the name of the group
+  # Example:
+  #   u.user_group? :admin
+  def user_group?(group)
+    user_group.name == group.to_s.capitalize
   end
 end

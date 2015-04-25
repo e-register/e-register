@@ -16,17 +16,45 @@ module ApplicationHelper
 
     content_tag :div, class: ['col-md-4', 'home-block'] do
       content_tag :div, class: ['home-block-content'] do
-        content_tag(:h2, name) +
-        content_tag(:p, opt['description']) +
-        opt['buttons'].map do |name, opt|
-          opt['to'] ||= ''
-          opt['type'] ||= 'success'
-          opt['method'] ||= 'get'
-          content_tag :div, class: 'form-group' do
-            button_to name, opt['to'], method: opt['method'], class: ['btn', "btn-#{opt['type']}", 'form-control']
-          end
-        end.join.html_safe
+        home_block_content(name, opt)
       end
+    end
+  end
+
+  def bootstrap_panel(title, content = '', &block)
+    content += capture(&block) if block_given?
+    return "" if content.gsub(/<\/?[^>]*>/, '').blank?
+
+    data = <<EOF
+<div class="col-md-6">
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h3 class="panel-title">#{title}</h3>
+    </div>
+    <div class="panel-body">
+      #{content}
+    </div>
+  </div>
+</div>
+EOF
+    data.html_safe
+  end
+
+  private
+  # Render the content of a block, including the title, the description and the buttons
+  def home_block_content(name, opt = {})
+    content_tag(:h2, name) +
+    content_tag(:p, opt['description']) +
+    opt['buttons'].map { |name, opt| home_block_button(name, opt) }.join.html_safe
+  end
+
+  # Render a button of a block
+  def home_block_button(name, opt)
+    opt['to'] ||= ''
+    opt['type'] ||= 'success'
+    opt['method'] ||= 'get'
+    content_tag :div, class: 'form-group' do
+      link_to name, opt['to'], method: opt['method'], class: ['btn', "btn-#{opt['type']}", 'form-control']
     end
   end
 end

@@ -9,6 +9,16 @@ describe User, type: :model do
 
   check_required_field(:user, [ :name, :surname, :user_group ])
 
+  it 'has a full_name' do
+    user = create(:user, name: 'Edoardo', surname: 'Morassutto')
+    expect(user.full_name).to eq('Edoardo Morassutto')
+  end
+
+  it 'stripes full_name' do
+    user = create(:user, name: 'Edoardo', surname: 'Morassutto     ')
+    expect(user.full_name).to eq('Edoardo Morassutto')
+  end
+
   it 'is student if the group is student' do
     student = build(:user_student)
     group = build(:user_group_student)
@@ -22,6 +32,21 @@ describe User, type: :model do
     students = Student.where(user: user)
 
     expect(user.students).to match_array(students)
+  end
+
+  it 'fetches the klasses' do
+    user = create(:user_teacher, num_klass: 0)
+
+    klass1 = create(:klass)
+    klass2 = create(:klass)
+    klass3 = create(:klass)
+
+    create(:student, klass: klass1, user: user)
+    create(:teacher, klass: klass1, user: user)
+    create(:teacher, klass: klass2, user: user)
+    create(:teacher, klass: klass3, user: user)
+
+    expect(user.klasses).to match_array([klass1, klass2, klass3])
   end
 
   it 'has credentials' do
@@ -164,5 +189,60 @@ describe User, type: :model do
     create(:note, notable: user, visible: false)
 
     expect(user.notes).to match_array([note1, note2, note3])
+  end
+
+  describe 'has dynamic user_group methods' do
+    before do
+      @u1 = create(:user_student)
+      @u2 = create(:user_teacher)
+      @u3 = create(:user_admin)
+    end
+
+    it 'responds to methods' do
+      expect(@u1).to respond_to(:admin?)
+      expect(@u2).to respond_to(:admin?)
+      expect(@u3).to respond_to(:admin?)
+
+      expect(@u1).to respond_to(:student?)
+      expect(@u2).to respond_to(:student?)
+      expect(@u3).to respond_to(:student?)
+
+      expect(@u1).to respond_to(:teacher?)
+      expect(@u2).to respond_to(:teacher?)
+      expect(@u3).to respond_to(:teacher?)
+
+      expect(@u1).not_to respond_to(:foobar?)
+      expect { @u1.foobar? }.to raise_exception
+    end
+
+    it 'to student?' do
+      expect(@u1).to be_student
+      expect(@u2).not_to be_student
+      expect(@u3).not_to be_student
+    end
+    it 'to teacher?' do
+      expect(@u1).not_to be_teacher
+      expect(@u2).to be_teacher
+      expect(@u3).not_to be_teacher
+    end
+    it 'to admin?' do
+      expect(@u1).not_to be_admin
+      expect(@u2).not_to be_admin
+      expect(@u3).to be_admin
+    end
+
+    it 'checks the user_groups correctly' do
+      expect(@u1.user_group? :student).to be_truthy
+      expect(@u2.user_group? :student).to be_falsey
+      expect(@u3.user_group? :student).to be_falsey
+
+      expect(@u1.user_group? 'teacher').to be_falsey
+      expect(@u2.user_group? 'teacher').to be_truthy
+      expect(@u3.user_group? 'teacher').to be_falsey
+
+      expect(@u1.user_group? 'Admin').to be_falsey
+      expect(@u2.user_group? 'Admin').to be_falsey
+      expect(@u3.user_group? 'Admin').to be_truthy
+    end
   end
 end

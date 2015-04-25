@@ -20,7 +20,7 @@ homepage:
       description: Manage here your classes
       buttons:
         My Classes:
-          to: /
+          to: /classes
 
   teacher_or_admin: &teacher_or_admin
     Quick Menu:

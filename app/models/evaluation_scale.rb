@@ -1,5 +1,5 @@
 class EvaluationScale < ActiveRecord::Base
-  has_many :evaluations
+  has_many :evaluations, dependent: :destroy
 
   serialize :checkpoints, JSON
 

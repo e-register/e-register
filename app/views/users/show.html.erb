@@ -1,0 +1,27 @@
+<div class="page-header">
+  <h1>
+    <%= @user.full_name %>
+    <span class="label label-default"><%= @user.user_group.name %></span>
+    <% if @user == current_user %>
+        <span class="label label-success">You</span>
+    <% end %>
+  </h1>
+</div>
+
+<h2>Classes</h2>
+<%= render 'partials/klass_list', klasses: @klasses %>
+
+<% if policy(:user).manage? %>
+    <div class="clearfix">
+        <hr/>
+        <div class="form-group">
+        <% if policy(:user).edit? %>
+          <%= link_to 'Edit', edit_user_path(@user), class: ['btn', 'btn-warning'] %>
+        <% end %>
+        <% if policy(:user).destroy? %>
+          <%= link_to 'Delete', user_path(@user), class: ['btn', 'btn-danger'],
+                      method: :delete, data: { confirm: 'Are you sure?' } %>
+        <% end %>
+        </div>
+    </div>
+<% end %>

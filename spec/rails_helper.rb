@@ -14,6 +14,8 @@ require 'capybara/rspec'
 require 'capybara/poltergeist'
 Capybara.javascript_driver = :poltergeist
 
+require 'pundit/rspec'
+
 # Load support files
 Dir[Rails.root.join("spec/support/**/*.rb")].each {|f| require f}
 
