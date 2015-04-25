@@ -64,7 +64,7 @@ describe 'Klass', type: :request do
     end
   end
 
-  describe 'klassesController#edit' do
+  describe 'KlassesController#edit' do
     it 'edits the klass' do
       user = create(:user_admin)
       sign_in user
@@ -109,6 +109,44 @@ describe 'Klass', type: :request do
       click_on 'Update'
 
       expect(current_path).to eq(edit_klass_path(klass))
+    end
+  end
+
+  describe 'KlassesController#new' do
+    it 'creates a new klass with all informations correct' do
+      sign_in create(:user_admin)
+
+      visit new_klass_path
+
+      fill_in 'Name', with: 'Foo'
+      fill_in 'Detail', with: 'Bar'
+
+      click_on 'Create'
+
+      klass = Klass.find_by(name: 'Foo', detail: 'Bar')
+      expect(klass).not_to be_nil
+    end
+
+    it 'doesn\'t create the class if non-admin' do
+      sign_in create(:user_student)
+
+      visit new_klass_path
+
+      expect(current_path).to eq(root_path)
+      expect(page).to have_content('You are not authorized to perform this action.')
+    end
+
+    it 'manage if an error' do
+      user = create(:user_admin)
+      sign_in user
+
+      visit new_klass_path
+
+      allow_any_instance_of(Klass).to receive(:save).and_return(false)
+
+      click_on 'Create'
+
+      expect(current_path).to eq(new_klass_path)
     end
   end
 end

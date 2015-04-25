@@ -1,5 +1,5 @@
 class KlassesController < ApplicationController
-  before_filter :fetch_klass, except: :index
+  before_filter :fetch_klass, except: [ :index, :new, :create ]
 
   def index
     authorize :klass
@@ -30,6 +30,22 @@ class KlassesController < ApplicationController
     end
   end
 
+  def new
+    @klass = Klass.new
+    authorize @klass
+  end
+
+  def create
+    @klass = Klass.new klass_params
+    authorize @klass, :create?
+    if @klass.save
+      redirect_to @klass
+    else
+      flash.now[:alert] = @klass.errors.full_messages.join("<br>").html_safe
+      redirect_to new_klass_path
+    end
+  end
+
   private
   def fetch_klass
     @klass = Klass.find(params[:id])
@@ -41,6 +57,6 @@ class KlassesController < ApplicationController
   end
 
   def klass_params
-    params.require(:klass).permit(policy(@klass).permitted_attributes)
+    params.require(:klass).permit(policy(@klass || :klass).permitted_attributes)
   end
 end

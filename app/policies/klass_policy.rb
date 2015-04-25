@@ -11,6 +11,10 @@ class KlassPolicy < ApplicationPolicy
     user && user.admin?
   end
 
+  def create?
+    user && user.admin?
+  end
+
   def permitted_attributes
     if user && user.admin?
       [:name, :detail]
