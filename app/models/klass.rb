@@ -2,8 +2,11 @@ class Klass < ActiveRecord::Base
   validates_uniqueness_of :name
   validates_presence_of :name
 
-  has_many :events, -> { where(visible: true) }
-  has_many :signs
+  has_many :events, -> { where(visible: true) }, dependent: :destroy
+  has_many :signs, dependent: :destroy
+  has_many :students, dependent: :destroy
+  has_many :teachers, dependent: :destroy
+  has_many :notes, as: :notable
 
   # Search the students in this class. The users are already preloaded
   def students
@@ -34,10 +37,4 @@ class Klass < ActiveRecord::Base
   def today_events
     events.where(date: Date.today)
   end
-
-  # Search the notes of the klass
-  def notes
-    Note.where(notable: self)
-  end
-
 end

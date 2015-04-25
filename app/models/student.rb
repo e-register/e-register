@@ -4,8 +4,9 @@ class Student < ActiveRecord::Base
 
   belongs_to :user
   belongs_to :klass
-  has_many :evaluations, -> { where(visible: true) }
-  has_many :presences
+  has_many :evaluations, -> { where(visible: true) }, dependent: :destroy
+  has_many :presences, dependent: :destroy
+  has_many :notes, as: :notable
 
   delegate :events, to: :klass
 
@@ -17,10 +18,5 @@ class Student < ActiveRecord::Base
   # Search all the signs in the class of the student
   def signs
     Sign.where(klass: klass)
-  end
-
-  # Search all the notes of the student
-  def notes
-    Note.where(notable: self)
   end
 end

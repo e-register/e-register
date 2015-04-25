@@ -1,4 +1,6 @@
 class Score < ActiveRecord::Base
+  has_many :evaluations, dependent: :restrict_with_error
+
   validates_presence_of :as_string
 
   # Return the Score with the nearest value to the specified one

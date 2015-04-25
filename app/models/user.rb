@@ -15,9 +15,13 @@ class User < ActiveRecord::Base
   # and used in valid_password?
   attr_accessor :username
 
-  has_many :students
-  has_many :teachers
-  has_many :credentials
+  has_many :students, dependent: :destroy
+  has_many :teachers, dependent: :destroy
+  has_many :credentials, dependent: :destroy
+  has_many :presences, foreign_key: :teacher_id, dependent: :destroy
+  has_many :events, foreign_key: :teacher_id, dependent: :destroy
+  has_many :signs, foreign_key: :teacher_id, dependent: :destroy
+  has_many :notes, foreign_key: :teacher_id, dependent: :destroy
 
   # The user full name:
   # name: "Edoardo"
