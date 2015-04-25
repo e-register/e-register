@@ -21,13 +21,7 @@ class KlassesController < ApplicationController
   end
 
   def update
-    authorize @klass
-    if @klass.update_attributes(klass_params)
-      redirect_to @klass
-    else
-      flash.now[:alert] = @klass.errors.full_messages.join("<br>").html_safe
-      redirect_to edit_klass_path(@klass)
-    end
+    do_update(@klass, klass_params) { |klass| edit_klass_path(klass) }
   end
 
   def new
@@ -36,23 +30,11 @@ class KlassesController < ApplicationController
   end
 
   def create
-    @klass = Klass.new klass_params
-    authorize @klass, :create?
-    if @klass.save
-      redirect_to @klass
-    else
-      flash.now[:alert] = @klass.errors.full_messages.join("<br>").html_safe
-      redirect_to new_klass_path
-    end
+    do_create(Klass, klass_params, new_klass_path)
   end
 
   def destroy
-    authorize @klass
-    if @klass.destroy
-      redirect_to root_path, notice: 'Class deleted successfully'
-    else
-      redirect_to @klass, alert: 'Error deleting the class'
-    end
+    do_destroy(@klass, 'Class')
   end
 
   private

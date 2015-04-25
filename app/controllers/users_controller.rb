@@ -14,13 +14,7 @@ class UsersController < ApplicationController
   end
 
   def update
-    authorize @user
-    if @user.update_attributes(user_params)
-      redirect_to @user
-    else
-      flash.now[:alert] = @user.errors.full_messages.join("<br>").html_safe
-      redirect_to edit_user_path(@user)
-    end
+    do_update(@user, user_params) { |user| edit_user_path(user) }
   end
 
   def new
@@ -29,23 +23,11 @@ class UsersController < ApplicationController
   end
 
   def create
-    @user = User.new user_params
-    authorize @user, :create?
-    if @user.save
-      redirect_to @user
-    else
-      flash.now[:alert] = @user.errors.full_messages.join("<br>").html_safe
-      redirect_to new_user_path
-    end
+    do_create(User, user_params, new_user_path)
   end
 
   def destroy
-    authorize @user
-    if @user.destroy
-      redirect_to root_path, notice: 'User deleted successfully'
-    else
-      redirect_to @user, alert: 'Error deleting the user'
-    end
+    do_destroy(@user, 'User')
   end
 
   private
