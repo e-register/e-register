@@ -21,6 +21,25 @@ module ApplicationHelper
     end
   end
 
+  def bootstrap_panel(title, content = '', &block)
+    content += capture(&block) if block_given?
+    return "" if content.gsub(/<\/?[^>]*>/, '').blank?
+
+    data = <<EOF
+<div class="col-md-6">
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h3 class="panel-title">#{title}</h3>
+    </div>
+    <div class="panel-body">
+      #{content}
+    </div>
+  </div>
+</div>
+EOF
+    data.html_safe
+  end
+
   private
   # Render the content of a block, including the title, the description and the buttons
   def home_block_content(name, opt = {})
@@ -35,7 +54,7 @@ module ApplicationHelper
     opt['type'] ||= 'success'
     opt['method'] ||= 'get'
     content_tag :div, class: 'form-group' do
-      button_to name, opt['to'], method: opt['method'], class: ['btn', "btn-#{opt['type']}", 'form-control']
+      link_to name, opt['to'], method: opt['method'], class: ['btn', "btn-#{opt['type']}", 'form-control']
     end
   end
 end

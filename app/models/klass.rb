@@ -3,6 +3,7 @@ class Klass < ActiveRecord::Base
   validates_presence_of :name
 
   has_many :events, -> { where(visible: true) }
+  has_many :signs
 
   # Search the students in this class. The users are already preloaded
   def students
@@ -27,5 +28,9 @@ class Klass < ActiveRecord::Base
   # Search the notes of the klass
   def notes
     Note.where(notable: self)
+  end
+
+  def today_signs
+    signs.where(date: Date.today)
   end
 end

@@ -48,6 +48,19 @@ class Fakeout
         end
       end
     end
+
+    # first user: admin
+    u = User.first
+    u.user_group_id = 1
+    u.save!
+    Credential.create(username: 'admin', password: 'password', user: u)
+
+    # check
+    Student.all.each do |s|
+      if s.user == nil
+        puts "Broken Student \##{s.id}"
+      end
+    end
   end
 
   def tiny
@@ -55,7 +68,7 @@ class Fakeout
   end
 
   def small
-    25+rand(50)
+    10+rand(5)
   end
 
   def medium

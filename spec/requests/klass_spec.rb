@@ -20,4 +20,32 @@ describe 'Klass', type: :request do
       expect(page).to have_content('You are not authorized to perform this action.')
     end
   end
+
+  describe 'KlassesController#show' do
+    it 'shows the requested klass' do
+      klass = create(:klass)
+      user = create(:user_student, with_klass: klass)
+
+      sign_in user
+
+      create(:teacher, klass: klass)
+      create(:sign, klass: klass)
+
+      visit klass_path(klass)
+
+      klass.students.each do |stud|
+        expect(page).to have_content(stud.user.full_name)
+      end
+
+      klass.teachers.each do |teach|
+        expect(page).to have_content(teach.user.full_name)
+      end
+
+      klass.today_signs.each do |sign|
+        expect(page).to have_content(sign.teacher.full_name)
+        expect(page).to have_content(sign.subject.name)
+        expect(page).to have_content(sign.lesson)
+      end
+    end
+  end
 end

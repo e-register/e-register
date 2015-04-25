@@ -23,6 +23,7 @@ FactoryGirl.define do
     factory :user_teacher do
       transient do
         num_klass 2
+        with_klass nil
       end
 
       association :user_group, factory: :user_group_teacher
@@ -34,12 +35,17 @@ FactoryGirl.define do
         klasses.zip(subjects).each do |klass, subject|
           create(:teacher, user: user, klass: klass, subject: subject)
         end
+
+        if evaluator.with_klass
+          create(:teacher, user: user, klass: evaluator.with_klass)
+        end
       end
     end
 
     factory :user_student do
       transient do
         num_klass 2
+        with_klass nil
       end
 
       association :user_group, factory: :user_group_student
@@ -48,6 +54,9 @@ FactoryGirl.define do
         klasses = create_list(:klass, evaluator.num_klass)
         klasses.each do |klass|
           create(:student, user: user, klass: klass)
+        end
+        if evaluator.with_klass
+          create(:student, user: user, klass: evaluator.with_klass)
         end
       end
     end

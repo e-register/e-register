@@ -1,0 +1,37 @@
+<h1><%= @klass.name %> <small><%= @klass.detail %></small></h1>
+
+<%= bootstrap_panel('Students') do %>
+    <ol>
+      <% if @today_signs.empty? %>
+        <% @students.each do |stud| %>
+          <li>
+            <%= stud.user.full_name %>
+            <span class="label label-default">Unknown</span>
+          </li>
+        <% end %>
+      <% else %>
+        <% @students.each do |stud| %>
+          <li>
+            <%= stud.user.full_name %>
+            <%= student_presence_badge(stud, @today_presences) %>
+          </li>
+        <% end %>
+      <% end %>
+    </ol>
+<% end %>
+
+<%= bootstrap_panel('Teachers') do %>
+    <ul>
+      <% @teachers.each do |teach| %>
+          <li><%= teach.user.full_name %></li>
+      <% end %>
+    </ul>
+<% end %>
+
+<%= bootstrap_panel("Today's signs") do %>
+    <ul>
+      <% @today_signs.each do |sign| %>
+          <li><%= sign.teacher.full_name %> [<%= sign.subject.name %>] - <%= sign.lesson %></li>
+      <% end %>
+    </ul>
+<% end %>

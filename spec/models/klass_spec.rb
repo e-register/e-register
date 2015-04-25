@@ -106,4 +106,26 @@ describe Klass do
 
     expect(klass.notes).to match_array([note])
   end
+
+  it 'fetches the signs' do
+    klass = create(:klass)
+
+    sign = create(:sign, klass: klass)
+
+    # a fake sign
+    create(:sign)
+
+    expect(klass.signs).to match_array([sign])
+  end
+
+  it 'fetches the today\'s signs' do
+    klass = create(:klass)
+
+    sign = create(:sign, klass: klass, date: Date.today)
+
+    create(:sign)
+    create(:sign, klass: klass, date: Date.yesterday)
+
+    expect(klass.today_signs).to match_array([sign])
+  end
 end

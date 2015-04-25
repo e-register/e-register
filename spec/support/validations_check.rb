@@ -24,7 +24,7 @@ def check_unique_field(klass_name, fields, values, opt = {})
         create(klass_name, params)
         x = build(klass_name, params)
       elsif opt[:create_method] == 'new'
-        klass = klass_name.to_s.split("_").collect(&:capitalize).join.constantize
+        klass = klass_name.to_s.classify.constantize
         klass.create!(params)
         x = klass.new(params)
       else
@@ -60,7 +60,7 @@ def check_required_field(klass_name, fields, value = nil, opt = {})
       if opt[:create_method] == 'factory'
         x = build(klass_name, params)
       elsif opt[:create_method] == 'new'
-        klass = klass_name.to_s.split("_").collect(&:capitalize).join.constantize
+        klass = klass_name.to_s.classify.constantize
         x = klass.new(params)
       else
         raise "Unknown generation mode #{opt[:create_method].inspect}"
