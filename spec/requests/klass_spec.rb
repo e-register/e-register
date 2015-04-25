@@ -63,4 +63,52 @@ describe 'Klass', type: :request do
       expect(page).to have_content('You are not authorized to perform this action.')
     end
   end
+
+  describe 'klassesController#edit' do
+    it 'edits the klass' do
+      user = create(:user_admin)
+      sign_in user
+
+      klass = create(:klass)
+
+      visit edit_klass_path(klass)
+
+      fill_in 'Name', with: 'Foo'
+      fill_in 'Detail', with: 'Bar'
+
+      click_on 'Update'
+
+      klass.reload
+
+      expect(klass.name).to eq('Foo')
+      expect(klass.detail).to eq('Bar')
+    end
+
+    it 'blocks a non-admin user' do
+      user = create(:user_student)
+      sign_in user
+
+      klass = create(:klass)
+
+      visit edit_klass_path(klass)
+
+      expect(current_path).to eq(root_path)
+      expect(page).to have_content('You are not authorized to perform this action.')
+    end
+
+    it 'manage if an error' do
+      user = create(:user_admin)
+      sign_in user
+
+      klass = create(:klass)
+
+      visit edit_klass_path(klass)
+
+      allow_any_instance_of(Klass).to receive(:update_attributes).and_return(false)
+
+      click_on 'Update'
+
+      expect(current_path).to eq(edit_klass_path(klass))
+    end
+  end
 end

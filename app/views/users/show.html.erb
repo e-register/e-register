@@ -12,14 +12,16 @@
 <%= render 'partials/klass_list', klasses: @klasses %>
 
 <% if policy(:user).manage? %>
-  <hr/>
-  <div class="form-group">
-    <% if policy(:user).edit? %>
-      <%= link_to 'Edit', edit_user_path(@user), class: ['btn', 'btn-warning'] %>
-    <% end %>
-    <% if policy(:user).destroy? %>
-      <%= link_to 'Delete', user_path(@user), class: ['btn', 'btn-danger'],
-                  method: :delete, data: { confirm: 'Are you sure?' } %>
-    <% end %>
-  </div>
+    <div class="clearfix">
+        <hr/>
+        <div class="form-group">
+        <% if policy(:user).edit? %>
+          <%= link_to 'Edit', edit_user_path(@user), class: ['btn', 'btn-warning'] %>
+        <% end %>
+        <% if policy(:user).destroy? %>
+          <%= link_to 'Delete', user_path(@user), class: ['btn', 'btn-danger'],
+                      method: :delete, data: { confirm: 'Are you sure?' } %>
+        <% end %>
+        </div>
+    </div>
 <% end %>

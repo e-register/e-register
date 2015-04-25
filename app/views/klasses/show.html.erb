@@ -44,3 +44,17 @@
     </ul>
 <% end %>
 
+<% if policy(:klass).manage? %>
+    <div class="clearfix">
+        <hr/>
+        <div class="form-group">
+          <% if policy(:klass).edit? %>
+              <%= link_to 'Edit', edit_klass_path(@klass), class: ['btn', 'btn-warning'] %>
+          <% end %>
+          <% if policy(:klass).destroy? %>
+              <%= link_to 'Delete', klass_path(@klass), class: ['btn', 'btn-danger'],
+                          method: :delete, data: { confirm: 'Are you sure?' } %>
+          <% end %>
+        </div>
+    </div>
+<% end %>
