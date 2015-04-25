@@ -12,14 +12,17 @@ class KlassesController < ApplicationController
     @today_signs = @klass.today_signs
     @today_events = @klass.today_events
 
-    @students = @klass.students.to_a.uniq { |x|x.user }.
-        sort_by{ |x| [x.user.surname, x.user.name] }
-    @teachers = @klass.teachers.to_a.uniq{ |x| x.user }.
-        sort_by{ |x| [x.user.surname, x.user.name] }
+    @students = uniq_and_sort @klass.students
+    @teachers = uniq_and_sort @klass.teachers
   end
 
   private
   def fetch_klass
     @klass = Klass.find(params[:id])
+  end
+
+  # Makes a list of student/teacher unique by user and sort by surname, name
+  def uniq_and_sort(users)
+    users.to_a.uniq { |x| x.user }.sort_by{ |x| [x.user.surname, x.user.name] }
   end
 end
