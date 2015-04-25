@@ -26,7 +26,7 @@ describe KlassPolicy do
     it { is_expected.not_to permit(other_teacher, klass) }
   end
 
-  permissions :update?, :create? do
+  permissions :update?, :create?, :destroy? do
     let(:admin) { create(:user_admin) }
     let(:klass) { create(:klass) }
     let(:student) { create(:user_student, with_klass: klass) }

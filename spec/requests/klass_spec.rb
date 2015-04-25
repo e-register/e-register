@@ -149,4 +149,33 @@ describe 'Klass', type: :request do
       expect(current_path).to eq(new_klass_path)
     end
   end
+
+  describe 'KlassesController#destroy' do
+    it 'deletes the klass if admin' do
+      klass = create(:klass)
+      sign_in create(:user_admin)
+
+      visit klass_path(klass)
+
+      click_on 'Delete'
+
+      expect(current_path).to eq(root_path)
+
+      expect { klass.reload }.to raise_exception(ActiveRecord::RecordNotFound)
+    end
+
+    it 'manage if an error' do
+      klass = create(:klass)
+      sign_in create(:user_admin)
+
+      visit klass_path(klass)
+
+      allow_any_instance_of(Klass).to receive(:destroy).and_return(false)
+
+      click_on 'Delete'
+
+      expect(current_path).to eq(klass_path(klass))
+      expect(page).to have_content('Error deleting the class')
+    end
+  end
 end

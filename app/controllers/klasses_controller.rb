@@ -46,6 +46,15 @@ class KlassesController < ApplicationController
     end
   end
 
+  def destroy
+    authorize @klass
+    if @klass.destroy
+      redirect_to root_path, notice: 'Class deleted successfully'
+    else
+      redirect_to @klass, alert: 'Error deleting the class'
+    end
+  end
+
   private
   def fetch_klass
     @klass = Klass.find(params[:id])

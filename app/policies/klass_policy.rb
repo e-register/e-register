@@ -15,6 +15,10 @@ class KlassPolicy < ApplicationPolicy
     user && user.admin?
   end
 
+  def destroy?
+    user && user.admin?
+  end
+
   def permitted_attributes
     if user && user.admin?
       [:name, :detail]
