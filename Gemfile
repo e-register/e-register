@@ -32,6 +32,9 @@ gem 'bcrypt', '~> 3.1.7'
 # Use Unicorn as the app server
 # gem 'unicorn'
 
+gem 'database_cleaner'
+gem 'faker'
+gem 'ffaker'
 
 gem 'rack-mini-profiler'
 
@@ -52,9 +55,7 @@ end
 
 group :development, :test do
   gem 'coveralls', require: false
-  gem 'faker'
-  gem 'ffaker'
-
+  
   gem 'launchy'
 end
 
@@ -64,7 +65,6 @@ group :test do
   gem 'capybara'
   gem 'guard-rspec'
   gem 'poltergeist'
-  gem 'database_cleaner'
 end
 
 
