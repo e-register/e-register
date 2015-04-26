@@ -2,7 +2,7 @@ require 'rails_helper'
 
 describe 'User', type: :request do
   describe 'UsersController#show' do
-    it 'shows the users informations' do
+    it 'shows the users information' do
       user = create(:user_student)
       sign_in create(:user_admin)
 
@@ -84,7 +84,7 @@ describe 'User', type: :request do
   end
 
   describe 'UsersController#new' do
-    it 'creates a new user with all informations correct' do
+    it 'creates a new user with all information correct' do
       sign_in create(:user_admin)
 
       visit new_user_path

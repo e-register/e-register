@@ -1,4 +1,6 @@
 class EvaluationsController < ApplicationController
+  before_filter :fetch_evaluation, only: :show
+
   def index
     authorize :evaluation
 
@@ -11,6 +13,12 @@ class EvaluationsController < ApplicationController
     elsif current_user.admin?
       render 'index_admin'
     end
+  end
+
+  def show
+    authorize @evaluation
+    @score_class = @evaluation.score_class
+    @score = @evaluation.score.try(:as_string) || '?'
   end
 
   private
@@ -29,5 +37,9 @@ class EvaluationsController < ApplicationController
     else
       render 'index_teacher'
     end
+  end
+
+  def fetch_evaluation
+    @evaluation = Evaluation.find params[:id]
   end
 end

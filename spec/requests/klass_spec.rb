@@ -54,7 +54,7 @@ describe 'Klass', type: :request do
       end
     end
 
-    it 'doesn\'t show the class informations for guest' do
+    it 'doesn\'t show the class information for guest' do
       klass = create(:klass)
 
       visit klass_path(klass)
@@ -113,7 +113,7 @@ describe 'Klass', type: :request do
   end
 
   describe 'KlassesController#new' do
-    it 'creates a new klass with all informations correct' do
+    it 'creates a new klass with all information correct' do
       sign_in create(:user_admin)
 
       visit new_klass_path

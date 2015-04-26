@@ -54,3 +54,6 @@ homepage:
   admin:
     <<: *anyone
     <<: *teacher_or_admin
+
+evaluations:
+  sufficient_value: 6.0

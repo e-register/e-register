@@ -6,6 +6,8 @@ FactoryGirl.define do
     as_string '8'
     is_counted true
 
+    factory :score_sufficient
+
     factory :score_insufficient do
       value 5.0
       as_string '5'

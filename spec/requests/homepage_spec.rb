@@ -27,7 +27,7 @@ describe 'Homepage', type: :request do
   end
 
   describe 'Header' do
-    it 'should have the school informations' do
+    it 'should have the school information' do
       visit root_path
 
       expect(page).to have_content(APP_CONFIG['school']['full_name'])
