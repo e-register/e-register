@@ -1,0 +1,11 @@
+<h1>Student</h1>
+<% if @students.empty? %>
+    <em>You have no classes</em>
+<% else %>
+    <h2>Your classes</h2>
+    <ul>
+        <% @students.each do |stud| %>
+            <li><%= link_to stud.klass.name, evaluations_student_path(stud) %></li>
+        <% end %>
+    </ul>
+<% end %>

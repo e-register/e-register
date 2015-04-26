@@ -16,7 +16,7 @@ class User < ActiveRecord::Base
   attr_accessor :username
 
   has_many :students, dependent: :destroy
-  has_many :teachers, dependent: :destroy
+  has_many :teachers, ->{ order(:klass_id, :subject_id) }, dependent: :destroy
   has_many :credentials, dependent: :destroy
   has_many :presences, foreign_key: :teacher_id, dependent: :destroy
   has_many :events, foreign_key: :teacher_id, dependent: :destroy

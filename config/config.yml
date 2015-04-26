@@ -23,11 +23,17 @@ homepage:
           to: /classes
 
   teacher_or_admin: &teacher_or_admin
+    Evaluations:
+      description: Manage here your evaluations
+      buttons:
+        My Evaluations:
+          to: /evaluations
+        Add an Evaluation:
+          to: /
+
     Quick Menu:
       description: Some quick action you can do here
       buttons:
-        Add an Evaluation:
-          to: /
         Add a Note:
           to: /
           type: warning
@@ -39,6 +45,11 @@ homepage:
   # the buttons of a student
   student:
     <<: *anyone
+    Evaluations:
+      description: Watch here your evaluations
+      buttons:
+        My Evaluations:
+          to: /evaluations
   # the buttons of an admin
   admin:
     <<: *anyone
