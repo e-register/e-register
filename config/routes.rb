@@ -11,7 +11,7 @@ Rails.application.routes.draw do
   # EvaluationsController
   get '/evaluations/teacher/:teacher_id' => 'evaluations#teacher', as: 'evaluations_teacher'
   get '/evaluations/student/:student_id' => 'evaluations#student', as: 'evaluations_student'
-  get '/evaluations/teacher/:teacher_id/new' => 'evaluation#new', as: 'new_evaluation_teacher'
+  get '/evaluations/teacher/:teacher_id/new' => 'evaluations#new', as: 'new_evaluation_teacher'
   resources :evaluations, except: :new
 
   # Authentication

@@ -15,7 +15,7 @@
       </tr>
       <tr>
         <td>Date</td>
-        <td><%= @evaluation.date %></td>
+        <td><%= format_date @evaluation.date %></td>
       </tr>
       <tr>
         <td>Score</td>
@@ -29,6 +29,10 @@
             <td><%= @evaluation.score_points %> / <%= @evaluation.total_score %></td>
           </tr>
       <% end %>
+      <tr>
+        <td>Type</td>
+        <td><%= @evaluation.evaluation_type.name %></td>
+      </tr>
       <tr>
         <td>Description</td>
         <td><%= @evaluation.description %></td>

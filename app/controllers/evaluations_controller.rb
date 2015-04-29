@@ -21,6 +21,20 @@ class EvaluationsController < ApplicationController
     @score = @evaluation.score.try(:as_string) || '?'
   end
 
+  def new
+    @teacher = Teacher.find params[:teacher_id]
+    @evaluation = Evaluation.new(teacher: @teacher, date: Date.today)
+    @scores = Score.all
+    @students = @teacher.klass.students.map { |s| [s.user.full_name, s.id] }
+    @types = EvaluationType.all
+    authorize @evaluation
+  end
+
+  def create
+    @teacher = Teacher.find params[:evaluation][:teacher_id]
+    do_create(Evaluation, evaluation_params, new_evaluation_teacher_path(@teacher))
+  end
+
   private
 
   def index_student
@@ -41,5 +55,14 @@ class EvaluationsController < ApplicationController
 
   def fetch_evaluation
     @evaluation = Evaluation.find params[:id]
+  end
+
+  def evaluation_params
+    eval_params = params.require(:evaluation).permit(policy(@evaluation || :evaluation).permitted_attributes)
+    unless eval_params.empty?
+      eval_params[:student] = Student.find_by id: eval_params[:student]
+      eval_params[:score] = Score.find_by id: eval_params[:score_id]
+    end
+    eval_params
   end
 end

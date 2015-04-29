@@ -36,7 +36,7 @@ class ApplicationController < ActionController::Base
     if instance.save
       redirect_to instance
     else
-      flash.now[:alert] = instance.errors.full_messages.join("<br>").html_safe
+      flash[:alert] = instance.errors.full_messages.join("<br>").html_safe
       redirect_to error_path
     end
   end

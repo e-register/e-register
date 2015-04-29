@@ -4,7 +4,7 @@ FactoryGirl.define do
       num_credential 0
     end
 
-    name 'Edoardo'
+    sequence(:name) { |n| "Edoardo #{n}" }
     surname 'Morassutto'
     user_group
 

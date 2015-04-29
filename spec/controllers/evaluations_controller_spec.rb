@@ -53,4 +53,25 @@ describe EvaluationsController, type: :controller do
       end
     end
   end
+
+  describe 'GET /evaluations/teacher/:teacher_id/new' do
+    it 'sets the instance variables correctly' do
+      teacher = create(:teacher)
+      score = create(:score)
+      student = create(:student, klass: teacher.klass)
+      type = create(:evaluation_type)
+
+      sign_in teacher.user
+
+      get :new, teacher_id: teacher.id
+
+      expect(assigns(:teacher)).to eq(teacher)
+      eval = assigns(:evaluation)
+      expect(eval.teacher).to eq(teacher)
+      expect(eval.date).to eq(Date.today)
+      expect(assigns(:scores)).to match_array([score])
+      expect(assigns(:types)).to match_array([type])
+      expect(assigns(:students)).to match_array([[student.user.full_name, student.id]])
+    end
+  end
 end

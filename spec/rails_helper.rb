@@ -55,17 +55,22 @@ RSpec.configure do |config|
   # Add the support for FactoryGirl
   config.include FactoryGirl::Syntax::Methods
 
-  # Prepare the database_cleaner gem
+  # Setup the database cleaner gem to clean the database with transactions,
+  # if the example requires javascript clean with truncation
   config.before(:suite) do
-    DatabaseCleaner.strategy = :transaction
-    DatabaseCleaner.clean_with(:truncation)
+    DatabaseCleaner.clean_with :truncation
   end
-
-  # Clean the database after each test
-  config.around(:each) do |example|
-    DatabaseCleaner.cleaning do
-      example.run
-    end
+  config.before(:each) do
+    DatabaseCleaner.strategy = :transaction
+  end
+  config.before(:each, js: true) do
+    DatabaseCleaner.strategy = :truncation
+  end
+  config.before(:each) do
+    DatabaseCleaner.start
+  end
+  config.after(:each) do
+    DatabaseCleaner.clean
   end
 
   # Add the support for stubbing the login
@@ -73,6 +78,8 @@ RSpec.configure do |config|
   config.include DeviseControllerMacros, type: :controller
   config.include Warden::Test::Helpers, type: :request
   config.include DeviseRequestMacros, type: :request
+
+  config.include ApplicationHelper
 
   # Enable the Warden Debug Mode to allow the current_user stubbing
   config.around(:each) do |example|

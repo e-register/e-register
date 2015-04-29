@@ -19,6 +19,7 @@ gem 'jbuilder', '~> 2.0'
 gem 'therubyracer'
 gem 'less-rails'
 gem 'twitter-bootstrap-rails'
+gem 'jquery-ui-rails'
 
 gem 'devise'
 gem 'pundit'
