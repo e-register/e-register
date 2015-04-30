@@ -45,6 +45,7 @@ describe 'Evaluation', type: :request do
       expect(page).not_to have_content('?')
       expect(page).to have_content("#{eval.score_points} / #{eval.total_score}")
       expect(page).to have_content(eval.evaluation_type.name)
+      expect(page).to have_content(yesno eval.visible)
       expect(page).to have_content(eval.description)
     end
 
@@ -93,6 +94,7 @@ describe 'Evaluation', type: :request do
       expect(page).to have_content score.as_string
 
       expect(page).to have_field 'Written'
+      expect(page).to have_field 'Visible'
 
       expect(page).to have_button 'Create'
     end
@@ -113,7 +115,7 @@ describe 'Evaluation', type: :request do
     it 'creates a new evaluation', js: true, slow: true do
       teacher = create(:teacher)
       student = create(:student, klass: teacher.klass)
-      score = create(:score)
+      score = create(:score, as_string: '8+')
       type = create(:evaluation_type_oral)
 
       sign_in create(:user_admin)

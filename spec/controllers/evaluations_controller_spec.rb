@@ -69,6 +69,7 @@ describe EvaluationsController, type: :controller do
       eval = assigns(:evaluation)
       expect(eval.teacher).to eq(teacher)
       expect(eval.date).to eq(Date.today)
+      expect(eval.visible).to be_truthy
       expect(assigns(:scores)).to match_array([score])
       expect(assigns(:types)).to match_array([type])
       expect(assigns(:students)).to match_array([[student.user.full_name, student.id]])

@@ -23,7 +23,7 @@ class EvaluationsController < ApplicationController
 
   def new
     @teacher = Teacher.find params[:teacher_id]
-    @evaluation = Evaluation.new(teacher: @teacher, date: Date.today)
+    @evaluation = Evaluation.new(teacher: @teacher, date: Date.today, visible: true)
     @scores = Score.all
     @students = @teacher.klass.students.map { |s| [s.user.full_name, s.id] }
     @types = EvaluationType.all

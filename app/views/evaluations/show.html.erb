@@ -34,6 +34,10 @@
         <td><%= @evaluation.evaluation_type.name %></td>
       </tr>
       <tr>
+        <td>Visible</td>
+        <td><%= yesno @evaluation.visible %></td>
+      </tr>
+      <tr>
         <td>Description</td>
         <td><%= @evaluation.description %></td>
       </tr>
