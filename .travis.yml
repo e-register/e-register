@@ -18,4 +18,7 @@ before_script:
   - cp config/travis_database.yml config/database.yml
   - RAILS_ENV=test bundle exec rake db:migrate
 script:
-  - bundle exec rspec spec
+  - bundle exec rspec
+branches:
+  except:
+    - heroku
