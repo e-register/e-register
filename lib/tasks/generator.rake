@@ -1,6 +1,3 @@
-require 'faker'
-require 'database_cleaner'
-
 class Fakeout
 
   MODELS = %w(UserGroup EvaluationType User Credential Klass Subject Student Teacher)
@@ -88,6 +85,7 @@ class Fakeout
   end
 
   def fakeout
+    require 'faker'
     puts "Faking it ... (#{size})"
     Fakeout.disable_mailers
 
@@ -114,6 +112,8 @@ class Fakeout
   end
 
   def self.clean
+    require 'database_cleaner'
+    
     puts "Cleaning all ..."
 
     Fakeout.disable_mailers
