@@ -2,8 +2,7 @@ source 'https://rubygems.org'
 
 gem 'rails', '4.2.1'
 
-# Install the proper gem according to the used database
-# gem 'sqlite3'
+gem 'sqlite3', group: [:development, :test]
 gem 'pg'
 
 gem 'activerecord_any_of'
@@ -66,6 +65,5 @@ group :test do
   gem 'guard-rspec'
   gem 'poltergeist'
 end
-
 
 gem 'rails_12factor', group: :production

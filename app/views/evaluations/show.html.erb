@@ -42,9 +42,11 @@
         <td><%= @evaluation.description %></td>
       </tr>
     </table>
-    <% if policy(@evaluation).update? %>
+    <% if policy(@evaluation).manage? %>
         <div class="form-group">
-          <%= link_to 'Edit', edit_evaluation_path(@evaluation), class: ['btn', 'btn-warning'] %>
+          <%= link_to_if policy(@evaluation).update?, 'Edit', edit_evaluation_path(@evaluation), class: ['btn', 'btn-warning'] %>
+          <%= link_to_if policy(@evaluation).destroy?, 'Delete', evaluation_path(@evaluation), class: ['btn', 'btn-danger'],
+                         method: :delete, data: { confirm: 'Are you sure?' } %>
         </div>
     <% end %>
 </div>

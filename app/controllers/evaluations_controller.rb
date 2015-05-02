@@ -1,5 +1,5 @@
 class EvaluationsController < ApplicationController
-  before_filter :fetch_evaluation, only: [:show, :edit, :update]
+  before_filter :fetch_evaluation, only: [:show, :edit, :update, :destroy]
 
   def index
     authorize :evaluation
@@ -43,6 +43,10 @@ class EvaluationsController < ApplicationController
 
   def update
     do_update(@evaluation, evaluation_params) { |eval| edit_evaluation_path(eval) }
+  end
+
+  def destroy
+    do_destroy(@evaluation, 'Evaluation')
   end
 
   private

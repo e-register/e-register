@@ -185,4 +185,21 @@ describe 'Evaluation', type: :request do
       check_unauthorized
     end
   end
+
+  describe 'EvaluationsController#destroy' do
+    it 'destroys the evaluation' do
+      evaluation = create(:evaluation)
+      sign_in create(:user_admin)
+
+      visit evaluation_path(evaluation)
+
+      click_on 'Delete'
+
+      expect(current_path).to eq(root_path)
+
+      expect { evaluation.reload }.to raise_exception(ActiveRecord::RecordNotFound)
+    end
+
+
+  end
 end

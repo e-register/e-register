@@ -19,6 +19,10 @@ class EvaluationPolicy < ApplicationPolicy
     create?
   end
 
+  def destroy?
+    create?
+  end
+
   def permitted_attributes
     return [] unless user
     return [] unless user.admin? || user.teacher?

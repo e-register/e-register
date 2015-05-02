@@ -4,8 +4,6 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
 
   rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
-  before_filter :enable_profiler
-
   rescue_from ActiveRecord::RecordNotFound, with: :user_not_authorized
 
   before_filter :enable_profiler
@@ -24,6 +22,12 @@ class ApplicationController < ActionController::Base
   def user_not_authorized
     flash[:alert] = "You are not authorized to perform this action."
     redirect_to(request.referrer || root_path)
+  end
+
+  def enable_profiler
+    if current_user.try(:user_group).try(:name) == 'Admin' || Rails.env.development?
+      Rack::MiniProfiler.authorize_request
+    end
   end
 
   protected
@@ -71,14 +75,6 @@ class ApplicationController < ActionController::Base
       redirect_to root_path, notice: "#{model_name} deleted successfully"
     else
       redirect_to instance, alert: "Error deleting the #{model_name.downcase}"
-    end
-  end
-
-  private
-
-  def enable_profiler
-    if current_user.try(:user_group).try(:name) == 'Admin'
-      Rack::MiniProfiler.authorize_request
     end
   end
 end
