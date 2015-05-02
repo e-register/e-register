@@ -48,10 +48,12 @@ class ApplicationController < ActionController::Base
   #    block: a block with a parameter that returns the path to redirect to in case of error
   def do_update(instance, klass_params)
     authorize instance
-    if instance.update_attributes(klass_params)
+    success = instance.update_attributes(klass_params)
+    authorize instance
+    if success
       redirect_to instance
     else
-      flash.now[:alert] = instance.errors.full_messages.join("<br>").html_safe
+      flash[:alert] = instance.errors.full_messages.join("<br>").html_safe
       redirect_to yield(instance)
     end
   end

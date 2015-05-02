@@ -65,8 +65,7 @@ describe 'User', type: :request do
 
       visit edit_user_path(user)
 
-      expect(current_path).to eq(root_path)
-      expect(page).to have_content('You are not authorized to perform this action.')
+      check_unauthorized
     end
 
     it 'manage if an error' do
@@ -104,8 +103,7 @@ describe 'User', type: :request do
 
       visit new_user_path
 
-      expect(current_path).to eq(root_path)
-      expect(page).to have_content('You are not authorized to perform this action.')
+      check_unauthorized
     end
 
     it 'manage if an error' do

@@ -1,7 +1,7 @@
 FactoryGirl.define do
   factory :evaluation do
-    teacher
-    student
+    teacher { FactoryGirl.create(:teacher, klass: FactoryGirl.create(:klass)) }
+    student { FactoryGirl.create(:student, klass: teacher.try(:klass) || FactoryGirl.create(:klass)) }
     date Date.today
     klass_test
     association :score, value: 8, as_string: '8'

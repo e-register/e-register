@@ -7,5 +7,11 @@ module DeviseRequestMacros
     fill_in 'Password', with: 'secret'
     click_on 'Log in'
   end
+
+  # checks if the response is a 'Not Authorized' in a request spec
+  def check_unauthorized
+    expect(current_path).to eq(root_path)
+    expect(page).to have_content('You are not authorized to perform this action.')
+  end
 end
 

@@ -67,8 +67,7 @@ describe 'Evaluation', type: :request do
 
       visit evaluation_path(eval)
 
-      expect(current_path).to eq(root_path)
-      expect(page).to have_content('You are not authorized to perform this action.')
+      check_unauthorized
     end
   end
 
@@ -106,8 +105,7 @@ describe 'Evaluation', type: :request do
 
       visit new_evaluation_teacher_path(teacher)
 
-      expect(current_path).to eq(root_path)
-      expect(page).to have_content('You are not authorized to perform this action.')
+      check_unauthorized
     end
   end
 
@@ -116,7 +114,9 @@ describe 'Evaluation', type: :request do
       teacher = create(:teacher)
       student = create(:student, klass: teacher.klass)
       score = create(:score, as_string: '8+')
+      # create(:evaluation_type_practical)
       type = create(:evaluation_type_oral)
+      # create(:evaluation_type_written)
 
       sign_in create(:user_admin)
 
@@ -125,9 +125,13 @@ describe 'Evaluation', type: :request do
       select student.user.full_name, from: 'Student'
       fill_in 'Date', with: '07/01/1997'
 
-      find('#evaluation_score').trigger('focus')
-
+      page.find('#evaluation_score').trigger('focus')
       click_on score.as_string
+
+      # for now this test is skipped because I can't find a valid way to do that :/
+      # page.find(:css, "#evaluation_evaluation_type_id_#{type.id}")
+
+      page.find('#evaluation_visible').set(true)
 
       fill_in 'Description', with: 'Sample description'
 
@@ -141,7 +145,44 @@ describe 'Evaluation', type: :request do
       expect(eval.date).to eq(Date.parse '07/01/1997')
       expect(eval.score).to eq(score)
       expect(eval.evaluation_type).to eq(type)
+      expect(eval.visible).to be_truthy
       expect(eval.description).to eq('Sample description')
+    end
+
+    it 'blocks unauthorized users' do
+      teacher = create(:teacher)
+      sign_in create(:user_teacher)
+
+      visit new_evaluation_teacher_path(teacher)
+
+      check_unauthorized
+    end
+  end
+
+  describe 'EvaluationsController#update' do
+    it 'updates an evaluation' do
+      evaluation = create(:evaluation)
+
+      sign_in create(:user_admin)
+
+      visit edit_evaluation_path(evaluation)
+
+      fill_in 'Date', with: '07/01/1997'
+
+      click_on 'Update'
+
+      evaluation.reload
+
+      expect(evaluation.date).to eq(Date.parse '07/01/1997')
+    end
+
+    it 'blocks unauthorized users' do
+      eval = create(:evaluation)
+      sign_in create(:user_teacher)
+
+      visit edit_evaluation_path(eval)
+
+      check_unauthorized
     end
   end
 end

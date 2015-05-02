@@ -53,6 +53,8 @@ group :development, :test do
   gem 'coveralls', require: false
   gem 'faker'
   gem 'ffaker'
+
+  gem 'launchy'
 end
 
 gem 'rspec-rails', group: [ :development, :test ]
