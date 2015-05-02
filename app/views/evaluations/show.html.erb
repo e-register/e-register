@@ -42,4 +42,9 @@
         <td><%= @evaluation.description %></td>
       </tr>
     </table>
+    <% if policy(@evaluation).update? %>
+        <div class="form-group">
+          <%= link_to 'Edit', edit_evaluation_path(@evaluation), class: ['btn', 'btn-warning'] %>
+        </div>
+    <% end %>
 </div>
