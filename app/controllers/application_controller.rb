@@ -77,4 +77,9 @@ class ApplicationController < ActionController::Base
       redirect_to instance, alert: "Error deleting the #{model_name.downcase}"
     end
   end
+
+  # Throws a NotAuthorized exception
+  def not_authorized(query = nil, record = nil, policy = nil)
+    raise NotAuthorizedError.new(query: query, record: record, policy: policy)
+  end
 end

@@ -27,7 +27,7 @@ class Score < ActiveRecord::Base
 
   def score_class
     if !is_counted
-      'default'
+      'info'
     elsif value >= APP_CONFIG['evaluations']['sufficient_value']
       'success'
     else

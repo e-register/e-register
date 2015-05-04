@@ -110,6 +110,11 @@ describe 'Evaluation', type: :request do
   end
 
   describe 'EvaluationsController#create' do
+    # TODO:
+    #   This test is slower than the other tests all together
+    #   This tests only a small part of the application
+    #   This test bugs a lot the test suite, requires some glitches to work (not so clever :/)
+    #   Refractor this test to a simpler Controller Spec
     it 'creates a new evaluation', js: true, slow: true do
       teacher = create(:teacher)
       student = create(:student, klass: teacher.klass)
@@ -125,11 +130,18 @@ describe 'Evaluation', type: :request do
       select student.user.full_name, from: 'Student'
       fill_in 'Date', with: '07/01/1997'
 
+      # remove the datepicker from the screen
+      page.execute_script('$("#ui-datepicker-div").remove();')
+
       page.find('#evaluation_score').trigger('focus')
       click_on score.as_string
 
+      # remove the dialog from the screen
+      page.execute_script('$("#score-dialog, .modal-backdrop").remove();')
+
       # for now this test is skipped because I can't find a valid way to do that :/
-      # page.find(:css, "#evaluation_evaluation_type_id_#{type.id}")
+      #page.find(:css, "#evaluation_evaluation_type_id_#{type.id}").trigger('click')
+      #page.choose("evaluation_evaluation_type_id_#{type.id}")
 
       page.find('#evaluation_visible').set(true)
 
@@ -199,7 +211,17 @@ describe 'Evaluation', type: :request do
 
       expect { evaluation.reload }.to raise_exception(ActiveRecord::RecordNotFound)
     end
+  end
 
+  describe 'EvaluationsController#student' do
+    it 'blocks unauthorized users' do
+      student = create(:student)
 
+      sign_in create(:user_student)
+
+      visit evaluations_student_path(student)
+
+      check_unauthorized
+    end
   end
 end

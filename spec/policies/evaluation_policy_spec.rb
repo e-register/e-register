@@ -42,6 +42,19 @@ describe EvaluationPolicy do
     it { is_expected.to permit(admin, eval) }
   end
 
+  permissions :student? do
+    let(:student) { create(:student) }
+    let(:other_student) { create(:student) }
+    let(:teacher) { create(:teacher) }
+    let(:admin) { create(:user_admin) }
+
+    it { is_expected.to_not permit(nil, student) }
+    it { is_expected.to permit(student.user, student) }
+    it { is_expected.not_to permit(other_student.user, student) }
+    it { is_expected.not_to permit(teacher.user, student) }
+    it { is_expected.to permit(admin, student) }
+  end
+
   describe 'permitted_attributes' do
     let(:student) { create(:student) }
     let(:other_student) { create(:student) }

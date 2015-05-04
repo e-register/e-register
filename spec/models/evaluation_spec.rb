@@ -68,7 +68,7 @@ describe Evaluation, type: :model do
 
     it 'returns "default" on not-counted score' do
       eval = create(:evaluation, score: create(:score_uncounted))
-      expect(eval.score_class).to eq('default')
+      expect(eval.score_class).to eq('info')
     end
 
     it 'returns "success" on sufficient score' do
@@ -84,7 +84,5 @@ describe Evaluation, type: :model do
       eval = create(:evaluation, score: create(:score_insufficient))
       expect(eval.score_class).to eq('danger')
     end
-
-
   end
 end

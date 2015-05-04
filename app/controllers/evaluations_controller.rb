@@ -15,6 +15,15 @@ class EvaluationsController < ApplicationController
     end
   end
 
+  def student
+    @student = Student.find params[:student_id]
+    not_authorized(:student?, @student) unless student_policy.student?
+
+    @evaluations = student_evaluations @student
+    @types = EvaluationType.all
+    @fluid = true
+  end
+
   def show
     authorize @evaluation
     @score_class = @evaluation.score_class
@@ -83,5 +92,13 @@ class EvaluationsController < ApplicationController
   def prepare_instance_variables
     @scores = Score.all
     @types = EvaluationType.all
+  end
+
+  def student_policy
+    @student_policy ||= EvaluationPolicy.new(current_user, @student)
+  end
+
+  def student_evaluations(student)
+    student.evaluations.includes(:teacher).group_by { |e| e.teacher.subject }
   end
 end

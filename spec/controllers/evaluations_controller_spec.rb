@@ -75,4 +75,25 @@ describe EvaluationsController, type: :controller do
       expect(assigns(:students)).to match_array([[student.user.full_name, student.id]])
     end
   end
+
+  describe 'GET /evaluations/student/:student_id' do
+    it 'sets the instance variables correctly' do
+      stud = create(:student)
+      eval1 = create(:evaluation, student: stud)
+      eval2 = create(:evaluation, student: stud, teacher: eval1.teacher)
+      eval3 = create(:evaluation, student: stud)
+
+      sign_in stud.user
+
+      get :student, student_id: stud.id
+
+      expect(assigns(:student)).to eq(stud)
+
+      expect(assigns(:evaluations)[eval1.teacher.subject]).to match_array [eval1, eval2]
+      expect(assigns(:evaluations)[eval3.teacher.subject]).to match_array [eval3]
+
+      expect(assigns(:types)).to match_array(EvaluationType.all)
+      expect(assigns(:fluid)).to be_truthy
+    end
+  end
 end

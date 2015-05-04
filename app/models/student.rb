@@ -4,7 +4,7 @@ class Student < ActiveRecord::Base
 
   belongs_to :user
   belongs_to :klass
-  has_many :evaluations, -> { where(visible: true) }, dependent: :destroy
+  has_many :evaluations, -> { where(visible: true).order(:date) }, dependent: :destroy
   has_many :presences, dependent: :destroy
   has_many :notes, as: :notable
 
