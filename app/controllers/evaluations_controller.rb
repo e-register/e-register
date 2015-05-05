@@ -31,9 +31,9 @@ class EvaluationsController < ApplicationController
 
     @types = EvaluationType.all
     @fluid = true
-    @evaluations = @teacher.evaluations.includes(:score).order(:date)
+    @evaluations = @teacher.evaluations.includes(:score, :klass_test).order(:date)
     @students = teacher_data_student(@teacher)
-    @data, @count = teacher_data @teacher
+    @data = teacher_data @teacher
   end
 
   def show
@@ -119,7 +119,7 @@ class EvaluationsController < ApplicationController
   end
 
   def teacher_data(teacher)
-    TeacherGrid.new(teacher, @students, @types, @evaluations).data
+    TeacherEvaluationsGrid.new(teacher, @students, @types, @evaluations).data
   end
 
   def teacher_data_student(teacher)

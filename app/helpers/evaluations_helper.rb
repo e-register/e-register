@@ -1,7 +1,7 @@
 module EvaluationsHelper
   def grid_evaluation(evaluation)
     html = <<EOC
-<div class="evaluation-box-content">
+<div class="evaluation-box-content" #{'style="color: blue;"' if evaluation.klass_test}>
   <div class="evaluation-box-score">#{evaluation.score.try(:as_string) || '?'}</div>
   <div class="evaluation-box-date">#{format_evaluation_date evaluation.date}</div>
 </div>

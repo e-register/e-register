@@ -10,6 +10,8 @@ class Student < ActiveRecord::Base
 
   delegate :events, to: :klass
 
+  scope :ordered, -> { includes(:user).joins(:user).order('users.surname', 'users.name') }
+
   # Search all the teachers that taught in the same class of this student
   def teachers
     Teacher.where(klass: klass).includes(:user)

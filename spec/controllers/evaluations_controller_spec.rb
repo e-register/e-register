@@ -108,10 +108,19 @@ describe EvaluationsController, type: :controller do
       oral = create(:evaluation_type_oral)
       practical = create(:evaluation_type_practical)
 
-      eval1 = create(:evaluation, student: stud1, teacher: teacher, evaluation_type: oral)
-      eval2 = create(:evaluation, student: stud2, teacher: teacher, evaluation_type: practical)
-      eval3 = create(:evaluation, student: stud2, teacher: teacher, evaluation_type: written)
-      eval4 = create(:evaluation, student: stud2, teacher: teacher, evaluation_type: written)
+      klass_test = create(:klass_test, date: Date.today)
+
+      eval1 = create(:evaluation, student: stud1, teacher: teacher, evaluation_type: written, date: Date.yesterday)
+      eval2 = create(:evaluation, student: stud1, teacher: teacher, evaluation_type: written, klass_test: klass_test)
+      eval3 = create(:evaluation, student: stud2, teacher: teacher, evaluation_type: written, klass_test: klass_test)
+      eval4 = create(:evaluation, student: stud2, teacher: teacher, evaluation_type: written, date: Date.tomorrow)
+
+      eval5 = create(:evaluation, student: stud1, teacher: teacher, evaluation_type: practical)
+      eval6 = create(:evaluation, student: stud2, teacher: teacher, evaluation_type: practical)
+
+      eval7 = create(:evaluation, student: stud1, teacher: teacher, evaluation_type: oral, date: Date.yesterday)
+      eval8 = create(:evaluation, student: stud2, teacher: teacher, evaluation_type: oral, klass_test: create(:klass_test))
+      eval9 = create(:evaluation, student: stud1, teacher: teacher, evaluation_type: oral, date: Date.tomorrow)
 
       sign_in teacher.user
 
@@ -124,32 +133,25 @@ describe EvaluationsController, type: :controller do
 
       expected_data = {
           written.id => {
-              stud1.id => [nil, nil],
-              stud2.id => [eval3, eval4]
-          },
-          oral.id => {
-              stud1.id => [eval1],
-              stud2.id => [nil]
+              stud1.id => [eval1, eval2],
+              stud2.id => [nil,   eval3, eval4]
           },
           practical.id => {
-              stud1.id => [nil],
-              stud2.id => [eval2]
+              stud1.id => [eval5],
+              stud2.id => [eval6]
+          },
+          oral.id => {
+              stud1.id => [eval7, nil,  eval9],
+              stud2.id => [nil,   eval8]
           }
-      }
-      expected_count = {
-          written.id => 2,
-          oral.id => 1,
-          practical.id => 1
       }
 
       data = assigns(:data)
-      count = assigns(:count)
 
       [written, oral, practical].each do |type|
         [stud1, stud2].each do |stud|
-          expect(data[stud.id][type.id]).to match_array(expected_data[type.id][stud.id])
+          expect(data[stud.id][type.id]).to eq(expected_data[type.id][stud.id])
         end
-        expect(count[type.id]).to eq(expected_count[type.id])
       end
     end
   end
