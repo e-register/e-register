@@ -25,6 +25,16 @@ class EvaluationsController < ApplicationController
     @fluid = true
   end
 
+  def teacher
+    @teacher = Teacher.find params[:teacher_id]
+    not_authorized(:teacher?, @teacher) unless teacher_policy.teacher?
+
+    @types = EvaluationType.all
+    @fluid = true
+    @students = teacher_data_student(@teacher)
+    @data, @count = teacher_data @teacher
+  end
+
   def show
     authorize @evaluation
     @score_class = @evaluation.score_class
@@ -101,5 +111,17 @@ class EvaluationsController < ApplicationController
 
   def student_evaluations(student)
     student.evaluations.includes(:teacher).group_by { |e| e.teacher.subject }
+  end
+
+  def teacher_policy
+    @teacher_policy ||= EvaluationPolicy.new(current_user, @teacher)
+  end
+
+  def teacher_data(teacher)
+    TeacherGrid.new(teacher, @students, @types, @evaluations).data
+  end
+
+  def teacher_data_student(teacher)
+    teacher.klass.students.to_a
   end
 end

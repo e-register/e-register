@@ -1,12 +1,21 @@
 module EvaluationsHelper
   def grid_evaluation(evaluation)
     html = <<EOC
-<div class="grid-evaluation-content">
-  <div class="grid-evaluation-score">#{evaluation.score.try(:as_string) || '?'}</div>
-  <div class="grid-evaluation-date">#{format_evaluation_date evaluation.date}</div>
+<div class="evaluation-box-content">
+  <div class="evaluation-box-score">#{evaluation.score.try(:as_string) || '?'}</div>
+  <div class="evaluation-box-date">#{format_evaluation_date evaluation.date}</div>
 </div>
 EOC
     html.html_safe
+  end
+
+  def evaluation_button(evaluation)
+    if evaluation
+      link_to grid_evaluation(evaluation), evaluation_path(evaluation),
+              class: ['btn', 'btn-sm', "btn-#{evaluation.score_class}", 'evaluation-box']
+    else
+      '<span class="evaluation-box btn-sm"></span>'.html_safe
+    end
   end
 
   private

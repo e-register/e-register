@@ -44,7 +44,7 @@ class User < ActiveRecord::Base
     evals = []
     students.each { |stud| evals.concat(stud.evaluations) }
     teachers.each { |teach| evals.concat(teach.evaluations) }
-    evals
+    evals.sort { |a,b| a.date <=> b.date }
   end
 
   # Fetch the presence of the User: the student's one and the teachers one

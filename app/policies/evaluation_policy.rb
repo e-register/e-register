@@ -28,6 +28,11 @@ class EvaluationPolicy < ApplicationPolicy
     user.admin? || user.students.include?(record)
   end
 
+  def teacher?
+    return false unless user
+    user.admin? || user.teachers.include?(record)
+  end
+
   def permitted_attributes
     return [] unless user
     return [] unless user.admin? || user.teacher?
