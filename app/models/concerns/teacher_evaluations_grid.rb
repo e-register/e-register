@@ -60,8 +60,6 @@ class TeacherEvaluationsGrid
     # if the tests has not a date, the alignment cannot be done
     return unless klass_test.date
 
-    Rails.logger.debug "Working on #{klass_test.id}"
-
     # compute the position of the column
     column = find_column(type_id, klass_test)
 
@@ -74,17 +72,9 @@ class TeacherEvaluationsGrid
     @data.each do |_, types|
       evals = types[type_id]
 
-      # search an eval of the class test
-      target = evals.index { |e| e && e.klass_test == klass_test }
-      # if not found search the first with date greater than the test one
-      target = evals.index { |e| e && e.date > klass_test.date && !e.klass_test } unless target
-      # if not found do nothing
-      target = -1 unless target
-
-      Rails.logger.debug "Found target: #{evals[target].try(:id)}"
+      target = find_target(klass_test, evals)
 
       column = [column, target].max
-      Rails.logger.debug "Current column = #{column}"
     end
 
     column
@@ -94,15 +84,9 @@ class TeacherEvaluationsGrid
     @data.each do |student_id, types|
       evals = types[type_id]
 
-      # search the eval of the test
-      target = evals.index { |e| e && e.klass_test == klass_test }
-      # if not found fall back to the date
-      target = evals.index { |e| e && e.date > klass_test.date && !e.klass_test } unless target
+      target = find_target(klass_test, evals)
 
-      # if no evaluation was found don't pad
-      next unless target
-
-      Rails.logger.debug "Working on student #{student_id} that starts at #{target.inspect}"
+      next if target == -1
 
       # the padding to add
       to_add = offset-target
@@ -112,10 +96,20 @@ class TeacherEvaluationsGrid
       # if there aren't spaces to add
       next if to_add <= 0
 
-      Rails.logger.debug "Add padding of #{to_add}"
       # insert some nil values before the evaluation
       @data[student_id][type_id].insert(target, *[nil]*to_add)
     end
+  end
+
+  def find_target(klass_test, evals)
+    # search an eval of the class test
+    target = evals.index { |e| e && e.klass_test == klass_test }
+    # if not found search the first with date greater than the test one
+    target = evals.index { |e| e && e.date > klass_test.date && !e.klass_test } unless target
+    # if not found do nothing
+    target = -1 unless target
+
+    target
   end
 
   def fetch_klass_tests(type_id)
