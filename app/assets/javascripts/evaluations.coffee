@@ -1,7 +1,11 @@
 $ ->
   # initialize the datepicker
-  $('#evaluation_date').datepicker
-    dateFormat: 'dd/mm/yy'
+  $('.date').datepicker
+    format: 'dd/mm/yyyy'
+    weekStart: 1
+    daysOfWeekDisabled: "0"
+    autoclose: true
+    todayHighlight: true
 
   # initialize the score selector popup
   $('#score-dialog').modal
