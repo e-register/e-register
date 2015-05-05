@@ -36,12 +36,15 @@ class TeacherGrid
   end
 
   def populate
-    @teacher.evaluations.includes(:score).each do |eval|
-      @data[eval.student_id][eval.evaluation_type_id] << eval
+    @evaluations.each do |eval|
+      student_id = eval.student_id
+      type_id = eval.evaluation_type_id
 
-      @count[eval.evaluation_type_id] = [
-          @count[eval.evaluation_type_id] || 0,
-          @data[eval.student_id][eval.evaluation_type_id].length
+      @data[student_id][type_id] << eval
+
+      @count[type_id] = [
+          @count.fetch(type_id, 0),
+          @data[student_id][type_id].length
       ].max
     end
   end

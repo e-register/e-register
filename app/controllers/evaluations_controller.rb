@@ -31,6 +31,7 @@ class EvaluationsController < ApplicationController
 
     @types = EvaluationType.all
     @fluid = true
+    @evaluations = @teacher.evaluations.includes(:score).order(:date)
     @students = teacher_data_student(@teacher)
     @data, @count = teacher_data @teacher
   end
