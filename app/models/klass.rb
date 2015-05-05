@@ -37,4 +37,9 @@ class Klass < ActiveRecord::Base
   def today_events
     events.where(date: Date.today)
   end
+
+  # Fetch the subjects of the class
+  def subjects
+    teachers.map(&:subject).uniq
+  end
 end

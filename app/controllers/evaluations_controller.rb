@@ -19,6 +19,7 @@ class EvaluationsController < ApplicationController
     @student = Student.find params[:student_id]
     not_authorized(:student?, @student) unless student_policy.student?
 
+    @subjects = @student.klass.subjects
     @evaluations = student_evaluations @student
     @types = EvaluationType.all
     @fluid = true

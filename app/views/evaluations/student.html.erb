@@ -7,7 +7,8 @@
         <th><%= type.name %></th>
       <% end %>
     </tr>
-    <% @evaluations.each do |subject, evals| %>
+    <% @subjects.each do |subject| %>
+    <% evals = @evaluations[subject] || [] %>
       <tr>
         <td><%= subject.name %></td>
         <% @types.each do |type| %>
