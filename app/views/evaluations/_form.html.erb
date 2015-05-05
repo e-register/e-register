@@ -7,8 +7,8 @@
   <%= text_field_tag '', @teacher.subject.name, class: 'form-control', disabled: true %>
 </div>
 <div class="form-group">
-  <%= f.label :student %>
-  <%= f.select :student, @students, {}, class: 'form-control' %>
+  <%= f.label :student_id %>
+  <%= f.select :student_id, @students, {}, class: 'form-control' %>
 </div>
 <div class="form-group">
   <%= f.label :date %>

@@ -95,7 +95,7 @@ class EvaluationsController < ApplicationController
   def evaluation_params
     eval_params = params.require(:evaluation).permit(policy(@evaluation || :evaluation).permitted_attributes)
     unless eval_params.empty?
-      eval_params[:student] = Student.find_by id: eval_params[:student]
+      eval_params[:student] = Student.find_by id: eval_params[:student_id]
       eval_params[:score] = Score.find_by id: eval_params[:score_id]
     end
     eval_params

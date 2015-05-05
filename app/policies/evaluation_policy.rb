@@ -37,6 +37,6 @@ class EvaluationPolicy < ApplicationPolicy
     return [] unless user
     return [] unless user.admin? || user.teacher?
     return [] unless user.admin? || user.teachers.include?(record.teacher)
-    [:teacher_id, :student, :date, :score, :score_id, :evaluation_type_id, :visible, :description]
+    [:teacher_id, :student_id, :date, :score, :score_id, :evaluation_type_id, :visible, :description]
   end
 end
