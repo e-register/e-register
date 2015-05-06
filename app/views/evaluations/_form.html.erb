@@ -1,0 +1,45 @@
+<div class="form-group">
+  <%= f.label :class %>
+  <%= text_field_tag '', @teacher.klass.name, class: 'form-control', disabled: true %>
+</div>
+<div class="form-group">
+  <%= f.label :subject %>
+  <%= text_field_tag '', @teacher.subject.name, class: 'form-control', disabled: true %>
+</div>
+<div class="form-group">
+  <%= f.label :student_id %>
+  <%= f.select :student_id, @students, {}, class: 'form-control' %>
+</div>
+<div class="form-group">
+  <%= f.label :date %>
+  <div class="input-group date">
+    <%= text_field_tag 'evaluation[date]', format_date(@evaluation.date), class: 'form-control' %>
+    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+  </div>
+</div>
+<div class="form-group">
+  <%= f.label :score %>
+  <%= text_field_tag 'evaluation[score]', @evaluation.score.try(:as_string), class: 'form-control' %>
+</div>
+<div class="form-group">
+  <%= f.label :type %>
+  <br>
+  <div class="btn-group" data-toggle="buttons">
+    <% @types.each do |type| %>
+        <label class="btn btn-default <%= 'active' if @evaluation.evaluation_type == type %> btn-evaluation_type">
+          <%= radio_button_tag 'evaluation[evaluation_type_id]', type.id, @evaluation.evaluation_type == type %>
+          <%= type.name %>
+        </label>
+    <% end %>
+  </div>
+</div>
+<div class="form-group">
+  <%= f.check_box :visible %>
+  <%= f.label :visible %>
+</div>
+<div class="form-group">
+  <%= f.label :description %>
+  <%= f.text_area :description, class: 'form-control' %>
+</div>
+<%= f.hidden_field :score_id %>
+<%= f.hidden_field :teacher_id %>

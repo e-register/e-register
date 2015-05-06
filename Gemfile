@@ -2,8 +2,7 @@ source 'https://rubygems.org'
 
 gem 'rails', '4.2.1'
 
-# Install the proper gem according to the used database
-gem 'sqlite3'
+gem 'sqlite3', group: [:development, :test]
 gem 'pg'
 
 gem 'activerecord_any_of'
@@ -15,10 +14,13 @@ gem 'coffee-rails', '~> 4.1.0'
 
 gem 'jquery-rails'
 gem 'turbolinks'
+gem 'jquery-turbolinks'
+gem 'nprogress-rails'
 gem 'jbuilder', '~> 2.0'
 gem 'therubyracer'
 gem 'less-rails'
 gem 'twitter-bootstrap-rails'
+gem 'bootstrap-datepicker-rails'
 
 gem 'devise'
 gem 'pundit'
@@ -31,6 +33,11 @@ gem 'bcrypt', '~> 3.1.7'
 # Use Unicorn as the app server
 # gem 'unicorn'
 
+gem 'database_cleaner'
+gem 'faker'
+gem 'ffaker'
+
+gem 'rack-mini-profiler'
 
 group :development do
   # Only in the development environment because the Travis build with ruby < 2 fail with this
@@ -40,7 +47,6 @@ group :development do
   gem 'pry-rails'
   gem 'better_errors'
   gem 'binding_of_caller'
-  gem 'rack-mini-profiler'
 
   # Spring speeds up development by keeping your application running in the background.
   # Read more: https://github.com/rails/spring
@@ -50,8 +56,8 @@ end
 
 group :development, :test do
   gem 'coveralls', require: false
-  gem 'faker'
-  gem 'ffaker'
+
+  gem 'launchy'
 end
 
 gem 'rspec-rails', group: [ :development, :test ]
@@ -60,5 +66,6 @@ group :test do
   gem 'capybara'
   gem 'guard-rspec'
   gem 'poltergeist'
-  gem 'database_cleaner'
 end
+
+gem 'rails_12factor', group: :production

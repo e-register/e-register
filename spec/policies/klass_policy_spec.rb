@@ -45,12 +45,13 @@ describe KlassPolicy do
   describe 'permitted_attributes' do
     let(:user) { create(:user) }
     let(:admin) { create(:user_admin) }
+    let(:klass) { create(:klass) }
 
     it 'disallow all for non-admin' do
-      expect(subject.new(user, user).permitted_attributes).to match_array([])
+      expect(subject.new(user, klass).permitted_attributes).to match_array([])
     end
     it 'allows attr for admin' do
-      expect(subject.new(admin, user).permitted_attributes).to match_array([:name, :detail])
+      expect(subject.new(admin, klass).permitted_attributes).to match_array([:name, :detail])
     end
   end
 end

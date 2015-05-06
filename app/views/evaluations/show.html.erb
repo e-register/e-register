@@ -1,0 +1,60 @@
+<h1>Evaluation</h1>
+<div class="col-md-6">
+    <table class="table">
+      <tr>
+        <td>Teacher</td>
+        <td><%= @evaluation.teacher.user.full_name %></td>
+      </tr>
+      <tr>
+        <td>Student</td>
+        <td><%= @evaluation.student.user.full_name %></td>
+      </tr>
+      <tr>
+        <td>Subject</td>
+        <td><%= @evaluation.teacher.subject.name %></td>
+      </tr>
+      <tr>
+        <td>Date</td>
+        <td><%= format_date @evaluation.date %></td>
+      </tr>
+      <tr>
+        <td>Score</td>
+        <td>
+          <span class="label label-<%= @score_class %>"><%= @score %></span>
+        </td>
+      </tr>
+      <% if @evaluation.score_points %>
+          <tr>
+            <td>Points</td>
+            <td><%= @evaluation.score_points %> / <%= @evaluation.total_score %></td>
+          </tr>
+      <% end %>
+      <tr>
+        <td>Type</td>
+        <td><%= @evaluation.evaluation_type.name %></td>
+      </tr>
+      <tr>
+        <td>Visible</td>
+        <td><%= yesno @evaluation.visible %></td>
+      </tr>
+      <tr>
+        <td>Description</td>
+        <td><%= @evaluation.description %></td>
+      </tr>
+    </table>
+    <div class="form-group">
+      <% if EvaluationPolicy.new(current_user, @evaluation.student).student? %>
+        <%= link_to 'Back to the student grid', evaluations_student_path(@evaluation.student), class: ['btn', 'btn-primary', 'btn-xs'] %>
+      <% end %>
+      <% if EvaluationPolicy.new(current_user, @evaluation.teacher).teacher? %>
+        <%= link_to 'Back to the teacher grid', evaluations_teacher_path(@evaluation.teacher), class: ['btn', 'btn-primary', 'btn-xs'] %>
+      <% end %>
+    </div>
+    <% if policy(@evaluation).manage? %>
+      <div class="form-group">
+        <%= link_to_if policy(@evaluation).update?, 'Edit', edit_evaluation_path(@evaluation), class: ['btn', 'btn-warning'] %>
+        <%= link_to_if policy(@evaluation).destroy?, 'Delete', evaluation_path(@evaluation), class: ['btn', 'btn-danger'],
+                       method: :delete, data: { confirm: 'Are you sure?' } %>
+      </div>
+    <% end %>
+</div>

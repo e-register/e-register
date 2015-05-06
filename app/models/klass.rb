@@ -10,7 +10,7 @@ class Klass < ActiveRecord::Base
 
   # Search the students in this class. The users are already preloaded
   def students
-    Student.where(klass: self).includes(:user)
+    Student.where(klass: self).ordered
   end
 
   # Search the teachers in this class. The users are already preloaded
@@ -36,5 +36,10 @@ class Klass < ActiveRecord::Base
   # Search the today's events
   def today_events
     events.where(date: Date.today)
+  end
+
+  # Fetch the subjects of the class
+  def subjects
+    teachers.map(&:subject).uniq
   end
 end

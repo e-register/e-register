@@ -4,7 +4,7 @@ class ::ActiveRecord::Base
 
   def randomize_id
     begin
-      self.id = SecureRandom.random_number(1_000_000)
+      self.id = rand(1_000_000)
     end while self.class.where(id: self.id).exists?
   end
 end

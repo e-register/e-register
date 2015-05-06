@@ -141,4 +141,21 @@ describe Klass do
 
     expect(klass.today_signs).to match_array([sign])
   end
+
+  it 'fetches the subjects' do
+    klass = create(:klass)
+    subj1 = create(:subject)
+    subj2 = create(:subject)
+    subj3 = create(:subject)
+
+    teacher = create(:user_teacher)
+
+    create(:teacher, user: teacher, klass: klass, subject: subj1)
+    create(:teacher, klass: klass, subject: subj1)
+    create(:teacher, user: teacher, klass: klass, subject: subj2)
+    create(:teacher, subject: subj1)
+    create(:teacher, subject: subj3)
+
+    expect(klass.subjects).to match_array([subj1, subj2])
+  end
 end

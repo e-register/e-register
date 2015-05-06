@@ -8,6 +8,8 @@ class Evaluation < ActiveRecord::Base
 
   validates_presence_of :teacher, :student, :evaluation_type
 
+  before_save :round_points
+
   def total_score
     super || (klass_test && klass_test.total_score)
   end
@@ -32,5 +34,20 @@ class Evaluation < ActiveRecord::Base
     else
       raise Exception, "The Evaluation Scale cannot be nil"
     end
+  end
+
+  def score_class
+    if !score
+      'default'
+    else
+      score.score_class
+    end
+  end
+
+  private
+
+  def round_points
+    self.total_score = total_score.round(2)   if total_score
+    self.score_points = score_points.round(2) if score_points
   end
 end

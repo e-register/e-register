@@ -10,7 +10,7 @@ class Teacher < ActiveRecord::Base
 
   # Search all the students that are in the same class of this teacher
   def students
-    Student.where(klass: klass).includes(:user)
+    Student.where(klass: klass).ordered
   end
 
   # Search the presences created by the user

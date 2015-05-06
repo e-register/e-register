@@ -4,8 +4,9 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
 
   rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
-
   rescue_from ActiveRecord::RecordNotFound, with: :user_not_authorized
+
+  before_filter :enable_profiler
 
   def home
     @home_blocks = APP_CONFIG['homepage'][current_user.user_group.name.downcase] if current_user
@@ -23,6 +24,12 @@ class ApplicationController < ActionController::Base
     redirect_to(request.referrer || root_path)
   end
 
+  def enable_profiler
+    if current_user.try(:user_group).try(:name) == 'Admin' || Rails.env.development?
+      Rack::MiniProfiler.authorize_request
+    end
+  end
+
   protected
 
   # Perform the creation of a model
@@ -36,7 +43,7 @@ class ApplicationController < ActionController::Base
     if instance.save
       redirect_to instance
     else
-      flash.now[:alert] = instance.errors.full_messages.join("<br>").html_safe
+      flash[:alert] = instance.errors.full_messages.join("<br>").html_safe
       redirect_to error_path
     end
   end
@@ -48,10 +55,12 @@ class ApplicationController < ActionController::Base
   #    block: a block with a parameter that returns the path to redirect to in case of error
   def do_update(instance, klass_params)
     authorize instance
-    if instance.update_attributes(klass_params)
+    success = instance.update_attributes(klass_params)
+    authorize instance
+    if success
       redirect_to instance
     else
-      flash.now[:alert] = instance.errors.full_messages.join("<br>").html_safe
+      flash[:alert] = instance.errors.full_messages.join("<br>").html_safe
       redirect_to yield(instance)
     end
   end
@@ -67,5 +76,10 @@ class ApplicationController < ActionController::Base
     else
       redirect_to instance, alert: "Error deleting the #{model_name.downcase}"
     end
+  end
+
+  # Throws a NotAuthorized exception
+  def not_authorized(query = nil, record = nil, policy = nil)
+    raise NotAuthorizedError.new(query: query, record: record, policy: policy)
   end
 end

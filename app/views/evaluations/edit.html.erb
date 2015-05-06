@@ -1,0 +1,11 @@
+<h1>Edit an evaluation</h1>
+<div class="col-md-6">
+  <%= form_for @evaluation do |f| %>
+      <%= render 'form', f: f %>
+      <div class="form-group">
+        <%= f.submit 'Update', class: ['btn', 'btn-success'] %>
+      </div>
+  <% end %>
+</div>
+
+<%= render 'modal', scores: @scores %>

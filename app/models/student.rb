@@ -4,11 +4,13 @@ class Student < ActiveRecord::Base
 
   belongs_to :user
   belongs_to :klass
-  has_many :evaluations, -> { where(visible: true) }, dependent: :destroy
+  has_many :evaluations, -> { where(visible: true).order(:date) }, dependent: :destroy
   has_many :presences, dependent: :destroy
   has_many :notes, as: :notable
 
   delegate :events, to: :klass
+
+  scope :ordered, -> { includes(:user).joins(:user).order('users.surname', 'users.name') }
 
   # Search all the teachers that taught in the same class of this student
   def teachers

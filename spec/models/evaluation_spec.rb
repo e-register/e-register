@@ -52,4 +52,37 @@ describe Evaluation, type: :model do
 
     expect { evaluation.compute_score }.to raise_exception
   end
+
+  it 'rounds the scores correctly' do
+    eval = create(:evaluation, score_points: 5.32123, total_score: 6.123564)
+
+    expect(eval.score_points).to eq(5.32)
+    expect(eval.total_score).to eq(6.12)
+  end
+
+  describe 'score_class' do
+    it 'returns "default" without score' do
+      eval = create(:evaluation, score: nil)
+      expect(eval.score_class).to eq('default')
+    end
+
+    it 'returns "default" on not-counted score' do
+      eval = create(:evaluation, score: create(:score_uncounted))
+      expect(eval.score_class).to eq('info')
+    end
+
+    it 'returns "success" on sufficient score' do
+      APP_CONFIG['evaluations'] = {'sufficient_value' => 6.0}
+
+      eval = create(:evaluation, score: create(:score_sufficient))
+      expect(eval.score_class).to eq('success')
+    end
+
+    it 'returns "danger" on insufficient score' do
+      APP_CONFIG['evaluations'] = {'sufficient_value' => 6.0}
+
+      eval = create(:evaluation, score: create(:score_insufficient))
+      expect(eval.score_class).to eq('danger')
+    end
+  end
 end

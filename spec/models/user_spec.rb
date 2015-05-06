@@ -120,33 +120,41 @@ describe User, type: :model do
   end
 
   it 'has the events' do
-    teacher = create(:user_teacher)
-    student = create(:user_student)
+    user_teacher = create(:user_teacher)
+    user_student = create(:user_student)
 
+    # a common klass
     klass = create(:klass)
 
+    teacher = user_teacher.teachers.first
+    student = user_student.students.first
+
     # join the classes of the 2 users
-    student.students.first.update(klass: klass)
-    teacher.teachers.first.update(klass: klass)
+    student.update(klass: klass)
+    teacher.update(klass: klass)
+
+    # 2 disjoint student and teacher
+    other_teacher = create(:teacher, user: user_teacher)
+    other_student = create(:student, user: user_student)
 
     # only teacher
-    event1 = create(:event, teacher: teacher, text: 'event1')
+    event1 = create(:event, teacher: user_teacher, text: 'event1')
     # teacher and student
     event2 = create(:event, klass: klass, text: 'event2')
     # only student
-    event3 = create(:event, klass: student.students.second.klass, text: 'event3')
+    event3 = create(:event, klass: other_student.klass, text: 'event3')
     # only teacher
-    event4 = create(:event, klass: teacher.teachers.second.klass, text: 'event4')
+    event4 = create(:event, klass: other_teacher.klass, text: 'event4')
     # only teacher as owner, not the student (hidden)
-    event5 = create(:event, teacher: teacher, visible: false, klass: klass, text: 'event5')
+    event5 = create(:event, teacher: user_teacher, visible: false, klass: klass, text: 'event5')
 
     # a fake event
     create(:event)
 
     # the events as a teacher
-    expect(teacher.events).to match_array([event1, event2, event4, event5])
+    expect(user_teacher.events).to match_array([event1, event2, event4, event5])
     # the events as a student
-    expect(student.events).to match_array([event2, event3])
+    expect(user_student.events).to match_array([event2, event3])
   end
 
   it 'fetches the signs as a student' do

@@ -40,6 +40,17 @@ EOF
     data.html_safe
   end
 
+  # Format a date to DD/MM/YYYY
+  def format_date(date)
+    d = Date.parse date.to_s
+    d.strftime '%d/%m/%Y'
+  end
+
+  # Return 'Yes' if value is true, 'No' if is false
+  def yesno(value)
+    value ? 'Yes' : 'No'
+  end
+
   private
   # Render the content of a block, including the title, the description and the buttons
   def home_block_content(name, opt = {})

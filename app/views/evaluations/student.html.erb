@@ -1,0 +1,26 @@
+<h1><%= @student.user.full_name %> <small><%= @student.klass.name %></small></h1>
+<div class="table-responsive">
+  <table class="table table-striped grid-evaluation">
+    <thead>
+      <tr>
+        <th>Subject</th>
+        <% @types.each do |type| %>
+          <th><%= type.name %></th>
+        <% end %>
+      </tr>
+    </thead>
+    <% @subjects.each do |subject| %>
+    <% evals = @evaluations[subject] || [] %>
+      <tr>
+        <td><%= subject.name %></td>
+        <% @types.each do |type| %>
+          <td>
+          <% evals.select { |e| e.evaluation_type_id == type.id }.each do |eval| %>
+            <%= evaluation_button(eval) %>
+          <% end %>
+          </td>
+        <% end %>
+      </tr>
+    <% end %>
+  </table>
+</div>

@@ -2,7 +2,7 @@ require 'rails_helper'
 
 describe 'User', type: :request do
   describe 'UsersController#show' do
-    it 'shows the users informations' do
+    it 'shows the users information' do
       user = create(:user_student)
       sign_in create(:user_admin)
 
@@ -65,8 +65,7 @@ describe 'User', type: :request do
 
       visit edit_user_path(user)
 
-      expect(current_path).to eq(root_path)
-      expect(page).to have_content('You are not authorized to perform this action.')
+      check_unauthorized
     end
 
     it 'manage if an error' do
@@ -84,7 +83,7 @@ describe 'User', type: :request do
   end
 
   describe 'UsersController#new' do
-    it 'creates a new user with all informations correct' do
+    it 'creates a new user with all information correct' do
       sign_in create(:user_admin)
 
       visit new_user_path
@@ -104,8 +103,7 @@ describe 'User', type: :request do
 
       visit new_user_path
 
-      expect(current_path).to eq(root_path)
-      expect(page).to have_content('You are not authorized to perform this action.')
+      check_unauthorized
     end
 
     it 'manage if an error' do

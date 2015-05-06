@@ -16,8 +16,7 @@ describe 'Klass', type: :request do
     it 'doesn\'t show the classes page for guest' do
       visit klasses_path
 
-      expect(current_path).to eq(root_path)
-      expect(page).to have_content('You are not authorized to perform this action.')
+      check_unauthorized
     end
   end
 
@@ -54,13 +53,12 @@ describe 'Klass', type: :request do
       end
     end
 
-    it 'doesn\'t show the class informations for guest' do
+    it 'doesn\'t show the class information for guest' do
       klass = create(:klass)
 
       visit klass_path(klass)
 
-      expect(current_path).to eq(root_path)
-      expect(page).to have_content('You are not authorized to perform this action.')
+      check_unauthorized
     end
   end
 
@@ -92,8 +90,7 @@ describe 'Klass', type: :request do
 
       visit edit_klass_path(klass)
 
-      expect(current_path).to eq(root_path)
-      expect(page).to have_content('You are not authorized to perform this action.')
+      check_unauthorized
     end
 
     it 'manage if an error' do
@@ -113,7 +110,7 @@ describe 'Klass', type: :request do
   end
 
   describe 'KlassesController#new' do
-    it 'creates a new klass with all informations correct' do
+    it 'creates a new klass with all information correct' do
       sign_in create(:user_admin)
 
       visit new_klass_path
@@ -132,8 +129,7 @@ describe 'Klass', type: :request do
 
       visit new_klass_path
 
-      expect(current_path).to eq(root_path)
-      expect(page).to have_content('You are not authorized to perform this action.')
+      check_unauthorized
     end
 
     it 'manage if an error' do
