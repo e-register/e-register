@@ -16,7 +16,7 @@
         <% @types.each do |type| %>
           <td>
           <% evals.select { |e| e.evaluation_type_id == type.id }.each do |eval| %>
-            <%= evaluation_button(eval) %>
+            <span class="evaluation-box-container"><%= evaluation_button(eval) %></span>
           <% end %>
           </td>
         <% end %>
