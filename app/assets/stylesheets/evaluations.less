@@ -2,11 +2,13 @@
 @import "twitter/bootstrap/mixins.less";
 
 .evaluation-box {
-  padding: 0 5px 0 5px;
-  display: inline-block;
+  padding: 0;
+  display: block;
   width: 35px;
   height: 35px;
   vertical-align: top;
+  border: 1px solid transparent;
+
   .evaluation-box-content {
     .evaluation-box-score {
       font-size: 1.2em;
@@ -17,13 +19,22 @@
   }
 }
 
+.evaluation-box-container {
+  display: inline-block;
+  margin-right: 3px;
+  padding: 1px;
+}
+
 .grid-evaluation {
   white-space: nowrap;
   td {
     border-left: 1px solid @table-border-color;
-    padding: 3px !important;
+    padding: 0 0 0 3px !important;
   }
-  td:first-of-type { border-left: 0; }
+  td:first-of-type {
+    border-left: 0;
+    padding-right: 3px !important;
+  }
 
   td:first-of-type {
     vertical-align: middle;

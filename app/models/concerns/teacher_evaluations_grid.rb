@@ -12,19 +12,22 @@ class TeacherEvaluationsGrid
   end
 
   def data
-    return @data if @data
+    return @data, @columns if @data
 
     prepare   # prepare the instance variables, alloc the matrix
     populate  # insert the data into the @data variable
     align     # align the class tests vertically
 
-    @data
+    return @data, @columns
   end
 
   private
 
   def prepare
     @data = {}
+    @columns = {}
+
+    @types.each { |type| @columns[type.id] = [] }
 
     @students.each do |stud|
       @data[stud.id] = {}
@@ -63,6 +66,8 @@ class TeacherEvaluationsGrid
     # compute the position of the column
     column = find_column(type_id, klass_test)
 
+    @columns[type_id] << column
+
     pad_evaluations(type_id, klass_test, column)
   end
 
@@ -85,13 +90,12 @@ class TeacherEvaluationsGrid
       evals = types[type_id]
 
       target = find_target(klass_test, evals)
-
-      next if target == -1
+      target = evals.length if target == -1
 
       # the padding to add
       to_add = offset-target
       # if the evaluation found is not in the test add another space
-      to_add += 1 if evals[target].klass_test != klass_test
+      to_add += 1 if evals[target].try(:klass_test) != klass_test
 
       # if there aren't spaces to add
       next if to_add <= 0

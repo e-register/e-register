@@ -33,7 +33,7 @@ class EvaluationsController < ApplicationController
     @fluid = true
     @evaluations = @teacher.evaluations.includes(:score, :klass_test).order(:date)
     @students = teacher_data_student(@teacher)
-    @data = teacher_data @teacher
+    @data, @columns = teacher_data @teacher
   end
 
   def show

@@ -12,12 +12,12 @@
     <% @students.each do |student|; types = @data[student.id] %>
       <tr>
         <td><%= student.user.full_name %></td>
-        <% types.each do |_, evals| %>
-          <td class="first-cell">
-            <% evals.each do |eval| %>
-              <%= evaluation_button(eval) %>
-            <% end %>
-          </td>
+        <% types.each do |type_id, evals| %>
+            <td><% evals.each_with_index do |eval, index|
+              %><span class="evaluation-box-container <%= 'bg-success' if @columns[type_id].include? index %>"><%=
+                evaluation_button(eval)
+              %></span><% end
+            %></td>
         <% end %>
       </tr>
     <% end %>
