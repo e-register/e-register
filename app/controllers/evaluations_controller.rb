@@ -65,6 +65,7 @@ class EvaluationsController < ApplicationController
   end
 
   def update
+    @teacher = Teacher.find params[:evaluation][:teacher_id]
     do_update(@evaluation, evaluation_params) { |eval| edit_evaluation_path(eval) }
   end
 
@@ -95,7 +96,7 @@ class EvaluationsController < ApplicationController
   end
 
   def evaluation_params
-    eval_params = params.require(:evaluation).permit(policy(@evaluation || :evaluation).permitted_attributes)
+    eval_params = params.require(:evaluation).permit(teacher_policy.permitted_attributes)
     unless eval_params.empty?
       eval_params[:student] = Student.find_by id: eval_params[:student_id]
       eval_params[:score] = Score.find_by id: eval_params[:score_id]
