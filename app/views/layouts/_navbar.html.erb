@@ -12,8 +12,7 @@
 
     <div class="collapse navbar-collapse" id="navbar-content">
       <ul class="nav navbar-nav">
-        <li class="active"><a href="#">Link <span class="sr-only">(current)</span></a></li>
-        <li><a href="#">Link</a></li>
+        <%= nav_link_to 'Evaluations', evaluations_path, {}, {wrapper: 'li', selected_class: 'active', controller_segment: 1} %>
       </ul>
 
       <% if current_user %>

@@ -63,9 +63,12 @@ EOF
   def home_block_button(name, opt)
     opt['to'] ||= ''
     opt['type'] ||= 'success'
-    opt['method'] ||= 'get'
+
+    link_opt = { class: ['btn', "btn-#{opt['type']}", 'form-control'] }
+    link_opt[:method] = opt['method'] if opt['method'] && opt['method'].downcase != 'get'
+
     content_tag :div, class: 'form-group' do
-      link_to name, opt['to'], method: opt['method'], class: ['btn', "btn-#{opt['type']}", 'form-control']
+      link_to name, opt['to'], link_opt
     end
   end
 end

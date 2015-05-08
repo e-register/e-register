@@ -21,6 +21,7 @@ gem 'therubyracer'
 gem 'less-rails'
 gem 'twitter-bootstrap-rails'
 gem 'bootstrap-datepicker-rails'
+gem 'nav_lynx'
 
 gem 'devise'
 gem 'pundit'
