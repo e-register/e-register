@@ -17,6 +17,8 @@
               %><span class="evaluation-box-container <%= 'bg-success' if @columns[type_id].include? index %>"><%=
                 evaluation_button(eval)
               %></span><% end
+            %><%=
+                new_evaluation_button(@teacher, student, type_id)
             %></td>
         <% end %>
       </tr>

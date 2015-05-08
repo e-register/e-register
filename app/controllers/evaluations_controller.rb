@@ -44,7 +44,7 @@ class EvaluationsController < ApplicationController
 
   def new
     @teacher = Teacher.find params[:teacher_id]
-    @evaluation = Evaluation.new(teacher: @teacher, date: Date.today, visible: true, evaluation_type: EvaluationType.first)
+    @evaluation = Evaluation.new(new_evaluation_params)
     @students = @teacher.klass.students.map { |s| [s.user.full_name, s.id] }
     prepare_instance_variables
     authorize @evaluation
@@ -99,6 +99,17 @@ class EvaluationsController < ApplicationController
       eval_params[:score] = Score.find_by id: eval_params[:score_id]
     end
     eval_params
+  end
+
+  def new_evaluation_params
+    {
+        teacher: @teacher,
+        date: Date.today,
+        visible: true,
+        evaluation_type: params[:type_id] ? EvaluationType.find(params[:type_id]) : EvaluationType.first,
+        student_id: params[:student_id],
+        klass_test_id: params[:klass_test_id]
+    }
   end
 
   def prepare_instance_variables

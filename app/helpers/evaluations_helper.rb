@@ -18,6 +18,21 @@ EOC
     end
   end
 
+  def new_evaluation_button(teacher, student_id, type_id)
+    html = <<EOC
+<span class="evaluation-box-container pull-right">
+  <a class="evaluation-box btn btn-sm btn-primary" href="#{new_evaluation_teacher_path(teacher, student_id: student_id, type_id: type_id)}">
+    <div class="evaluation-box-content">
+      <div class="evaluation-box-add">
+        Add
+      </div>
+    </div>
+  </a>
+</span>
+EOC
+    html.strip.html_safe
+  end
+
   private
 
   def format_evaluation_date(date)
