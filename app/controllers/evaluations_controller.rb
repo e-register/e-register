@@ -1,6 +1,8 @@
 class EvaluationsController < ApplicationController
   before_filter :fetch_evaluation, only: [:show, :edit, :update, :destroy]
 
+  helper_method :teacher_policy
+
   def index
     authorize :evaluation
 
