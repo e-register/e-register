@@ -9,6 +9,7 @@
           <h4 class="list-group-item-heading"><%= teach.klass.name %></h4>
           <p class="list-group-item-text"><%= teach.subject.name %></p>
         <% end %>
+        <%= link_to 'Add', new_evaluation_teacher_path(teach), method: :get, class: ['btn', 'btn-primary', 'btn-list-add-eval'] %>
       <% end %>
     </div>
   </div>
