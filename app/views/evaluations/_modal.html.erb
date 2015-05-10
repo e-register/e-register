@@ -6,13 +6,22 @@
         <h4 class="modal-title">Select a score</h4>
       </div>
       <div class="modal-body">
-        <% scores.each do |score| %>
-            <button class="btn btn-<%= score.score_class %> btn-score"
-                    data-id="<%= score.id %>"
-                    data-sufficient="<%= score.score_class %>">
-              <%= score.as_string %>
-            </button>
-        <% end %>
+        <div class="form-group">
+          <% scores.each do |score| %>
+              <button class="btn btn-<%= score.score_class %> btn-score"
+                      data-id="<%= score.id %>"
+                      data-sufficient="<%= score.score_class %>">
+                <%= score.as_string %>
+              </button>
+          <% end %>
+        </div>
+        <div class="form-group">
+          <button class="btn btn-default btn-score"
+                  data-id=""
+                  data-sufficient="">
+            <em>None</em>
+          </button>
+        </div>
       </div>
     </div>
   </div>

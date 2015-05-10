@@ -35,6 +35,10 @@ class EvaluationPolicy < ApplicationPolicy
     user.admin? || user.teachers.include?(record)
   end
 
+  def new_group?
+    teacher?
+  end
+
   def permitted_attributes
     return [] unless user
     return [] unless user.admin? || user.teacher?

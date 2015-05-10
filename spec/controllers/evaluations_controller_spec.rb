@@ -90,6 +90,122 @@ describe EvaluationsController, type: :controller do
     end
   end
 
+  describe 'GET /evaluations/teacher/:teacher_id/new_class' do
+    it 'sets the instance variables correctly' do
+      teacher = create(:teacher)
+      score = create(:score)
+      type = create(:evaluation_type)
+
+      stud1 = create(:student, klass: teacher.klass)
+      stud2 = create(:student, klass: teacher.klass)
+
+      sign_in teacher.user
+
+      get :new_klass, teacher_id: teacher.id
+
+      expect(assigns(:teacher)).to eq(teacher)
+      expect(assigns(:students)).to match_array([stud1, stud2])
+      expect(assigns(:scores)).to match_array([score])
+      expect(assigns(:types)).to match_array([type])
+      expect(assigns(:evaluation_type)).to eq(type)
+      expect(assigns(:visible)).to be_truthy
+      expect(assigns(:description)).to eq ''
+      expect(assigns(:date)).to eq(Date.today)
+      expect(assigns(:klass_test)).to be_truthy
+      expect(assigns(:evals)).to match_array([])
+    end
+  end
+
+  describe 'POST /evaluations/teacher/:teacher_id/new_class' do
+    it 'creates the evaluations' do
+      teacher = create(:teacher)
+      score = create(:score)
+      type = create(:evaluation_type)
+
+      stud1 = create(:student, klass: teacher.klass)
+      stud2 = create(:student, klass: teacher.klass)
+      stud3 = create(:student, klass: teacher.klass)
+
+      sign_in teacher.user
+
+      params = {
+          'date': '07/01/1997',
+          'evaluation_type_id': type.id.to_s,
+          'klass_test': 'true',
+          'description': 'Foo Bar',
+          'teacher_id': teacher.id,
+          'group': {
+              stud1.id.to_s => {
+                  'date': '08/01/1997',
+                  'score_id': score.id.to_s,
+                  'visible': 'true'
+              },
+              stud2.id.to_s => {
+                  'score_id': score.id.to_s
+              },
+              stud3.id.to_s => {
+                  'date': '09/01/1997',
+                  'visible': 'true'
+              }
+          }
+      }
+
+      post 'create_klass', params
+
+      evals = Evaluation.all.sort_by { |e| e.date }
+      klass_test = KlassTest.first
+
+      expected = [
+          {
+              teacher: teacher, student: stud2, klass_test: klass_test,
+              date: Date.parse('07/01/1997'), evaluation_type: type, score: score,
+              visible: false, description: 'Foo Bar'
+          }, {
+              teacher: teacher, student: stud1, klass_test: klass_test,
+              date: Date.parse('08/01/1997'), evaluation_type: type, score: score,
+              visible: true, description: 'Foo Bar'
+          }
+      ]
+
+      expect(evals.count).to eq(2)
+
+      evals.each_with_index do |eval, index|
+        expected[index].each do |attr, val|
+          expect(eval.send(attr)).to eq(val)
+        end
+      end
+    end
+
+    it 'doesn\'t create invalid evaluations' do
+      teacher = create(:teacher)
+      score = create(:score)
+      type = create(:evaluation_type)
+
+      stud = create(:student)
+
+      sign_in teacher.user
+
+      params = {
+          'date': '07/01/1997',
+          'evaluation_type_id': type.id.to_s,
+          'klass_test': 'true',
+          'description': 'Foo Bar',
+          'teacher_id': teacher.id,
+          'group': {
+              stud.id.to_s => {
+                  'date': '08/01/1997',
+                  'score_id': score.id.to_s,
+                  'visible': 'true'
+              }
+          }
+      }
+
+      post 'create_klass', params
+
+      expect(Evaluation.count).to be_zero
+    end
+  end
+
   describe 'GET /evaluations/student/:student_id' do
     it 'sets the instance variables correctly' do
       stud = create(:student)

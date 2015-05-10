@@ -1,5 +1,6 @@
 class Teacher < ActiveRecord::Base
-  validates_uniqueness_of :user, scope: [:klass, :subject]
+  validates_presence_of :user_id, :klass_id, :subject_id
+  validates_uniqueness_of :user_id, scope: [:klass_id, :subject_id]
 
   belongs_to :user
   belongs_to :klass

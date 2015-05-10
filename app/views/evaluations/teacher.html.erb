@@ -29,5 +29,6 @@
 <% if teacher_policy.new? %>
   <div class="form-group">
     <%= link_to 'New Evaluation', new_evaluation_teacher_path(@teacher), class: ['btn', 'btn-primary'] %>
+    <%= link_to 'Add multiple Evaluations', new_evaluation_teacher_klass_path(@teacher), class: ['btn', 'btn-primary'] %>
   </div>
 <% end %>

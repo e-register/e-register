@@ -1,6 +1,6 @@
 class Student < ActiveRecord::Base
-  validates_presence_of :user, :klass
-  validates_uniqueness_of :user, scope: [:klass]
+  validates_presence_of :user_id, :klass_id
+  validates_uniqueness_of :user_id, scope: [:klass_id]
 
   belongs_to :user
   belongs_to :klass

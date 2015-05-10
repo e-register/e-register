@@ -55,7 +55,7 @@ describe EvaluationPolicy do
     it { is_expected.to permit(admin, student) }
   end
 
-  permissions :teacher? do
+  permissions :teacher?, :new_group? do
     let(:student) { create(:student) }
     let(:teacher) { create(:teacher) }
     let(:other_teacher) { create(:teacher) }

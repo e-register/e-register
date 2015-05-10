@@ -6,7 +6,7 @@ class Evaluation < ActiveRecord::Base
   belongs_to :evaluation_scale
   belongs_to :evaluation_type
 
-  validates_presence_of :teacher, :student, :evaluation_type
+  validates_presence_of :teacher_id, :student_id, :evaluation_type_id
 
   before_save :round_points
 

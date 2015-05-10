@@ -4,7 +4,7 @@ class Presence < ActiveRecord::Base
   belongs_to :presence_type
   belongs_to :justification
 
-  validates_presence_of :teacher, :student, :date, :hour, :presence_type
+  validates_presence_of :teacher_id, :student_id, :date, :hour, :presence_type_id
 
   scope :today_presences, ->(stud) { where(student: stud, date: Date.today).order(:hour) }
 

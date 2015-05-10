@@ -6,6 +6,7 @@ gem 'sqlite3', group: [:development, :test]
 gem 'pg'
 
 gem 'activerecord_any_of'
+gem 'activerecord-import'
 
 gem 'sass-rails', '~> 5.0'
 gem 'uglifier', '>= 1.3.0'

@@ -31,7 +31,7 @@ class EvaluationsController < ApplicationController
 
     @types = EvaluationType.all
     @fluid = true
-    @evaluations = @teacher.evaluations.includes(:score, :klass_test).order(:date)
+    @evaluations = @teacher.evaluations.includes(:score, :klass_test)
     @students = teacher_data_student(@teacher)
     @data, @columns = teacher_data @teacher
   end
@@ -50,9 +50,23 @@ class EvaluationsController < ApplicationController
     authorize @evaluation
   end
 
+  def new_klass
+    @teacher = Teacher.find params[:teacher_id]
+    not_authorized(:new_group?, @teacher) unless teacher_policy.new_group?
+
+    @students = @teacher.klass.students
+    prepare_instance_variables
+    prepare_new_klass_instance_variables
+  end
+
   def create
     @teacher = Teacher.find params[:evaluation][:teacher_id]
     do_create(Evaluation, evaluation_params, new_evaluation_teacher_path(@teacher))
+  end
+
+  def create_klass
+    EvaluationsBatch.new(params, current_user).process
+    redirect_to evaluations_teacher_path(params[:teacher_id])
   end
 
   def edit
@@ -124,6 +138,15 @@ class EvaluationsController < ApplicationController
   def prepare_instance_variables
     @scores = Score.all
     @types = EvaluationType.all
+  end
+
+  def prepare_new_klass_instance_variables
+    @evaluation_type = @types.first
+    @visible = true
+    @description = ''
+    @date = Date.today
+    @klass_test = true
+    @evals = {}
   end
 
   def student_policy

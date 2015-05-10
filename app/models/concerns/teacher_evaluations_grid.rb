@@ -8,7 +8,7 @@ class TeacherEvaluationsGrid
     @teacher = teacher
     @students = students
     @types = types
-    @evaluations = evaluations
+    @evaluations = evaluations.sort_by { |e| e.klass_test ? [e.klass_test.date, e.date] : [ e.date, e.date ] }
   end
 
   def data
@@ -123,6 +123,6 @@ class TeacherEvaluationsGrid
       klass_tests.concat(evals.map(&:klass_test).compact)
     end
 
-    klass_tests.uniq
+    klass_tests.uniq.sort_by { |k| k.date }
   end
 end
