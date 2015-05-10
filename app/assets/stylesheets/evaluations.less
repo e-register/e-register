@@ -8,7 +8,10 @@
   height: 35px;
   vertical-align: top;
   border: 1px solid transparent;
-
+  &[disabled] {
+    cursor: pointer;
+    pointer-events: all;
+  }
   .evaluation-box-content {
     .evaluation-box-score {
       font-size: 1.2em;

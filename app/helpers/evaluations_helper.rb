@@ -12,7 +12,8 @@ EOC
   def evaluation_button(evaluation)
     if evaluation
       link_to grid_evaluation(evaluation), evaluation_path(evaluation),
-              class: ['btn', 'btn-sm', "btn-#{evaluation.score_class}", 'evaluation-box']
+              class: ['btn', 'btn-sm', "btn-#{evaluation.score_class}", 'evaluation-box'],
+              disabled: !evaluation.visible
     else
       empty_grid_evaluation
     end
