@@ -129,23 +129,23 @@ describe EvaluationsController, type: :controller do
       sign_in teacher.user
 
       params = {
-          'date': '07/01/1997',
-          'evaluation_type_id': type.id.to_s,
-          'klass_test': 'true',
-          'description': 'Foo Bar',
-          'teacher_id': teacher.id,
-          'group': {
+          'date' => '07/01/1997',
+          'evaluation_type_id' => type.id.to_s,
+          'klass_test' => 'true',
+          'description' => 'Foo Bar',
+          'teacher_id' => teacher.id,
+          'group' => {
               stud1.id.to_s => {
-                  'date': '08/01/1997',
-                  'score_id': score.id.to_s,
-                  'visible': 'true'
+                  'date' => '08/01/1997',
+                  'score_id' => score.id.to_s,
+                  'visible' => 'true'
               },
               stud2.id.to_s => {
-                  'score_id': score.id.to_s
+                  'score_id' => score.id.to_s
               },
               stud3.id.to_s => {
-                  'date': '09/01/1997',
-                  'visible': 'true'
+                  'date' => '09/01/1997',
+                  'visible' => 'true'
               }
           }
       }
@@ -186,16 +186,16 @@ describe EvaluationsController, type: :controller do
       sign_in teacher.user
 
       params = {
-          'date': '07/01/1997',
-          'evaluation_type_id': type.id.to_s,
-          'klass_test': 'true',
-          'description': 'Foo Bar',
-          'teacher_id': teacher.id,
-          'group': {
+          'date' => '07/01/1997',
+          'evaluation_type_id' => type.id.to_s,
+          'klass_test' => 'true',
+          'description' => 'Foo Bar',
+          'teacher_id' => teacher.id,
+          'group' => {
               stud.id.to_s => {
-                  'date': '08/01/1997',
-                  'score_id': score.id.to_s,
-                  'visible': 'true'
+                  'date' => '08/01/1997',
+                  'score_id' => score.id.to_s,
+                  'visible' => 'true'
               }
           }
       }
