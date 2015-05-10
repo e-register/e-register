@@ -23,5 +23,16 @@ describe EvaluationsHelper, type: :helper do
 
       expect(html).to_not be_nil
     end
+
+    it 'generates an add tag for the student' do
+      teacher = create(:teacher)
+
+      html = helper.new_evaluation_button(teacher, 123456789, 987654321)
+
+      expect(html).to include(teacher.id.to_s)
+      expect(html).to include('123456789')
+      expect(html).to include('987654321')
+      expect(html).to include('Add')
+    end
   end
 end

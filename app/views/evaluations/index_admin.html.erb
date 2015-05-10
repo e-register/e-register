@@ -1,2 +1,19 @@
-<h1>Admin</h1>
-<h2>What to place here?</h2>
+<h1>All the classes</h1>
+<div class="col-md-6">
+    <% @teachers.each do |klass, teachers| %>
+      <div class="panel panel-default">
+        <div class="panel-heading"><h4><%= klass.name %></h4></div>
+        <% if klass.detail %>
+          <div class="panel-body"><%= klass.detail %></div>
+        <% end %>
+        <ul class="list-group">
+          <% teachers.each do |teach| %>
+            <%= link_to evaluations_teacher_path(teach), class: 'list-group-item' do %>
+              <strong><%= teach.user.full_name %></strong>
+              <%= teach.subject.name %>
+            <% end %>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+</div>

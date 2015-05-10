@@ -28,8 +28,6 @@ homepage:
       buttons:
         My Evaluations:
           to: /evaluations
-        Add an Evaluation:
-          to: /
 
     Quick Menu:
       description: Some quick action you can do here

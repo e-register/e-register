@@ -12,7 +12,9 @@ class EvaluationPolicy < ApplicationPolicy
     return true if user.admin?
     return false unless user.teacher?
 
-    user.teachers.include?(record.teacher)
+    @record = @record.teacher if record.is_a? Evaluation
+
+    user.teachers.include?(record)
   end
 
   def update?
@@ -36,7 +38,10 @@ class EvaluationPolicy < ApplicationPolicy
   def permitted_attributes
     return [] unless user
     return [] unless user.admin? || user.teacher?
-    return [] unless user.admin? || user.teachers.include?(record.teacher)
+
+    @record = @record.teacher if record.is_a? Evaluation
+
+    return [] unless user.admin? || user.teachers.include?(record)
     [:teacher_id, :student_id, :date, :score, :score_id, :evaluation_type_id, :visible, :description]
   end
 end

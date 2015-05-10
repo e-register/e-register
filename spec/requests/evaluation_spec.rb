@@ -19,10 +19,9 @@ describe 'Evaluation', type: :request do
       sign_in user
 
       visit evaluations_path
-
       expect(page).to have_content('Your classes')
       user.teachers.each do |teach|
-        expect(page).to have_link(teach.klass.name + ' - ' + teach.subject.name, href: evaluations_teacher_path(teach))
+        expect(page).to have_link("#{teach.klass.name} #{teach.subject.name}", href: evaluations_teacher_path(teach))
       end
     end
   end

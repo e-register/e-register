@@ -1,11 +1,16 @@
-<h1>Teacher</h1>
 <% if @teachers.empty? %>
-    <em>You have no classes</em>
+  <em>You have no classes</em>
 <% else %>
-    <h2>Your classes</h2>
-    <ul>
+  <h2>Your classes</h2>
+  <div class="col-md-6">
+    <div class="list-group">
       <% @teachers.each do |teach| %>
-          <li><%= link_to "#{teach.klass.name} - #{teach.subject.name}", evaluations_teacher_path(teach) %></li>
+        <%= link_to evaluations_teacher_path(teach), class: 'list-group-item' do %>
+          <h4 class="list-group-item-heading"><%= teach.klass.name %></h4>
+          <p class="list-group-item-text"><%= teach.subject.name %></p>
+        <% end %>
+        <%= link_to 'Add', new_evaluation_teacher_path(teach), method: :get, class: ['btn', 'btn-primary', 'btn-list-add-eval'] %>
       <% end %>
-    </ul>
+    </div>
+  </div>
 <% end %>

@@ -158,6 +158,8 @@ GEM
     mini_portile (0.6.2)
     minitest (5.5.1)
     multi_json (1.11.0)
+    nav_lynx (1.1.1)
+      rails (>= 3.1.0)
     nenv (0.2.0)
     netrc (0.10.3)
     nokogiri (1.6.6.2)
@@ -338,6 +340,7 @@ DEPENDENCIES
   jquery-turbolinks
   launchy
   less-rails
+  nav_lynx
   nprogress-rails
   pg
   poltergeist

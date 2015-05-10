@@ -17,9 +17,17 @@
               %><span class="evaluation-box-container <%= 'bg-success' if @columns[type_id].include? index %>"><%=
                 evaluation_button(eval)
               %></span><% end
+            %><%=
+                new_evaluation_button(@teacher, student, type_id) if teacher_policy.new?
             %></td>
         <% end %>
       </tr>
     <% end %>
   </table>
 </div>
+
+<% if teacher_policy.new? %>
+  <div class="form-group">
+    <%= link_to 'New Evaluation', new_evaluation_teacher_path(@teacher), class: ['btn', 'btn-primary'] %>
+  </div>
+<% end %>
