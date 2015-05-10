@@ -4,10 +4,24 @@ describe EvaluationsController, type: :controller do
   describe 'GET /evaluations' do
     context 'as admin' do
       it 'renders the admin page' do
+        teach1 = create(:teacher)
+        teach2 = create(:teacher)
+        teach3 = create(:teacher, klass: teach2.klass)
+
         user = create(:user_admin)
         sign_in user
 
+        expected = {
+            teach1.klass => [ teach1 ],
+            teach2.klass => [ teach2, teach3 ]
+        }
+
         get :index
+
+        teachers = assigns(:teachers)
+
+        teachers.each { |k,t| expect(t).to match_array(expected[k]) }
+        expected.each { |k,t| expect(t).to match_array(teachers[k]) }
 
         expect(response).to render_template(:index_admin)
       end

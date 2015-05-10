@@ -7,13 +7,11 @@ class EvaluationsController < ApplicationController
     authorize :evaluation
 
     if current_user.student?
-      @students = current_user.students.includes(:klass)
       index_student
     elsif current_user.teacher?
-      @teachers = current_user.teachers.includes(:klass, :subject)
       index_teacher
     elsif current_user.admin?
-      render 'index_admin'
+      index_admin
     end
   end
 
@@ -76,6 +74,7 @@ class EvaluationsController < ApplicationController
   private
 
   def index_student
+    @students = current_user.students.includes(:klass)
     if @students.count == 1
       redirect_to evaluations_student_path(@students.first)
     else
@@ -84,11 +83,18 @@ class EvaluationsController < ApplicationController
   end
 
   def index_teacher
+    @teachers = current_user.teachers.includes(:klass, :subject)
     if @teachers.count == 1
       redirect_to evaluations_teacher_path(@teachers.first)
     else
       render 'index_teacher'
     end
+  end
+
+  def index_admin
+    @teachers = Teacher.includes(:klass, :user, :subject).
+        to_a.sort_by { |x| x.klass.name }.group_by { |x| x.klass }
+    render 'index_admin'
   end
 
   def fetch_evaluation
