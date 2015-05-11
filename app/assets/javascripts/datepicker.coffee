@@ -9,5 +9,5 @@ $ ->
     orientation: 'auto'
 
   # prevent the smartphone keyboard to be shown
-  $('.date').focus ->
+  $('.date, .date input').focus ->
     $(this).blur();
