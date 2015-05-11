@@ -13,12 +13,12 @@
       <tr>
         <td><%= student.user.full_name %></td>
         <% types.each do |type_id, evals| %>
-            <td><% evals.each_with_index do |eval, index|
+            <td><%=
+                new_evaluation_button(@teacher, student, type_id) if teacher_policy.new?
+              %><% evals.each_with_index do |eval, index|
               %><span class="evaluation-box-container <%= 'bg-success' if @columns[type_id].include? index %>"><%=
                 evaluation_button(eval)
               %></span><% end
-            %><%=
-                new_evaluation_button(@teacher, student, type_id) if teacher_policy.new?
             %></td>
         <% end %>
       </tr>
