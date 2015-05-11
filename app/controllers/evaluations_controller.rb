@@ -118,20 +118,27 @@ class EvaluationsController < ApplicationController
   def evaluation_params
     eval_params = params.require(:evaluation).permit(teacher_policy.permitted_attributes)
     unless eval_params.empty?
-      eval_params[:student] = Student.find_by id: eval_params[:student_id]
-      eval_params[:score] = Score.find_by id: eval_params[:score_id]
+      eval_params[:student] = Student.find eval_params[:student_id]
+      eval_params[:score] = Score.find eval_params[:score_id]
+      if eval_params[:klass_test_id].present?
+        klass_test =  KlassTest.find eval_params[:klass_test_id]
+        eval_params[:description] = nil if eval_params[:description] == klass_test.description
+        eval_params[:date] = nil        if Date.parse(eval_params[:date]) == klass_test.date
+      end
     end
     eval_params
   end
 
   def new_evaluation_params
+    klass_test = params[:klass_test_id] ? KlassTest.find(params[:klass_test_id]) : nil
     {
         teacher: @teacher,
-        date: Date.today,
+        date: klass_test.try(:date) || Date.today,
         visible: true,
         evaluation_type: params[:type_id] ? EvaluationType.find(params[:type_id]) : EvaluationType.first,
         student_id: params[:student_id],
-        klass_test_id: params[:klass_test_id]
+        klass_test_id: params[:klass_test_id],
+        description: klass_test.try(:description) || ''
     }
   end
 

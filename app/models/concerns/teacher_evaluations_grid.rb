@@ -27,7 +27,7 @@ class TeacherEvaluationsGrid
     @data = {}
     @columns = {}
 
-    @types.each { |type| @columns[type.id] = [] }
+    @types.each { |type| @columns[type.id] = {} }
 
     @students.each do |stud|
       @data[stud.id] = {}
@@ -66,7 +66,7 @@ class TeacherEvaluationsGrid
     # compute the position of the column
     column = find_column(type_id, klass_test)
 
-    @columns[type_id] << column
+    @columns[type_id][column] = klass_test
 
     pad_evaluations(type_id, klass_test, column)
   end

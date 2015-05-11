@@ -285,4 +285,79 @@ describe EvaluationsController, type: :controller do
       end
     end
   end
+
+  describe 'evaluation_params' do
+    let(:user) { create(:user_admin) }
+    before(:each) do
+      allow(controller).to receive(:current_user).and_return(user)
+    end
+
+    it 'filters unpermitted params' do
+      params = {
+          evaluation: { foo: :bar }
+      }
+      allow(controller).to receive(:params).and_return(ActionController::Parameters.new params)
+      response = controller.send(:evaluation_params)
+
+      expect(response).to match({})
+    end
+
+    it 'create score and student correctly' do
+      student = create(:student)
+      score = create(:score)
+      params = {
+          evaluation: {
+              student_id: student.id,
+              score_id: score.id
+          }
+      }
+      allow(controller).to receive(:params).and_return(ActionController::Parameters.new params)
+      response = controller.send(:evaluation_params)
+
+      expect(response[:student]).to eq(student)
+      expect(response[:score]).to eq(score)
+    end
+
+    it 'removes overridden parameters' do
+      student = create(:student)
+      score = create(:score)
+      klass_test = create(:klass_test)
+
+      params = {
+          evaluation: {
+              student_id: student.id,
+              score_id: score.id,
+              klass_test_id: klass_test.id,
+              description: klass_test.description,
+              date: klass_test.date.to_s
+          }
+      }
+      allow(controller).to receive(:params).and_return(ActionController::Parameters.new params)
+      response = controller.send(:evaluation_params)
+
+      expect(response[:description]).to be_nil
+      expect(response[:date]).to be_nil
+    end
+
+    it 'doesn\'t remove changed overriden parameters' do
+      student = create(:student)
+      score = create(:score)
+      klass_test = create(:klass_test)
+
+      params = {
+          evaluation: {
+              student_id: student.id,
+              score_id: score.id,
+              klass_test_id: klass_test.id,
+              description: 'FoOBaR',
+              date: '07/01/1997'
+          }
+      }
+      allow(controller).to receive(:params).and_return(ActionController::Parameters.new params)
+      response = controller.send(:evaluation_params)
+
+      expect(response[:description]).to eq('FoOBaR')
+      expect(response[:date]).to eq('07/01/1997')
+    end
+  end
 end

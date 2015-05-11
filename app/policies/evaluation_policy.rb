@@ -46,6 +46,6 @@ class EvaluationPolicy < ApplicationPolicy
     @record = @record.teacher if record.is_a? Evaluation
 
     return [] unless user.admin? || user.teachers.include?(record)
-    [:teacher_id, :student_id, :date, :score, :score_id, :evaluation_type_id, :visible, :description]
+    [:teacher_id, :student_id, :date, :score, :score_id, :evaluation_type_id, :visible, :description, :klass_test_id]
   end
 end

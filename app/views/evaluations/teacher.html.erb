@@ -16,9 +16,7 @@
             <td><%=
                 new_evaluation_button(@teacher, student, type_id) if teacher_policy.new?
               %><% evals.each_with_index do |eval, index|
-              %><span class="evaluation-box-container <%= 'bg-success' if @columns[type_id].include? index %>"><%=
-                evaluation_button(eval)
-              %></span><% end
+              %><%= evaluation_button(eval, teacher: @teacher, student_id: student.id, type_id: type_id, klass_test: @columns[type_id][index]) %><% end
             %></td>
         <% end %>
       </tr>
