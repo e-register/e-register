@@ -18,7 +18,8 @@ describe EvaluationsController, type: :controller do
 
         get :index
 
-        teachers = assigns(:teachers)
+        teachers = Teacher.includes(:klass, :user, :subject).
+            to_a.sort_by { |x| x.klass.name }.group_by { |x| x.klass }
 
         teachers.each { |k,t| expect(t).to match_array(expected[k]) }
         expected.each { |k,t| expect(t).to match_array(teachers[k]) }
