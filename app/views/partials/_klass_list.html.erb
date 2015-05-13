@@ -1,9 +1,16 @@
 <% if klasses.any? %>
-  <ul>
-     <% klasses.each do |klass| %>
-    <li><%= render 'partials/klass_li', klass: klass %></li>
-  <% end %>
-  </ul>
+  <div class="col-md-6">
+    <div class="list-group">
+    <% klasses.each do |klass| %>
+      <%= link_to klass_path(klass), class: 'list-group-item' do %>
+        <h4 class="list-group-item-heading"><%= klass.name %></h4>
+        <% if klass.detail %>
+          <p class="list-group-item-text"><%= klass.detail %></p>
+        <% end %>
+      <% end %>
+    <% end %>
+    </div>
+  </div>
 <% else %>
   <em>This user has no classes</em>
 <% end %>

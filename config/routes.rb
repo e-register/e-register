@@ -12,6 +12,8 @@ Rails.application.routes.draw do
   get '/evaluations/teacher/:teacher_id' => 'evaluations#teacher', as: 'evaluations_teacher'
   get '/evaluations/student/:student_id' => 'evaluations#student', as: 'evaluations_student'
   get '/evaluations/teacher/:teacher_id/new' => 'evaluations#new', as: 'new_evaluation_teacher'
+  get '/evaluations/teacher/:teacher_id/new_class' => 'evaluations#new_klass', as: 'new_evaluation_teacher_klass'
+  post '/evaluations/teacher/:teacher_id/new_class' => 'evaluations#create_klass', as: 'create_evaluation_teacher_klass'
   resources :evaluations, except: :new
 
   # Authentication

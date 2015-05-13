@@ -18,7 +18,8 @@ describe EvaluationsController, type: :controller do
 
         get :index
 
-        teachers = assigns(:teachers)
+        teachers = Teacher.includes(:klass, :user, :subject).
+            to_a.sort_by { |x| x.klass.name }.group_by { |x| x.klass }
 
         teachers.each { |k,t| expect(t).to match_array(expected[k]) }
         expected.each { |k,t| expect(t).to match_array(teachers[k]) }
@@ -87,6 +88,122 @@ describe EvaluationsController, type: :controller do
       expect(assigns(:scores)).to match_array([score])
       expect(assigns(:types)).to match_array([type])
       expect(assigns(:students)).to match_array([[student.user.full_name, student.id]])
+    end
+  end
+
+  describe 'GET /evaluations/teacher/:teacher_id/new_class' do
+    it 'sets the instance variables correctly' do
+      teacher = create(:teacher)
+      score = create(:score)
+      type = create(:evaluation_type)
+
+      stud1 = create(:student, klass: teacher.klass)
+      stud2 = create(:student, klass: teacher.klass)
+
+      sign_in teacher.user
+
+      get :new_klass, teacher_id: teacher.id
+
+      expect(assigns(:teacher)).to eq(teacher)
+      expect(assigns(:students)).to match_array([stud1, stud2])
+      expect(assigns(:scores)).to match_array([score])
+      expect(assigns(:types)).to match_array([type])
+      expect(assigns(:evaluation_type)).to eq(type)
+      expect(assigns(:visible)).to be_truthy
+      expect(assigns(:description)).to eq ''
+      expect(assigns(:date)).to eq(Date.today)
+      expect(assigns(:klass_test)).to be_truthy
+      expect(assigns(:evals)).to match_array([])
+    end
+  end
+
+  describe 'POST /evaluations/teacher/:teacher_id/new_class' do
+    it 'creates the evaluations' do
+      teacher = create(:teacher)
+      score = create(:score)
+      type = create(:evaluation_type)
+
+      stud1 = create(:student, klass: teacher.klass)
+      stud2 = create(:student, klass: teacher.klass)
+      stud3 = create(:student, klass: teacher.klass)
+
+      sign_in teacher.user
+
+      params = {
+          'date' => '07/01/1997',
+          'evaluation_type_id' => type.id.to_s,
+          'klass_test' => 'true',
+          'description' => 'Foo Bar',
+          'teacher_id' => teacher.id,
+          'group' => {
+              stud1.id.to_s => {
+                  'date' => '08/01/1997',
+                  'score_id' => score.id.to_s,
+                  'visible' => 'true'
+              },
+              stud2.id.to_s => {
+                  'score_id' => score.id.to_s
+              },
+              stud3.id.to_s => {
+                  'date' => '09/01/1997',
+                  'visible' => 'true'
+              }
+          }
+      }
+
+      post 'create_klass', params
+
+      evals = Evaluation.all.sort_by { |e| e.date }
+      klass_test = KlassTest.first
+
+      expected = [
+          {
+              teacher: teacher, student: stud2, klass_test: klass_test,
+              date: Date.parse('07/01/1997'), evaluation_type: type, score: score,
+              visible: false, description: 'Foo Bar'
+          }, {
+              teacher: teacher, student: stud1, klass_test: klass_test,
+              date: Date.parse('08/01/1997'), evaluation_type: type, score: score,
+              visible: true, description: 'Foo Bar'
+          }
+      ]
+
+      expect(evals.count).to eq(2)
+
+      evals.each_with_index do |eval, index|
+        expected[index].each do |attr, val|
+          expect(eval.send(attr)).to eq(val)
+        end
+      end
+    end
+
+    it 'doesn\'t create invalid evaluations' do
+      teacher = create(:teacher)
+      score = create(:score)
+      type = create(:evaluation_type)
+
+      stud = create(:student)
+
+      sign_in teacher.user
+
+      params = {
+          'date' => '07/01/1997',
+          'evaluation_type_id' => type.id.to_s,
+          'klass_test' => 'true',
+          'description' => 'Foo Bar',
+          'teacher_id' => teacher.id,
+          'group' => {
+              stud.id.to_s => {
+                  'date' => '08/01/1997',
+                  'score_id' => score.id.to_s,
+                  'visible' => 'true'
+              }
+          }
+      }
+
+      post 'create_klass', params
+
+      expect(Evaluation.count).to be_zero
     end
   end
 
@@ -167,6 +284,81 @@ describe EvaluationsController, type: :controller do
           expect(data[stud.id][type.id]).to eq(expected_data[type.id][stud.id])
         end
       end
+    end
+  end
+
+  describe 'evaluation_params' do
+    let(:user) { create(:user_admin) }
+    before(:each) do
+      allow(controller).to receive(:current_user).and_return(user)
+    end
+
+    it 'filters unpermitted params' do
+      params = {
+          evaluation: { foo: :bar }
+      }
+      allow(controller).to receive(:params).and_return(ActionController::Parameters.new params)
+      response = controller.send(:evaluation_params)
+
+      expect(response).to match({})
+    end
+
+    it 'create score and student correctly' do
+      student = create(:student)
+      score = create(:score)
+      params = {
+          evaluation: {
+              student_id: student.id,
+              score_id: score.id
+          }
+      }
+      allow(controller).to receive(:params).and_return(ActionController::Parameters.new params)
+      response = controller.send(:evaluation_params)
+
+      expect(response[:student]).to eq(student)
+      expect(response[:score]).to eq(score)
+    end
+
+    it 'removes overridden parameters' do
+      student = create(:student)
+      score = create(:score)
+      klass_test = create(:klass_test)
+
+      params = {
+          evaluation: {
+              student_id: student.id,
+              score_id: score.id,
+              klass_test_id: klass_test.id,
+              description: klass_test.description,
+              date: klass_test.date.to_s
+          }
+      }
+      allow(controller).to receive(:params).and_return(ActionController::Parameters.new params)
+      response = controller.send(:evaluation_params)
+
+      expect(response[:description]).to be_nil
+      expect(response[:date]).to be_nil
+    end
+
+    it 'doesn\'t remove changed overriden parameters' do
+      student = create(:student)
+      score = create(:score)
+      klass_test = create(:klass_test)
+
+      params = {
+          evaluation: {
+              student_id: student.id,
+              score_id: score.id,
+              klass_test_id: klass_test.id,
+              description: 'FoOBaR',
+              date: '07/01/1997'
+          }
+      }
+      allow(controller).to receive(:params).and_return(ActionController::Parameters.new params)
+      response = controller.send(:evaluation_params)
+
+      expect(response[:description]).to eq('FoOBaR')
+      expect(response[:date]).to eq('07/01/1997')
     end
   end
 end

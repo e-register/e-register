@@ -8,7 +8,7 @@ class TeacherEvaluationsGrid
     @teacher = teacher
     @students = students
     @types = types
-    @evaluations = evaluations
+    @evaluations = evaluations.sort_by { |e| e.klass_test ? [e.klass_test.date, e.date] : [ e.date, e.date ] }
   end
 
   def data
@@ -27,7 +27,7 @@ class TeacherEvaluationsGrid
     @data = {}
     @columns = {}
 
-    @types.each { |type| @columns[type.id] = [] }
+    @types.each { |type| @columns[type.id] = {} }
 
     @students.each do |stud|
       @data[stud.id] = {}
@@ -66,7 +66,7 @@ class TeacherEvaluationsGrid
     # compute the position of the column
     column = find_column(type_id, klass_test)
 
-    @columns[type_id] << column
+    @columns[type_id][column] = klass_test
 
     pad_evaluations(type_id, klass_test, column)
   end
@@ -123,6 +123,6 @@ class TeacherEvaluationsGrid
       klass_tests.concat(evals.map(&:klass_test).compact)
     end
 
-    klass_tests.uniq
+    klass_tests.uniq.sort_by { |k| k.date }
   end
 end

@@ -158,4 +158,13 @@ describe Klass do
 
     expect(klass.subjects).to match_array([subj1, subj2])
   end
+
+  it 'destroys scoped resources [BUG #25]' do
+    klass = create(:klass)
+    event = create(:event, klass: klass, visible: false)
+
+    klass.destroy
+
+    expect { event.reload }.to raise_exception ActiveRecord::RecordNotFound
+  end
 end

@@ -2,7 +2,7 @@ class Klass < ActiveRecord::Base
   validates_uniqueness_of :name
   validates_presence_of :name
 
-  has_many :events, -> { where(visible: true) }, dependent: :destroy
+  has_many :events, dependent: :destroy
   has_many :signs, dependent: :destroy
   has_many :students, dependent: :destroy
   has_many :teachers, dependent: :destroy
@@ -41,5 +41,10 @@ class Klass < ActiveRecord::Base
   # Fetch the subjects of the class
   def subjects
     teachers.map(&:subject).uniq
+  end
+
+  # Scope the events
+  def events
+    super.where(visible: true)
   end
 end

@@ -1,0 +1,67 @@
+<div class="col-md-6">
+  <div class="form-group">
+    <%= label_tag :class %>
+    <%= text_field_tag '', teacher.klass.name, class: 'form-control', disabled: true %>
+  </div>
+  <div class="form-group">
+    <%= label_tag :subject %>
+    <%= text_field_tag '', teacher.subject.name, class: 'form-control', disabled: true %>
+  </div>
+  <div class="form-group">
+    <%= label_tag :date %>
+    <div class="input-group date">
+      <%= text_field_tag 'date', format_date(date), class: 'form-control' %>
+      <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+    </div>
+  </div>
+  <div class="form-group">
+    <%= label_tag :type %>
+    <br>
+    <div class="btn-group" data-toggle="buttons">
+      <% types.each do |type| %>
+        <label class="btn btn-default btn-evaluation_type <%= 'active' if evaluation_type == type %>">
+          <%= radio_button_tag 'evaluation_type_id', type.id, evaluation_type == type %>
+          <%= type.name %>
+        </label>
+      <% end %>
+    </div>
+  </div>
+  <div class="form-group">
+    <%= check_box_tag :klass_test, 'true', klass_test %>
+    <%= label_tag 'this is a class test' %>
+  </div>
+  <div class="form-group">
+    <%= label_tag :description %>
+    <%= text_area_tag :description, @description, class: 'form-control' %>
+  </div>
+</div>
+<div class="col-md-12">
+  <div class="table-responsive">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Student</th>
+          <th>Score</th>
+          <th>Visible</th>
+          <th>Date</th>
+        </tr>
+      </thead>
+      <tbody>
+      <% students.each do |stud| %>
+        <% eval = evals[stud.id] || {visible: true} %>
+        <tr>
+          <td><%= stud.user.full_name %></td>
+          <td>
+            <%= text_field_tag "group[#{stud.id}][score]", eval[:score].try(:as_string),
+                               class: ['form-control', 'evaluation_score_group'],
+                               'data-id' => stud.id %>
+            <%= hidden_field_tag "group[#{stud.id}][score_id]", eval[:score].try(:id) %>
+          </td>
+          <td><%= check_box_tag "group[#{stud.id}][visible]", 'visible', eval[:visible] %></td>
+          <td><%= text_field_tag "group[#{stud.id}][date]", eval[:date], class: ['form-control', 'date'] %></td>
+        </tr>
+      <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>

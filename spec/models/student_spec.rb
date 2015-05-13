@@ -81,4 +81,13 @@ describe Student, type: :model do
 
     expect(stud.notes).to match_array([note])
   end
+
+  it 'destroys scoped resources [BUG #25]' do
+    stud = create(:student)
+    eval = create(:evaluation, visible: false, student: stud)
+
+    stud.destroy
+
+    expect { eval.reload }.to raise_exception ActiveRecord::RecordNotFound
+  end
 end

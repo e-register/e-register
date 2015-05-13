@@ -3,11 +3,12 @@
 
 .evaluation-box {
   padding: 0;
-  display: block;
+  display: inline-block;
   width: 35px;
   height: 35px;
   vertical-align: top;
   border: 1px solid transparent;
+  &:hover, &:focus { text-decoration: none; }
   &[disabled] {
     cursor: pointer;
     pointer-events: all;
@@ -53,4 +54,7 @@
   position: relative;
   right: 2px;
   bottom: 35px;
+}
+.evaluation_score_group {
+  min-width: 150px;
 }

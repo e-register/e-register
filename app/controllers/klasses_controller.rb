@@ -3,7 +3,8 @@ class KlassesController < ApplicationController
 
   def index
     authorize :klass
-    @klasses = current_user.klasses
+    @klasses = current_user.admin? ? Klass.all.to_a : current_user.klasses
+    @klasses.sort_by! { |x| x.name }
   end
 
   def show

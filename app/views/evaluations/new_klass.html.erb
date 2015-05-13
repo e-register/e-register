@@ -1,0 +1,14 @@
+<h1>New evaluations for <%= @teacher.klass.name %> <small><%= @teacher.subject.name %></small></h1>
+
+<%= form_tag create_evaluation_teacher_klass_path(@teacher) do %>
+  <%= render 'form_klass', teacher: @teacher, date: @date, klass_test: @klass_test,
+             types: @types, evaluation_type: @evaluation_type,
+             visible: @visible, students: @students, evals: @evals %>
+  <div class="col-md-6">
+    <div class="form-group">
+      <%= submit_tag 'Create', class: ['btn', 'btn-success'] %>
+    </div>
+  </div>
+<% end %>
+
+<%= render 'modal', scores: @scores %>

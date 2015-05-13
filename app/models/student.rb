@@ -1,10 +1,10 @@
 class Student < ActiveRecord::Base
-  validates_presence_of :user, :klass
-  validates_uniqueness_of :user, scope: [:klass]
+  validates_presence_of :user_id, :klass_id
+  validates_uniqueness_of :user_id, scope: [:klass_id]
 
   belongs_to :user
   belongs_to :klass
-  has_many :evaluations, -> { where(visible: true).order(:date) }, dependent: :destroy
+  has_many :evaluations, dependent: :destroy
   has_many :presences, dependent: :destroy
   has_many :notes, as: :notable
 
@@ -20,5 +20,10 @@ class Student < ActiveRecord::Base
   # Search all the signs in the class of the student
   def signs
     Sign.where(klass: klass)
+  end
+
+  # Scope the evaluations
+  def evaluations
+    super.where(visible: true).order(:date)
   end
 end

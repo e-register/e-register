@@ -3,5 +3,5 @@ class Sign < ActiveRecord::Base
   belongs_to :subject
   belongs_to :klass
 
-  validates_presence_of :teacher, :subject, :klass, :date, :hour
+  validates_presence_of :teacher_id, :subject_id, :klass_id, :date, :hour
 end

@@ -10,6 +10,8 @@ describe Teacher, type: :model do
   it { is_expected.to respond_to(:klass_tests) }
   it { is_expected.to respond_to(:evaluations) }
 
+  check_required_field :teacher, [:user, :klass, :subject]
+
   it 'checks the uniqueness of the tuple' do
     user = create(:user)
     klass = create(:klass)

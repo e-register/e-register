@@ -1,7 +1,7 @@
 class User < ActiveRecord::Base
   devise :database_authenticatable, :trackable
 
-  validates_presence_of :name, :surname, :user_group
+  validates_presence_of :name, :surname, :user_group_id
 
   belongs_to :user_group
 

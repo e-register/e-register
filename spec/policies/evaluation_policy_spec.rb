@@ -55,7 +55,7 @@ describe EvaluationPolicy do
     it { is_expected.to permit(admin, student) }
   end
 
-  permissions :teacher? do
+  permissions :teacher?, :new_group? do
     let(:student) { create(:student) }
     let(:teacher) { create(:teacher) }
     let(:other_teacher) { create(:teacher) }
@@ -75,7 +75,9 @@ describe EvaluationPolicy do
     let(:other_teacher) { create(:teacher) }
     let(:admin) { create(:user_admin) }
     let(:evaluation) { create(:evaluation, teacher: teacher, student: student) }
-    let(:permitted_attributes) { [:teacher_id, :student_id, :date, :score, :score_id, :evaluation_type_id, :visible, :description] }
+    let(:permitted_attributes) { [:teacher_id, :student_id, :date, :score,
+                                  :score_id, :evaluation_type_id, :visible,
+                                  :description, :klass_test_id] }
 
     it 'disallow all for guest' do
       expect(subject.new(nil, evaluation).permitted_attributes).to match_array([])

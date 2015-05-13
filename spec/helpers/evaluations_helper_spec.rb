@@ -18,10 +18,21 @@ describe EvaluationsHelper, type: :helper do
       expect(html).to have_content(helper.send(:format_evaluation_date, evaluation.date))
     end
 
+    it 'generates a link to the new_evaluation_teacher_path with the klass_test' do
+      klass_test = create(:klass_test)
+
+      html = helper.evaluation_button(nil, klass_test: klass_test, teacher: klass_test.teacher, student_id: 123456, type_id: 654321)
+
+      href = new_evaluation_teacher_path(klass_test.teacher, klass_test_id: klass_test.id, student_id: 123456, type_id: 654321)
+
+      expect(html).to include(href.gsub '&', '&amp;')
+      expect(html).to match /&nbsp;.+&nbsp;/m
+    end
+
     it 'generates an empty tag if the evaluation is missing' do
       html = helper.evaluation_button nil
 
-      expect(html).to_not be_nil
+      expect(html).to match /&nbsp;.+&nbsp;/m
     end
 
     it 'generates an add tag for the student' do

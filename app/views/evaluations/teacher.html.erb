@@ -13,12 +13,10 @@
       <tr>
         <td><%= student.user.full_name %></td>
         <% types.each do |type_id, evals| %>
-            <td><% evals.each_with_index do |eval, index|
-              %><span class="evaluation-box-container <%= 'bg-success' if @columns[type_id].include? index %>"><%=
-                evaluation_button(eval)
-              %></span><% end
-            %><%=
+            <td><%=
                 new_evaluation_button(@teacher, student, type_id) if teacher_policy.new?
+              %><% evals.each_with_index do |eval, index|
+              %><%= evaluation_button(eval, teacher: @teacher, student_id: student.id, type_id: type_id, klass_test: @columns[type_id][index]) %><% end
             %></td>
         <% end %>
       </tr>
@@ -29,5 +27,6 @@
 <% if teacher_policy.new? %>
   <div class="form-group">
     <%= link_to 'New Evaluation', new_evaluation_teacher_path(@teacher), class: ['btn', 'btn-primary'] %>
+    <%= link_to 'Add multiple Evaluations', new_evaluation_teacher_klass_path(@teacher), class: ['btn', 'btn-primary'] %>
   </div>
 <% end %>
