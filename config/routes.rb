@@ -6,7 +6,9 @@ Rails.application.routes.draw do
   resources :users, path: 'user', except: :index
 
   # KlassesController
-  resources :klasses, path: 'classes'
+  resources :klasses, path: 'classes' do
+    resources :presences
+  end
 
   # EvaluationsController
   get '/evaluations/teacher/:teacher_id' => 'evaluations#teacher', as: 'evaluations_teacher'

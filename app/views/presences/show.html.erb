@@ -1,0 +1,28 @@
+<h1>Presence</h1>
+<div class="col-md-6">
+  <table class="table">
+    <tr><td>Teacher</td><td><%= @presence.teacher.full_name %></td></tr>
+    <tr><td>Student</td><td><%= @presence.student.user.full_name %></td></tr>
+    <tr><td>Presence</td><td><%= student_presence_badge(@presence.student, @today_presences) %></td></tr>
+    <tr><td>Date</td><td><%= format_date @presence.date %></td></tr>
+    <tr><td>Hour</td><td><%= @presence.hour %></td></tr>
+    <tr>
+      <td>Justified</td>
+      <td>
+        <% if @presence.justified_at.present? %>
+          <% if @presence.justification.present? %>
+            <em class="text-success"><%= @presence.justification.reason %></em>
+          <% else %>
+            <em class="text-success">Yes</em>
+          <% end %>
+          (<%= format_date @presence.justified_at %>)
+        <% else %>
+          <em class="text-danger">Not yet</em>
+        <% end %>
+      </td>
+    </tr>
+    <% if @presence.note.present? %>
+    <tr><td>Note</td><td><%= @presence.note %></td></tr>
+    <% end %>
+  </table>
+</div>

@@ -18,8 +18,6 @@ module UsersHelper
     end
   end
 
-  private
-
   def student_present
     build_label('success', 'Present')
   end
@@ -35,6 +33,8 @@ module UsersHelper
   def student_left
     build_label('info', 'Left')
   end
+
+  private
 
   def build_label(label, text)
     "<span class=\"label label-#{label}\">#{text}</span>".html_safe
