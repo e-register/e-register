@@ -3,7 +3,7 @@ class EvaluationParams
     eval_params = params.require(:evaluation).permit(permitted_attributes)
     unless eval_params.empty?
       eval_params[:student] = Student.find eval_params[:student_id]
-      eval_params[:score] = Score.find eval_params[:score_id]
+      eval_params[:score] = Score.find_by(id: eval_params[:score_id])
       insert_klass_test(eval_params) if eval_params[:klass_test_id].present?
     end
     eval_params
