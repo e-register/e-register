@@ -1,0 +1,43 @@
+<div class="form-group">
+  <%= f.label :class %>
+  <%= text_field_tag '', @klass.name, class: 'form-control', disabled: true %>
+</div>
+<div class="form-group">
+  <%= f.label :teacher %>
+  <%= text_field_tag '', current_user.full_name, class: 'form-control', disabled: true %>
+</div>
+<div class="form-group">
+  <%= f.label :student_id %>
+  <%= f.select :student_id, @students, {}, class: 'form-control' %>
+</div>
+<div class="form-group">
+  <%= f.label :date %>
+  <div class="input-group date">
+    <%= text_field_tag 'presence[date]', format_date(@presence.date), class: 'form-control' %>
+    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+  </div>
+</div>
+<div class="form-group">
+  <%= f.label :hour %>
+  <%= text_field_tag 'presence[hour]', @presence.hour, class: 'form-control' %>
+</div>
+<div class="list-group">
+  <% @presence_types.each do |type| %>
+    <a href="#" class="presence_type_selector list-group-item
+        <%= type.present ? 'bg-success' : 'bg-danger' if type.id == @presence.presence_type_id %>"
+        data-class="<%= type.present ? 'success' : 'danger' %>"
+        data-id="<%= type.id %>">
+      <h4 class="list-group-item-heading"><%= type.name.humanize %></h4>
+      <p class="list-group-item-text"><%= type.description %></p>
+    </a>
+<% end %>
+  <span class="list-group-item">
+    <span class="input-group">
+      <span class="input-group-addon">Notes</span>
+      <%= f.text_field :note, class: 'form-control' %>
+      <a class="input-group-addon" href="#">&times;</a>
+    </span>
+  </span>
+</div>
+
+<%= f.hidden_field :presence_type_id %>

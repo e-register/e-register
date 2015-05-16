@@ -90,7 +90,7 @@ describe EvaluationPolicy do
       expect(subject.new(teacher.user, evaluation).permitted_attributes).to match_array(permitted_attributes)
       expect(subject.new(other_teacher.user, evaluation).permitted_attributes).to match_array([])
     end
-    it 'disallow all for guest' do
+    it 'allows all for admin' do
       expect(subject.new(admin, evaluation).permitted_attributes).to match_array(permitted_attributes)
     end
   end

@@ -42,7 +42,11 @@ class ApplicationController < ActionController::Base
     instance = klass.new klass_params
     authorize instance, :create?
     if instance.save
-      redirect_to instance
+      if block_given?
+        redirect_to yield(instance)
+      else
+        redirect_to instance
+      end
     else
       flash[:alert] = instance.errors.full_messages.join("<br>").html_safe
       redirect_to error_path
