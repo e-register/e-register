@@ -30,6 +30,10 @@ class PresencePolicy < ApplicationPolicy
     false
   end
 
+  def destroy?
+    create?
+  end
+
   def permitted_attributes
     return [] unless user
     unless user.admin?

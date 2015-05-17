@@ -41,7 +41,7 @@ describe PresencePolicy do
     it { is_expected.to     permit(admin, presence) }
   end
 
-  permissions :create? do
+  permissions :create?, :destroy? do
     let(:klass) { create(:klass) }
     let(:teacher) { create(:teacher, klass: klass) }
     let(:student) { create(:student, klass: klass) }

@@ -1,5 +1,5 @@
 class PresencesController < ApplicationController
-  before_filter :fetch_presence, only: [:show, :edit, :update]
+  before_filter :fetch_presence, only: [:show, :edit, :update, :destroy]
 
   def show
     authorize @presence
@@ -30,6 +30,11 @@ class PresencesController < ApplicationController
     do_update(@presence, presence_params, success) do |instance|
       edit_klass_presence_path(@klass, instance)
     end
+  end
+
+  def destroy
+    on_error = ->(instance) { klass_presence_path(instance.student.klass, instance) }
+    do_destroy(@presence, 'Presence', on_error)
   end
 
   private

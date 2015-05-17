@@ -57,6 +57,7 @@ class ApplicationController < ActionController::Base
   #    block: a block with a parameter that returns the path to redirect to in case of error
   def do_update(instance, klass_params, on_success = nil)
     authorize instance
+    # TODO: if the authorization fails after that the changes are stored?
     success = instance.update_attributes(klass_params)
     authorize instance
     if success
@@ -71,12 +72,14 @@ class ApplicationController < ActionController::Base
   # Params:
   #    instance: the instance to destroy
   #    model_name: the name of the class of the model to destroy
-  def do_destroy(instance, model_name)
+  #    on_error: a proc with a parameter that returns the path to redirect to in case of error
+  def do_destroy(instance, model_name, on_error = nil)
     authorize instance
     if instance.destroy
       redirect_to root_path, notice: "#{model_name} deleted successfully"
     else
-      redirect_to instance, alert: "Error deleting the #{model_name.downcase}"
+      redirect_to on_error ? on_error.call(instance) : instance,
+        alert: "Error deleting the #{model_name.downcase}"
     end
   end
 

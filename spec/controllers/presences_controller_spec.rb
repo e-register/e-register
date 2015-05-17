@@ -203,4 +203,47 @@ describe PresencesController, type: :controller do
       expect(response).to redirect_to edit_klass_presence_path(klass, presence)
     end
   end
+
+  describe 'DELETE /classes/:klass_id/presences/:id' do
+    it 'deletes the presence' do
+      presence = create(:presence)
+
+      sign_in create(:user_admin)
+
+      delete :destroy, klass_id: presence.student.klass_id, id: presence.id
+
+      expect(response).to redirect_to root_path
+      expect(flash[:notice]).to include 'deleted'
+      expect(flash[:alert]).to be_nil
+      expect { presence.reload }.to raise_error ActiveRecord::RecordNotFound
+    end
+
+    it 'doesn\'t delete the presence if unauthorized' do
+      presence = create(:presence)
+
+      sign_in create(:user_teacher)
+
+      delete :destroy, klass_id: presence.student.klass_id, id: presence.id
+
+      expect { presence.reload }.not_to raise_error
+
+      expect(response).to redirect_to root_path
+      expect(flash[:alert]).not_to be_nil
+    end
+
+    it 'doesn\'t delete the presence if an error' do
+      presence = create(:presence)
+
+      sign_in create(:user_admin)
+
+      allow_any_instance_of(Presence).to receive(:destroy).and_return(false)
+
+      delete :destroy, klass_id: presence.student.klass_id, id: presence.id
+
+      expect { presence.reload }.not_to raise_error
+
+      expect(response).to redirect_to klass_presence_path(presence.student.klass_id, presence)
+      expect(flash[:alert]).not_to be_nil
+    end
+  end
 end
