@@ -3,7 +3,7 @@
   <table class="table">
     <tr><td>Teacher</td><td><%= @presence.teacher.full_name %></td></tr>
     <tr><td>Student</td><td><%= @presence.student.user.full_name %></td></tr>
-    <tr><td>Presence</td><td><%= student_presence_badge(@presence.student, @today_presences) %></td></tr>
+    <tr><td>Presence</td><td><%= presence_badge(@presence) %></td></tr>
     <tr><td>Date</td><td><%= format_date @presence.date %></td></tr>
     <tr><td>Hour</td><td><%= @presence.hour %></td></tr>
     <tr>

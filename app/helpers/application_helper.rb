@@ -51,6 +51,11 @@ EOF
     value ? 'Yes' : 'No'
   end
 
+  # Build an html tag for a bootstrap label
+  def build_label(label, text)
+    "<span class=\"label label-#{label}\">#{text}</span>".html_safe
+  end
+
   private
   # Render the content of a block, including the title, the description and the buttons
   def home_block_content(name, opt = {})
