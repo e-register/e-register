@@ -25,4 +25,12 @@
       <tr><td>Note</td><td><%= @presence.note %></td></tr>
     <% end %>
   </table>
+
+  <% if policy(@presence).manage? %>
+    <div class="form-group">
+      <%= link_to_if policy(@presence).update?, 'Edit', edit_klass_presence_path(@klass, @presence), class: ['btn', 'btn-warning'] %>
+      <%= link_to_if policy(@presence).destroy?, 'Delete', klass_presence_path(@klass, @presence), class: ['btn', 'btn-danger'],
+                     method: :delete, data: { confirm: 'Are you sure?' } %>
+    </div>
+  <% end %>
 </div>

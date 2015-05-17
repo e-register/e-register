@@ -26,7 +26,10 @@ class PresencePolicy < ApplicationPolicy
 
   def update?
     return false unless user
-    return true if user.admin? || user == record.teacher
+    return true if user.admin?
+    return false unless user == record.teacher
+    return false unless record.student
+    return true if (record.student.teachers & user.teachers).length > 0
     false
   end
 

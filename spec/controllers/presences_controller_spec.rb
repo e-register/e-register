@@ -154,7 +154,7 @@ describe PresencesController, type: :controller do
 
       sign_in teacher.user
 
-      new_student = create(:student)
+      new_student = create(:student, klass: klass)
       new_persence_type = create(:presence_type)
 
       params = {
@@ -201,6 +201,32 @@ describe PresencesController, type: :controller do
       post :update, params
 
       expect(response).to redirect_to edit_klass_presence_path(klass, presence)
+    end
+
+    it 'doesn\'t save if there is an authorization error' do
+      klass = create(:klass)
+      teacher = create(:teacher, klass: klass)
+      student = create(:student, klass: klass)
+      presence = create(:presence, student: student, teacher: teacher.user)
+
+      sign_in teacher.user
+
+      new_student = create(:student)
+      new_persence_type = create(:presence_type)
+
+      params = {
+        klass_id: klass.id,
+        id: presence.id,
+        presence: {
+          student_id: new_student.id
+        }
+      }
+
+      post :update, params
+
+      presence.reload
+
+      expect(presence.student).to eq(student)
     end
   end
 

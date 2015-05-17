@@ -58,9 +58,9 @@ class ApplicationController < ActionController::Base
   def do_update(instance, klass_params, on_success = nil)
     authorize instance
     # TODO: if the authorization fails after that the changes are stored?
-    success = instance.update_attributes(klass_params)
+    instance.assign_attributes(klass_params)
     authorize instance
-    if success
+    if instance.save
       redirect_to on_success ? on_success.call(instance) : instance
     else
       flash[:alert] = instance.errors.full_messages.join("<br>").html_safe

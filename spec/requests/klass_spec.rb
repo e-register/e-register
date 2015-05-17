@@ -101,7 +101,7 @@ describe 'Klass', type: :request do
 
       visit edit_klass_path(klass)
 
-      allow_any_instance_of(Klass).to receive(:update_attributes).and_return(false)
+      allow_any_instance_of(Klass).to receive(:save).and_return(false)
 
       click_on 'Update'
 

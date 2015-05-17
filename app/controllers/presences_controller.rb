@@ -4,7 +4,7 @@ class PresencesController < ApplicationController
   def show
     authorize @presence
 
-    @today_presences = Presence.today_presences(@presence.student)
+    @today_presences = Presence.daily_presences(@presence.student, @presence.date)
   end
 
   def new
