@@ -1,5 +1,5 @@
 class PresencesController < ApplicationController
-  before_filter :fetch_presence, only: [:show]
+  before_filter :fetch_presence, only: [:show, :edit, :update]
 
   def show
     authorize @presence
@@ -10,8 +10,7 @@ class PresencesController < ApplicationController
   def new
     @klass = Klass.find params[:klass_id]
     @presence = Presence.new new_presence_params
-    @students = @klass.students.map { |s| [s.user.full_name, s.id] }
-    @presence_types = PresenceType.all
+    prepare_instance_variables
     authorize @presence
   end
 
@@ -21,11 +20,24 @@ class PresencesController < ApplicationController
     end
   end
 
+  def edit
+    prepare_instance_variables
+    authorize @presence
+  end
+
+  def update
+    success = ->(instance) { klass_presence_path(instance.student.klass, instance) }
+    do_update(@presence, presence_params, success) do |instance|
+      edit_klass_presence_path(@klass, instance)
+    end
+  end
+
   private
 
   def fetch_presence
+    @klass = Klass.find(params[:klass_id])
     @presence = Presence.find(params[:id])
-    raise ActiveRecord::RecordNotFound if @presence.student.klass_id != params[:klass_id].to_i
+    raise ActiveRecord::RecordNotFound if @presence.student.klass != @klass
   end
 
   def presence_params
@@ -42,5 +54,10 @@ class PresencesController < ApplicationController
         presence_type_id: PresenceType.first.id,
         klass: @klass
     }
+  end
+
+  def prepare_instance_variables
+    @students = @klass.students.map { |s| [s.user.full_name, s.id] }
+    @presence_types = PresenceType.all
   end
 end

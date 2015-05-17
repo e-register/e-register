@@ -42,11 +42,7 @@ class ApplicationController < ActionController::Base
     instance = klass.new klass_params
     authorize instance, :create?
     if instance.save
-      if block_given?
-        redirect_to yield(instance)
-      else
-        redirect_to instance
-      end
+      redirect_to block_given? ? yield(instance) : instance
     else
       flash[:alert] = instance.errors.full_messages.join("<br>").html_safe
       redirect_to error_path
@@ -57,13 +53,14 @@ class ApplicationController < ActionController::Base
   # Params:
   #    instance: the instance to update
   #    klass_params: the params to update
+  #    on_success: a proc to call if the update is successful and return the url to redirect to
   #    block: a block with a parameter that returns the path to redirect to in case of error
-  def do_update(instance, klass_params)
+  def do_update(instance, klass_params, on_success = nil)
     authorize instance
     success = instance.update_attributes(klass_params)
     authorize instance
     if success
-      redirect_to instance
+      redirect_to on_success ? on_success.call(instance) : instance
     else
       flash[:alert] = instance.errors.full_messages.join("<br>").html_safe
       redirect_to yield(instance)

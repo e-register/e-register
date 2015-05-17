@@ -34,7 +34,6 @@ describe PresencesController, type: :controller do
     end
   end
 
-
   describe 'GET /classes/:klass_id/presences/new' do
     it 'sets the instance variables correctly' do
       klass = create(:klass)
@@ -125,6 +124,83 @@ describe PresencesController, type: :controller do
       post :create, params
 
       expect(response).to redirect_to root_path
+    end
+  end
+
+  describe 'GET /classes/:klass_id/presences/:id/edit' do
+    it 'sets the instance variables correctly' do
+      klass = create(:klass)
+      teacher = create(:teacher, klass: klass)
+      student = create(:student, klass: klass)
+      presence = create(:presence, student: student, teacher: teacher.user)
+
+      sign_in teacher.user
+
+      get :edit, klass_id: klass.id, id: presence.id
+
+      expect(assigns(:klass)).to eq(klass)
+      expect(assigns(:presence)).to eq(presence)
+      expect(assigns(:students)).to match_array [[student.user.full_name, student.id]]
+      expect(assigns(:presence_types)).to match_array [presence.presence_type]
+    end
+  end
+
+  describe 'PATCH /classes/:klass_id/presences/:id' do
+    it 'updates the presence correctly' do
+      klass = create(:klass)
+      teacher = create(:teacher, klass: klass)
+      student = create(:student, klass: klass)
+      presence = create(:presence, student: student, teacher: teacher.user)
+
+      sign_in teacher.user
+
+      new_student = create(:student)
+      new_persence_type = create(:presence_type)
+
+      params = {
+        klass_id: klass.id,
+        id: presence.id,
+        presence: {
+          student_id: new_student.id,
+          date: Date.tomorrow,
+          hour: 42,
+          presence_type_id: new_persence_type.id,
+          note: 'FooBar'
+        }
+      }
+
+      post :update, params
+
+      presence.reload
+
+      expect(presence.student).to eq(new_student)
+      expect(presence.date).to eq(Date.tomorrow)
+      expect(presence.hour).to eq(42)
+      expect(presence.presence_type).to eq(new_persence_type)
+      expect(presence.note).to eq('FooBar')
+
+      expect(response).to redirect_to klass_presence_path(new_student.klass, presence)
+    end
+
+    it 'redirects to the correct url if an error' do
+      klass = create(:klass)
+      teacher = create(:teacher, klass: klass)
+      student = create(:student, klass: klass)
+      presence = create(:presence, student: student, teacher: teacher.user)
+
+      sign_in teacher.user
+
+      params = {
+        klass_id: klass.id,
+        id: presence.id,
+        presence: {
+          hour: nil,
+        }
+      }
+
+      post :update, params
+
+      expect(response).to redirect_to edit_klass_presence_path(klass, presence)
     end
   end
 end

@@ -24,6 +24,12 @@ class PresencePolicy < ApplicationPolicy
     false
   end
 
+  def update?
+    return false unless user
+    return true if user.admin? || user == record.teacher
+    false
+  end
+
   def permitted_attributes
     return [] unless user
     unless user.admin?
