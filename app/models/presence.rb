@@ -8,7 +8,7 @@ class Presence < ActiveRecord::Base
 
   validates_presence_of :teacher_id, :student_id, :date, :hour, :presence_type_id
 
-  scope :daily_presences, ->(stud, date) { where(student: stud, date: date).order(:hour) }
+  scope :daily_presences, ->(stud, date) { where(student: stud, date: date).order(:hour, :created_at) }
   scope :today_presences, ->(stud) { daily_presences(stud, Date.today) }
 
   def self.last_today_presence(stud)

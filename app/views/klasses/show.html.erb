@@ -18,6 +18,9 @@
         <% end %>
       <% end %>
     </ol>
+    <% if PresencePolicy.new(current_user, Presence.new(klass: @klass)).index? %>
+      <%= link_to 'Presences', klass_presences_path(@klass), class: ['btn', 'btn-primary'] %>
+    <% end %>
 <% end %>
 
 <%= bootstrap_panel('Teachers') do %>

@@ -26,6 +26,9 @@
     <% end %>
   </table>
 
+  <div class="form-group">
+    <%= link_to 'Back to the grid', klass_presences_path(@klass, date: @presence.date), class: ['btn', 'btn-primary', 'btn-xs'] %>
+  </div>
   <% if policy(@presence).manage? %>
     <div class="form-group">
       <%= link_to_if policy(@presence).update?, 'Edit', edit_klass_presence_path(@klass, @presence), class: ['btn', 'btn-warning'] %>
