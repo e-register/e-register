@@ -1,6 +1,16 @@
 class PresencesController < ApplicationController
   before_filter :fetch_presence, only: [:show, :edit, :update, :destroy]
 
+  def index
+    @date = params[:date] ? Date.parse(params[:date]) : Date.today
+    @klass = Klass.find params[:klass_id]
+
+    authorize Presence.new(klass: @klass)
+
+    @presences = @klass.presences.where(date: @date).includes(:presence_type).group_by { |p| p.student_id }
+    @students = @klass.students
+  end
+
   def show
     authorize @presence
 
@@ -54,9 +64,10 @@ class PresencesController < ApplicationController
   def new_presence_params
     {
         teacher: current_user,
-        date: Date.today,
-        hour: 1,
-        presence_type_id: PresenceType.first.id,
+        date: params[:date] || Date.today,
+        hour: params[:hour] || 1,
+        presence_type_id: params[:presence_type_id] || PresenceType.first.id,
+        student_id: params[:student_id],
         klass: @klass
     }
   end

@@ -1,6 +1,45 @@
 require 'rails_helper'
 
 describe PresencesController, type: :controller do
+  describe 'GET /classes/:klass_id/presences' do
+    it 'sets the instance varibles correctly' do
+      klass = create(:klass)
+
+      stud1 = create(:student, klass: klass)
+      stud2 = create(:student, klass: klass)
+
+      pres1 = create(:presence, student: stud1, date: Date.today)
+      pres2 = create(:presence, student: stud1, date: Date.tomorrow)
+      pres3 = create(:presence, student: stud2, date: Date.today)
+
+      sign_in create(:user_admin)
+
+      get :index, klass_id: klass
+
+      expect(assigns(:klass)).to eq(klass)
+      expect(assigns(:date)).to eq(Date.today)
+      expect(assigns(:students)).to match_array [stud1, stud2]
+      expect(assigns(:presences)).to eq({ stud1.id => [pres1], stud2.id => [pres3] })
+    end
+
+    it 'fetches the presence of the correct day' do
+      klass = create(:klass)
+
+      stud1 = create(:student, klass: klass)
+      stud2 = create(:student, klass: klass)
+
+      pres1 = create(:presence, student: stud1, date: Date.today)
+      pres2 = create(:presence, student: stud1, date: Date.tomorrow)
+      pres3 = create(:presence, student: stud2, date: Date.today)
+
+      sign_in create(:user_admin)
+
+      get :index, klass_id: klass, date: Date.tomorrow
+      expect(assigns(:students)).to match_array [stud1, stud2]
+      expect(assigns(:presences)).to eq({ stud1.id => [pres2] })
+    end
+  end
+
   describe 'GET /classes/:klass_id/presences/:id' do
     it 'fetches the presence correctly' do
       presence = create(:presence, date: Date.today)

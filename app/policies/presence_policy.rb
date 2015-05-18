@@ -1,4 +1,12 @@
 class PresencePolicy < ApplicationPolicy
+  def index?
+    return false unless user
+    return true if user.admin?
+    return false unless user.teacher?
+    return true if user.klasses.include? record.klass
+    false
+  end
+
   def show?
     return false unless user
     return true if user.admin?
