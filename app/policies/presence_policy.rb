@@ -9,10 +9,8 @@ class PresencePolicy < ApplicationPolicy
 
   def show?
     return false unless user
-    return true if user.admin?
-    return true if record.teacher == user
+    return true if user.admin? || record.teacher == user || record.student.user == user
     return true if (record.student.teachers & user.teachers).length > 0
-    return true if record.student.user == user
     false
   end
 
@@ -49,7 +47,7 @@ class PresencePolicy < ApplicationPolicy
     return [] unless user
     unless user.admin?
       return [] unless user.teacher?
-      return [] if !record.is_a?(Symbol) && (record.student.teachers & user.teachers).length == 0
+      return [] if record != :presence && (record.student.teachers & user.teachers) == []
     end
     [:teacher_id, :student_id, :date, :hour, :presence_type_id, :justification_id, :note]
   end
