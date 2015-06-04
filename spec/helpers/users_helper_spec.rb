@@ -21,7 +21,7 @@ describe UsersHelper, :type => :helper do
 
     it 'return late correctly' do
       create(:presence, student: stud, date: Date.today, hour: 1, presence_type: create(:presence_type_absent))
-      create(:presence, student: stud, date: Date.today, hour: 2, presence_type: create(:presence_type_present))
+      create(:presence, student: stud, date: Date.today, hour: 1, presence_type: create(:presence_type_present))
 
       today_presences = klass.today_presences
 

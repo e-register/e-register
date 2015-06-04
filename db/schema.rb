@@ -11,7 +11,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150418094330) do
+ActiveRecord::Schema.define(version: 20150604171816) do
+
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
 
   create_table "credentials", force: :cascade do |t|
     t.integer  "user_id"
@@ -21,8 +24,8 @@ ActiveRecord::Schema.define(version: 20150418094330) do
     t.datetime "updated_at",    null: false
   end
 
-  add_index "credentials", ["user_id"], name: "index_credentials_on_user_id"
-  add_index "credentials", ["username"], name: "index_credentials_on_username", unique: true
+  add_index "credentials", ["user_id"], name: "index_credentials_on_user_id", using: :btree
+  add_index "credentials", ["username"], name: "index_credentials_on_username", unique: true, using: :btree
 
   create_table "evaluation_scales", force: :cascade do |t|
     t.text     "checkpoints"
@@ -50,9 +53,9 @@ ActiveRecord::Schema.define(version: 20150418094330) do
     t.datetime "updated_at",          null: false
   end
 
-  add_index "evaluations", ["klass_test_id"], name: "index_evaluations_on_klass_test_id"
-  add_index "evaluations", ["student_id"], name: "index_evaluations_on_student_id"
-  add_index "evaluations", ["teacher_id"], name: "index_evaluations_on_teacher_id"
+  add_index "evaluations", ["klass_test_id"], name: "index_evaluations_on_klass_test_id", using: :btree
+  add_index "evaluations", ["student_id"], name: "index_evaluations_on_student_id", using: :btree
+  add_index "evaluations", ["teacher_id"], name: "index_evaluations_on_teacher_id", using: :btree
 
   create_table "events", force: :cascade do |t|
     t.integer  "teacher_id"
@@ -64,9 +67,9 @@ ActiveRecord::Schema.define(version: 20150418094330) do
     t.datetime "updated_at", null: false
   end
 
-  add_index "events", ["date"], name: "index_events_on_date"
-  add_index "events", ["klass_id"], name: "index_events_on_klass_id"
-  add_index "events", ["teacher_id"], name: "index_events_on_teacher_id"
+  add_index "events", ["date"], name: "index_events_on_date", using: :btree
+  add_index "events", ["klass_id"], name: "index_events_on_klass_id", using: :btree
+  add_index "events", ["teacher_id"], name: "index_events_on_teacher_id", using: :btree
 
   create_table "justifications", force: :cascade do |t|
     t.string   "reason"
@@ -84,7 +87,7 @@ ActiveRecord::Schema.define(version: 20150418094330) do
     t.datetime "updated_at",          null: false
   end
 
-  add_index "klass_tests", ["teacher_id"], name: "index_klass_tests_on_teacher_id"
+  add_index "klass_tests", ["teacher_id"], name: "index_klass_tests_on_teacher_id", using: :btree
 
   create_table "klasses", force: :cascade do |t|
     t.string   "name"
@@ -104,16 +107,17 @@ ActiveRecord::Schema.define(version: 20150418094330) do
     t.datetime "updated_at",   null: false
   end
 
-  add_index "notes", ["date"], name: "index_notes_on_date"
-  add_index "notes", ["notable_type", "notable_id"], name: "index_notes_on_notable_type_and_notable_id"
-  add_index "notes", ["teacher_id"], name: "index_notes_on_teacher_id"
+  add_index "notes", ["date"], name: "index_notes_on_date", using: :btree
+  add_index "notes", ["notable_type", "notable_id"], name: "index_notes_on_notable_type_and_notable_id", using: :btree
+  add_index "notes", ["teacher_id"], name: "index_notes_on_teacher_id", using: :btree
 
   create_table "presence_types", force: :cascade do |t|
     t.string   "name"
     t.string   "description"
     t.boolean  "present"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
+    t.boolean  "justificable"
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
   end
 
   create_table "presences", force: :cascade do |t|
@@ -126,11 +130,12 @@ ActiveRecord::Schema.define(version: 20150418094330) do
     t.string   "note"
     t.datetime "created_at",       null: false
     t.datetime "updated_at",       null: false
+    t.datetime "justified_at"
   end
 
-  add_index "presences", ["date"], name: "index_presences_on_date"
-  add_index "presences", ["student_id"], name: "index_presences_on_student_id"
-  add_index "presences", ["teacher_id"], name: "index_presences_on_teacher_id"
+  add_index "presences", ["date"], name: "index_presences_on_date", using: :btree
+  add_index "presences", ["student_id"], name: "index_presences_on_student_id", using: :btree
+  add_index "presences", ["teacher_id"], name: "index_presences_on_teacher_id", using: :btree
 
   create_table "scores", force: :cascade do |t|
     t.float   "value"
@@ -149,10 +154,10 @@ ActiveRecord::Schema.define(version: 20150418094330) do
     t.datetime "updated_at", null: false
   end
 
-  add_index "signs", ["date"], name: "index_signs_on_date"
-  add_index "signs", ["klass_id"], name: "index_signs_on_klass_id"
-  add_index "signs", ["subject_id"], name: "index_signs_on_subject_id"
-  add_index "signs", ["teacher_id"], name: "index_signs_on_teacher_id"
+  add_index "signs", ["date"], name: "index_signs_on_date", using: :btree
+  add_index "signs", ["klass_id"], name: "index_signs_on_klass_id", using: :btree
+  add_index "signs", ["subject_id"], name: "index_signs_on_subject_id", using: :btree
+  add_index "signs", ["teacher_id"], name: "index_signs_on_teacher_id", using: :btree
 
   create_table "students", force: :cascade do |t|
     t.integer  "user_id"
@@ -161,9 +166,9 @@ ActiveRecord::Schema.define(version: 20150418094330) do
     t.datetime "updated_at", null: false
   end
 
-  add_index "students", ["klass_id"], name: "index_students_on_klass_id"
-  add_index "students", ["user_id", "klass_id"], name: "index_students_on_user_id_and_klass_id", unique: true
-  add_index "students", ["user_id"], name: "index_students_on_user_id"
+  add_index "students", ["klass_id"], name: "index_students_on_klass_id", using: :btree
+  add_index "students", ["user_id", "klass_id"], name: "index_students_on_user_id_and_klass_id", unique: true, using: :btree
+  add_index "students", ["user_id"], name: "index_students_on_user_id", using: :btree
 
   create_table "subjects", force: :cascade do |t|
     t.string   "name"
@@ -179,10 +184,10 @@ ActiveRecord::Schema.define(version: 20150418094330) do
     t.datetime "updated_at", null: false
   end
 
-  add_index "teachers", ["klass_id"], name: "index_teachers_on_klass_id"
-  add_index "teachers", ["subject_id"], name: "index_teachers_on_subject_id"
-  add_index "teachers", ["user_id", "klass_id", "subject_id"], name: "index_teachers_on_user_id_and_klass_id_and_subject_id", unique: true
-  add_index "teachers", ["user_id"], name: "index_teachers_on_user_id"
+  add_index "teachers", ["klass_id"], name: "index_teachers_on_klass_id", using: :btree
+  add_index "teachers", ["subject_id"], name: "index_teachers_on_subject_id", using: :btree
+  add_index "teachers", ["user_id", "klass_id", "subject_id"], name: "index_teachers_on_user_id_and_klass_id_and_subject_id", unique: true, using: :btree
+  add_index "teachers", ["user_id"], name: "index_teachers_on_user_id", using: :btree
 
   create_table "user_groups", force: :cascade do |t|
     t.string   "name"

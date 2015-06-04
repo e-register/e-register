@@ -74,7 +74,7 @@ describe 'User', type: :request do
 
       visit edit_user_path(user)
 
-      allow_any_instance_of(User).to receive(:update_attributes).and_return(false)
+      allow_any_instance_of(User).to receive(:save).and_return(false)
 
       click_on 'Update'
 

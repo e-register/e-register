@@ -1,0 +1,9 @@
+<h1>Edit Presence</h1>
+<%= form_for @presence, url: klass_presence_path(@klass, @presence) do |f| %>
+  <div class="col-md-6">
+    <%= render 'form', f: f %>
+    <div class="form-group">
+      <%= f.submit 'Update', class: ['btn', 'btn-success'] %>
+    </div>
+  </div>
+<% end %>

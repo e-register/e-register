@@ -1,0 +1,21 @@
+@import "twitter/bootstrap/variables.less";
+@import "twitter/bootstrap/mixins.less";
+
+.list-group-item.bg-success {
+  background-color: @brand-success;
+  &:hover, &:focus { background-color: lighten(@brand-success, 15%); }
+}
+.list-group-item.bg-danger {
+  background-color: @brand-danger;
+  &:hover, &:focus { background-color: lighten(@brand-danger, 15%); }
+}
+
+.grid-presences {
+  a:hover, .grid-presences a:focus {
+    text-decoration: none;
+  }
+  .btn-add {
+    padding: 5px;
+  }
+  td { vertical-align: middle !important; }
+}

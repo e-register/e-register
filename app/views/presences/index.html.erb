@@ -1,0 +1,32 @@
+<h1>Presences</h1>
+<h2><%= @klass.name %>
+  <small>
+    <%= @klass.detail %>
+    <%= "(#{format_date(@date)})" if @date != Date.today %>
+  </small>
+</h2>
+
+<div class="col-md-6">
+<div class="table-responsive">
+  <table class="table table-striped grid-presences">
+    <thead>
+      <tr>
+        <th>Student</th>
+        <th></th>
+      <tr>
+    </thead>
+    <% @students.each do |student| %>
+      <tr>
+        <td><%= student.user.full_name %></td>
+        <td>
+          <% presences = @presences[student.id] || [] %>
+          <%= link_to 'Add', new_klass_presence_path(@klass, student_id: student.id, date: @date), class: ['btn', 'btn-primary', 'btn-add'] %>
+          <% presences.each do |presence| %>
+            <%= link_to presence_badge(presence), klass_presence_path(@klass, presence) %>
+          <% end %>
+        </td>
+      </tr>
+    <% end %>
+  </table>
+</div>
+</div>
