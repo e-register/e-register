@@ -25,7 +25,7 @@ class PresenceParams
     if presence_params[:justification_id] == '0'
       presence_params[:justified_at] = nil
     else
-      presence_params[:justified_at] = presence.justified_at || Date.today
+      presence_params[:justified_at] = presence.try(:justified_at) || Date.today
     end
     presence_params[:justification_id] = nil if ['0', '-1'].include? presence_params[:justification_id]
   end
