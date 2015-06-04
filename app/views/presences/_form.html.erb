@@ -21,23 +21,45 @@
   <%= f.label :hour %>
   <%= text_field_tag 'presence[hour]', @presence.hour, class: 'form-control' %>
 </div>
+<%= f.label :type %>
 <div class="list-group">
   <% @presence_types.each do |type| %>
     <a href="#" class="presence_type_selector list-group-item
         <%= type.present ? 'bg-success' : 'bg-danger' if type.id == @presence.presence_type_id %>"
         data-class="<%= type.present ? 'success' : 'danger' %>"
+        data-justificable="<%= type.justificable %>"
         data-id="<%= type.id %>">
       <h4 class="list-group-item-heading"><%= type.name.humanize %></h4>
       <p class="list-group-item-text"><%= type.description %></p>
     </a>
-<% end %>
-  <span class="list-group-item">
-    <span class="input-group">
-      <span class="input-group-addon">Notes</span>
-      <%= f.text_field :note, class: 'form-control' %>
-      <a class="input-group-addon" href="#">&times;</a>
-    </span>
-  </span>
+  <% end %>
+</div>
+<div class="justification-box" style="<%= 'display: none' unless @presence.presence_type.justificable %>">
+  <%= f.label :justification %>
+  <div class="list-group">
+    <a href="#" class="justification_selector list-group-item
+      <%= 'bg-success' unless @presence.justified_at %>"
+      data-id="0">
+      <h4 class="list-group-item-heading"><em>Unjustified</em></h4>
+    </a>
+    <% @justifications.each do |just| %>
+      <a href="#" class="justification_selector list-group-item
+        <%= 'bg-success' if @presence.justification == just %>"
+        data-id="<%= just.id %>">
+        <h4 class="list-group-item-heading"><%= just.reason %></h4>
+      </a>
+    <% end %>
+    <a href="#" class="justification_selector list-group-item
+      <%= 'bg-success' if @presence.justified_at && !@presence.justification_id %>"
+      data-id="-1">
+      <h4 class="list-group-item-heading"><em>Other</em></h4>
+      <span class="input-group">
+        <span class="input-group-addon">Notes</span>
+        <%= f.text_field :note, class: 'form-control' %>
+      </span>
+    </a>
+  </div>
 </div>
 
 <%= f.hidden_field :presence_type_id %>
+<%= f.hidden_field :justification_id %>

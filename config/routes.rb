@@ -7,6 +7,7 @@ Rails.application.routes.draw do
 
   # KlassesController
   resources :klasses, path: 'classes' do
+    # PresencesController
     resources :presences
   end
 

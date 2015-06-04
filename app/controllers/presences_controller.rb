@@ -13,8 +13,6 @@ class PresencesController < ApplicationController
 
   def show
     authorize @presence
-
-    @today_presences = Presence.daily_presences(@presence.student, @presence.date)
   end
 
   def new
@@ -56,24 +54,20 @@ class PresencesController < ApplicationController
   end
 
   def presence_params
-    params.require(:presence).permit(policy(@presence || :presence).permitted_attributes).merge({
-      teacher_id: current_user.id
-    })
+    PresenceParams.presence_params(params, permitted_attributes, current_user, @presence)
+  end
+
+  def permitted_attributes
+    policy(@presence || :presence).permitted_attributes
   end
 
   def new_presence_params
-    {
-        teacher: current_user,
-        date: params[:date] || Date.today,
-        hour: params[:hour] || 1,
-        presence_type_id: params[:presence_type_id] || PresenceType.first.id,
-        student_id: params[:student_id],
-        klass: @klass
-    }
+    PresenceParams.new_presence_params(params, @klass, current_user)
   end
 
   def prepare_instance_variables
     @students = @klass.students.map { |s| [s.user.full_name, s.id] }
     @presence_types = PresenceType.all
+    @justifications = Justification.all
   end
 end

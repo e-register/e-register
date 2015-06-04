@@ -49,7 +49,6 @@ describe PresencesController, type: :controller do
       get :show, klass_id: presence.student.klass_id, id: presence.id
 
       expect(assigns(:presence)).to eq(presence)
-      expect(assigns(:today_presences)).to match_array([presence])
     end
 
     it 'throws an error if the presence is missing' do
@@ -309,6 +308,50 @@ describe PresencesController, type: :controller do
 
       expect(response).to redirect_to klass_presence_path(presence.student.klass_id, presence)
       expect(flash[:alert]).not_to be_nil
+    end
+  end
+
+  describe 'presence_params' do
+    let(:presence) { create(:presence) }
+
+    it 'removes justification_id on 0' do
+      params = { justification_id: '0' }
+      PresenceParams.send(:insert_justification, params, presence)
+
+      expect(params[:justification_id]).to be_nil
+    end
+    it 'removes justification_id on -1' do
+      params = { justification_id: '-1' }
+      PresenceParams.send(:insert_justification, params, presence)
+
+      expect(params[:justification_id]).to be_nil
+    end
+    it 'doesn\'t remove justification_id on 1' do
+      params = { justification_id: '1' }
+      PresenceParams.send(:insert_justification, params, presence)
+
+      expect(params[:justification_id]).to eq('1')
+    end
+
+    it 'removes justified_at on justification_id == 0' do
+      params = { justification_id: '0', justified_at: Date.yesterday }
+      PresenceParams.send(:insert_justification, params, presence)
+
+      expect(params[:justified_at]).to be_nil
+    end
+    it 'doesn\'t remove justified_at on justification_id != 0' do
+      params = { justification_id: '1' }
+      PresenceParams.send(:insert_justification, params, presence)
+
+      expect(params[:justified_at]).to eq Date.today
+    end
+    it 'keeps the old justified_at' do
+      presence.update! justified_at: Date.yesterday
+
+      params = { justification_id: '1' }
+      PresenceParams.send(:insert_justification, params, presence)
+
+      expect(params[:justified_at]).to eq Date.yesterday
     end
   end
 end

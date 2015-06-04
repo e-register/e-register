@@ -6,21 +6,23 @@
     <tr><td>Presence</td><td><%= presence_badge(@presence) %></td></tr>
     <tr><td>Date</td><td><%= format_date @presence.date %></td></tr>
     <tr><td>Hour</td><td><%= @presence.hour %></td></tr>
-    <tr>
-      <td>Justified</td>
-      <td>
-        <% if @presence.justified_at.present? %>
-          <% if @presence.justification.present? %>
-            <em class="text-success"><%= @presence.justification.reason %></em>
+    <% if @presence.presence_type.justificable %>
+      <tr>
+        <td>Justified</td>
+        <td>
+          <% if @presence.justified_at.present? %>
+            <% if @presence.justification.present? %>
+              <em class="text-success"><%= @presence.justification.reason %></em>
+            <% else %>
+              <em class="text-success">Yes</em>
+            <% end %>
+            (<%= format_date @presence.justified_at %>)
           <% else %>
-            <em class="text-success">Yes</em>
+            <em class="text-danger">Not yet</em>
           <% end %>
-          (<%= format_date @presence.justified_at %>)
-        <% else %>
-          <em class="text-danger">Not yet</em>
-        <% end %>
-      </td>
-    </tr>
+        </td>
+      </tr>
+    <% end %>
     <% if @presence.note.present? %>
       <tr><td>Note</td><td><%= @presence.note %></td></tr>
     <% end %>
